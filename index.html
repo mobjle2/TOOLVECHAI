@@ -445,7 +445,13 @@ async function doLogin(){
   if(found){
     sessionStorage.setItem("vipToken", btoa(u + ":" + Date.now()));
     document.getElementById("loginScreen").style.display="none";
-    secureLoad();
+    
+        // 🔥 SAVE ONLY AFTER SUCCESS
+        localStorage.setItem("rememberUser", u);
+        localStorage.setItem("rememberPass", p);
+
+        secureLoad();
+    
   }else{
     document.getElementById("loginMsg").innerText="Sai USER hoặc PASSWORD!";
   }
