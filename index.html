@@ -195,6 +195,52 @@ button{
 
 <body>
 
+<div id="loginScreen" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:radial-gradient(circle,#111,#000);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+  <div style="
+  background:#111;
+  padding:40px;
+  border-radius:20px;
+  width:320px;
+  border:1px solid rgba(255,215,0,0.3);
+  text-align:center;
+  ">
+
+    <h2 style="margin-bottom:20px;color:#FFD700;">🔐 LOGIN</h2>
+
+    <input id="loginUser" placeholder="USER"
+      style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
+
+    <input id="loginPass" type="password" placeholder="PASSWORD"
+      style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
+
+    <button onclick="doLogin()" style="
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      background:linear-gradient(45deg,#FFD700,#ffb700);
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+    ">ĐĂNG NHẬP</button>
+
+    <div id="loginMsg" style="margin-top:10px;color:#f87171;"></div>
+
+  </div>
+</div>
+
+
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
   <input id="q" placeholder="Nhập mã cần kiểm tra">
@@ -351,6 +397,29 @@ function showVIP13(){
     document.getElementById("vip13Screen").style.opacity=0;
   },4000);
 }
+
+// ===== LOGIN SYSTEM =====
+const validUser = "admin";
+const validPass = "123456";
+
+function doLogin(){
+  const u = document.getElementById("loginUser").value;
+  const p = document.getElementById("loginPass").value;
+
+  if(u === validUser && p === validPass){
+    document.getElementById("loginScreen").style.display="none";
+    localStorage.setItem("loggedIn","true");
+  }else{
+    document.getElementById("loginMsg").innerText="Sai USER hoặc PASSWORD!";
+  }
+}
+
+window.addEventListener("load", function(){
+  if(localStorage.getItem("loggedIn")==="true"){
+    document.getElementById("loginScreen").style.display="none";
+  }
+});
+
 </script>
 
 </body>
