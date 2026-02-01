@@ -191,25 +191,6 @@ button{
   to{transform:scale(1.1);}
 }
 </style>
-
-<style>
-#loginUser{
-    padding-left:40px !important;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='8' r='4' fill='%23FFD700'/><path d='M4 20c0-4 4-6 8-6s8 2 8 6' fill='%23FFD700'/></svg>");
-    background-repeat:no-repeat;
-    background-position:12px center;
-    background-size:18px;
-}
-
-#loginPass{
-    padding-left:40px !important;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='6' y='10' width='12' height='10' rx='2' fill='%23FFD700'/><path d='M8 10V7a4 4 0 118 0v3' stroke='%23FFD700' stroke-width='2' fill='none'/></svg>");
-    background-repeat:no-repeat;
-    background-position:12px center;
-    background-size:18px;
-}
-</style>
-
 </head>
 
 <body>
@@ -418,28 +399,9 @@ function showVIP13(){
 }
 
 
+// ===== SECURE LOGIN SYSTEM =====
 
-
-// ===== PRO MAX SECURITY SYSTEM =====
-
-// Disable console completely
-setInterval(function(){
-  console.clear();
-},1000);
-
-// Block DevTools open detection
-(function(){
-  function detectDevTools(){
-    const threshold = 160;
-    if (window.outerWidth - window.innerWidth > threshold || 
-        window.outerHeight - window.innerHeight > threshold){
-        document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>🚫 DEVTOOLS BLOCKED</h1>";
-    }
-  }
-  setInterval(detectDevTools,1000);
-})();
-
-// SHA-256
+// SHA-256 helper
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -447,74 +409,49 @@ async function sha256(message) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// USER DATABASE (multi account)
-const users = [
-  {user:"Toolvechai", hash:"c5cdfda88ab58a89f659268255b6d835577101abbad85699fb8fe9949a258fe5"}
-];
+// USER + HASHED PASSWORD
+const validUser = "admin";
+const validHash = "8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"; 
+// password = 123456 (SHA256)
 
 async function doLogin(){
-  const u = document.getElementById("loginUser").value.trim();
+  const u = document.getElementById("loginUser").value;
   const p = document.getElementById("loginPass").value;
 
   const hash = await sha256(p);
 
-  const found = users.find(acc => acc.user === u && acc.hash === hash);
-
-  if(found){
-    sessionStorage.setItem("vipToken", btoa(u + ":" + Date.now()));
+  if(u === validUser && hash === validHash){
     document.getElementById("loginScreen").style.display="none";
-    
-        // 🔥 SAVE ONLY AFTER SUCCESS
-        localStorage.setItem("rememberUser", u);
-        localStorage.setItem("rememberPass", p);
-
-        secureLoad();
-    
+    sessionStorage.setItem("vipLogged","true");
+    loadDataScript();
   }else{
     document.getElementById("loginMsg").innerText="Sai USER hoặc PASSWORD!";
   }
 }
 
-// Encrypt loader (data.js encoded load)
-function secureLoad(){
-  const s = document.createElement("script");
-  s.src = "data.js?v=" + Date.now();
-  document.body.appendChild(s);
+// Load data.js only after login
+function loadDataScript(){
+  const script = document.createElement("script");
+  script.src = "data.js";
+  document.body.appendChild(script);
 }
 
-// Block right click + common inspect shortcuts
+// Disable right click + F12 + Ctrl+Shift+I
 document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("keydown", function(e){
-  if(
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) ||
-    (e.ctrlKey && ["U","S"].includes(e.key))
-  ){
+  if(e.key === "F12" || 
+     (e.ctrlKey && e.shiftKey && e.key === "I") ||
+     (e.ctrlKey && e.key === "U")){
     e.preventDefault();
   }
 });
 
-
-
-
-
-// ===== PREFILL LOGIN (NO AUTO LOGIN) =====
 window.addEventListener("load", function(){
-    const savedUser = localStorage.getItem("rememberUser");
-    const savedPass = localStorage.getItem("rememberPass");
-
-    if(savedUser){
-        const uInput = document.getElementById("loginUser");
-        if(uInput) uInput.value = savedUser;
-    }
-
-    if(savedPass){
-        const pInput = document.getElementById("loginPass");
-        if(pInput) pInput.value = savedPass;
-    }
+  if(sessionStorage.getItem("vipLogged")==="true"){
+    document.getElementById("loginScreen").style.display="none";
+    loadDataScript();
+  }
 });
-
-
 
 </script>
 
