@@ -353,107 +353,147 @@ function showVIP13(){
 }
 
 
-/* ======================================
-   👑 PRO MAX LOCAL WORKER SYSTEM FINAL
-====================================== */
+/* ===============================
+   👑 PRO MAX LOCAL - FIXED
+================================ */
 
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "Tr11223344@";
-
-/* ===== UTIL ===== */
 
 function randomToken(){
   return Math.random().toString(36).substring(2,10);
 }
 
-function now(){
-  return Date.now();
-}
+function now(){ return Date.now(); }
 
 function formatTime(ms){
-  if(ms <= 0) return "00:00:00";
-  let s = Math.floor(ms/1000);
-  let d = Math.floor(s/86400);
-  s %= 86400;
-  let h = Math.floor(s/3600);
-  s %= 3600;
-  let m = Math.floor(s/60);
-  s %= 60;
-  return (d>0? d+"d ":"") +
+  if(ms<=0) return "00:00:00";
+  let s=Math.floor(ms/1000);
+  let d=Math.floor(s/86400); s%=86400;
+  let h=Math.floor(s/3600); s%=3600;
+  let m=Math.floor(s/60); s%=60;
+  return (d>0?d+"d ":"") +
          String(h).padStart(2,'0')+":" +
          String(m).padStart(2,'0')+":" +
          String(s).padStart(2,'0');
 }
 
-/* ===== WORKERS STORAGE ===== */
-
-let workers = JSON.parse(localStorage.getItem("workers_final")) || {};
+let workers = JSON.parse(localStorage.getItem("workers_fixed")) || {};
 
 function saveWorkers(){
-  localStorage.setItem("workers_final", JSON.stringify(workers));
+  localStorage.setItem("workers_fixed", JSON.stringify(workers));
 }
 
-/* ===== ADMIN LOGIN UI ===== */
+/* ===== WORKER MODE CHECK FIRST ===== */
+
+const params = new URLSearchParams(location.search);
+const userKey = params.get("u");
+const token = params.get("t");
+
+if(userKey){
+  document.body.innerHTML = ""; // clear everything for clean worker mode
+  let w = workers[userKey];
+
+  if(!w || !w.active || w.token!==token){
+    document.body.innerHTML="<h1 style='text-align:center;margin-top:20%;color:red;'>🚫 Link không hợp lệ hoặc đã hết hạn</h1>";
+  }else{
+
+    let wrapper=document.createElement("div");
+    wrapper.style.textAlign="center";
+    wrapper.style.marginTop="40px";
+    wrapper.innerHTML=`
+      <h1>👑 CHECK VIP</h1>
+      <div id="countdown" style="font-weight:bold;margin:15px;"></div>
+      <input id="q" placeholder="Nhập mã cần kiểm tra" style="padding:10px;width:250px;"><br><br>
+      <button onclick="check()" style="padding:10px 20px;">CHECK</button>
+      <div id="out" style="margin-top:20px;"></div>
+    `;
+    document.body.appendChild(wrapper);
+
+    let s=document.createElement("script");
+    s.src="data.js";
+    document.body.appendChild(s);
+
+    setInterval(()=>{
+      document.getElementById("countdown").innerHTML =
+        "⏳ Còn lại: " + formatTime(w.expireAt - now());
+      if(now()>w.expireAt){
+        w.active=false;
+        saveWorkers();
+        location.reload();
+      }
+    },1000);
+
+    let oldCheck = window.check;
+    window.check=function(){
+      w.today++;
+      w.total++;
+      saveWorkers();
+      if(oldCheck) oldCheck();
+    };
+  }
+
+  throw new Error("Worker mode stop admin render");
+}
+
+/* ===== ADMIN BUTTON ===== */
 
 function openAdminLogin(){
-  let box = document.createElement("div");
-  box.style.position="fixed";
-  box.style.top="0";
-  box.style.left="0";
-  box.style.width="100%";
-  box.style.height="100%";
-  box.style.background="rgba(0,0,0,0.8)";
-  box.style.display="flex";
-  box.style.justifyContent="center";
-  box.style.alignItems="center";
-  box.style.zIndex="9999";
 
-  box.innerHTML=`
+  let overlay=document.createElement("div");
+  overlay.style.position="fixed";
+  overlay.style.top="0";
+  overlay.style.left="0";
+  overlay.style.width="100%";
+  overlay.style.height="100%";
+  overlay.style.background="rgba(0,0,0,0.8)";
+  overlay.style.display="flex";
+  overlay.style.justifyContent="center";
+  overlay.style.alignItems="center";
+  overlay.style.zIndex="9999";
+
+  overlay.innerHTML=`
     <div style="background:#111;padding:30px;border-radius:15px;width:300px;">
       <h3 style="color:#FFD700;text-align:center;">ADMIN LOGIN</h3>
-      <input id="adminUser" placeholder="User"
-        style="width:100%;padding:10px;margin:10px 0;border-radius:8px;">
-      <input id="adminPass" type="password" placeholder="Pass"
-        style="width:100%;padding:10px;margin:10px 0;border-radius:8px;">
-      <button onclick="adminLogin()"
-        style="width:100%;padding:10px;background:#FFD700;border:none;border-radius:8px;font-weight:bold;">
-        Đăng nhập
-      </button>
+      <input id="adminUser" placeholder="User" style="width:100%;padding:8px;margin:8px 0;">
+      <input id="adminPass" type="password" placeholder="Pass" style="width:100%;padding:8px;margin:8px 0;">
+      <button onclick="adminLogin()" style="width:100%;padding:8px;background:#FFD700;border:none;">Đăng nhập</button>
     </div>
   `;
 
-  document.body.appendChild(box);
+  document.body.appendChild(overlay);
 
-  // Remember credentials but DO NOT auto login
   document.getElementById("adminUser").value =
-    localStorage.getItem("adminUser") || "";
-
+    localStorage.getItem("adminUser")||"";
   document.getElementById("adminPass").value =
-    localStorage.getItem("adminPass") || "";
+    localStorage.getItem("adminPass")||"";
 }
 
 function adminLogin(){
-  let u = document.getElementById("adminUser").value;
-  let p = document.getElementById("adminPass").value;
+
+  let u=document.getElementById("adminUser").value;
+  let p=document.getElementById("adminPass").value;
 
   if(u===ADMIN_USER && p===ADMIN_PASS){
-    localStorage.setItem("adminUser", u);
-    localStorage.setItem("adminPass", p);
+
+    localStorage.setItem("adminUser",u);
+    localStorage.setItem("adminPass",p);
+
     document.body.removeChild(document.body.lastChild);
     renderAdmin();
-  } else {
-    alert("Sai tài khoản admin");
+
+  }else{
+    alert("Sai tài khoản");
   }
 }
 
-/* ===== ADMIN PANEL ===== */
-
 function renderAdmin(){
-  let panel = document.createElement("div");
+
+  let panel=document.createElement("div");
   panel.style.position="fixed";
   panel.style.right="0";
   panel.style.top="0";
-  panel.style.width="380px";
+  panel.style.width="350px";
   panel.style.height="100%";
   panel.style.background="#111";
   panel.style.padding="20px";
@@ -461,9 +501,9 @@ function renderAdmin(){
   panel.style.zIndex="9999";
 
   panel.innerHTML=`
-    <h2 style="color:#FFD700;">👑 ADMIN PANEL</h2>
-    <button onclick="addWorker()" style="margin-bottom:15px;">➕ Thêm thợ</button>
-    <div id="workerList"></div>
+    <h2 style="color:#FFD700;">👑 ADMIN</h2>
+    <button onclick="addWorker()">➕ Thêm thợ</button>
+    <div id="list"></div>
   `;
 
   document.body.appendChild(panel);
@@ -471,35 +511,31 @@ function renderAdmin(){
 }
 
 function renderWorkers(){
-  let list = document.getElementById("workerList");
+
+  let list=document.getElementById("list");
   list.innerHTML="";
 
-  for(let key in workers){
-    let w = workers[key];
-    let remaining = w.expireAt ? (w.expireAt - now()) : 0;
-
-    list.innerHTML += `
-      <div style="border:1px solid #333;padding:10px;margin-bottom:10px;border-radius:10px;">
+  for(let k in workers){
+    let w=workers[k];
+    list.innerHTML+=`
+      <div style="border:1px solid #333;padding:10px;margin:10px 0;">
         <b>${w.name}</b><br>
-        Trạng thái: ${w.active ? "🟢 MỞ" : "🔴 KHÓA"}<br>
-        Còn: ${w.active ? formatTime(remaining) : "--"}<br>
-        Hôm nay: ${w.today} | Tổng: ${w.total}<br>
-        <button onclick="toggleWorker('${key}')">Bật/Tắt</button>
-        <button onclick="setTime('${key}')">⏳ Cài thời gian</button>
-        <button onclick="copyLink('${key}')">📋 Copy</button>
-        <button onclick="deleteWorker('${key}')">❌ Xóa</button>
+        ${w.active?"🟢 MỞ":"🔴 KHÓA"}<br>
+        <button onclick="toggleWorker('${k}')">Bật/Tắt</button>
+        <button onclick="setTime('${k}')">⏳ Thời gian</button>
+        <button onclick="copyLink('${k}')">📋 Copy</button>
       </div>
     `;
   }
 }
 
 function addWorker(){
-  let name = prompt("Tên thợ:");
+  let name=prompt("Tên thợ:");
   if(!name) return;
 
-  let key = "W"+Math.random().toString(36).substring(2,6).toUpperCase();
+  let key="W"+Math.random().toString(36).substring(2,6).toUpperCase();
 
-  workers[key] = {
+  workers[key]={
     name:name,
     active:false,
     token:randomToken(),
@@ -512,112 +548,43 @@ function addWorker(){
   renderWorkers();
 }
 
-function deleteWorker(key){
-  delete workers[key];
+function toggleWorker(k){
+  let w=workers[k];
+  w.active=!w.active;
+  if(w.active) w.token=randomToken();
   saveWorkers();
   renderWorkers();
 }
 
-function toggleWorker(key){
-  let w = workers[key];
-  if(w.active){
-    w.active=false;
-  } else {
-    w.active=true;
-    w.token=randomToken(); // đổi token khi bật lại
-  }
+function setTime(k){
+  let d=parseInt(prompt("Ngày:",0))||0;
+  let h=parseInt(prompt("Giờ:",0))||0;
+  let m=parseInt(prompt("Phút:",0))||0;
+  workers[k].expireAt=now()+d*86400000+h*3600000+m*60000;
+  workers[k].active=true;
+  workers[k].token=randomToken();
   saveWorkers();
   renderWorkers();
 }
 
-function setTime(key){
-  let d = parseInt(prompt("Số ngày:",0))||0;
-  let h = parseInt(prompt("Số giờ:",0))||0;
-  let m = parseInt(prompt("Số phút:",0))||0;
-
-  let total = d*86400000 + h*3600000 + m*60000;
-  workers[key].expireAt = now() + total;
-  workers[key].active = true;
-  workers[key].token = randomToken();
-
-  saveWorkers();
-  renderWorkers();
-}
-
-function copyLink(key){
-  let w = workers[key];
-  let link = location.origin + location.pathname + "?u=" + key + "&t=" + w.token;
+function copyLink(k){
+  let w=workers[k];
+  let link=location.origin+location.pathname+"?u="+k+"&t="+w.token;
   navigator.clipboard.writeText(link);
   alert("Đã copy:\n"+link);
 }
 
-/* ===== COUNTDOWN AUTO LOCK ===== */
-
-setInterval(()=>{
-  for(let k in workers){
-    let w = workers[k];
-    if(w.active && w.expireAt && now()>w.expireAt){
-      w.active=false;
-      saveWorkers();
-    }
-  }
-  if(document.getElementById("workerList")){
-    renderWorkers();
-  }
-},1000);
-
-/* ===== WORKER LINK MODE ===== */
-
-const params = new URLSearchParams(location.search);
-const userKey = params.get("u");
-const token = params.get("t");
-
-if(userKey){
-  let w = workers[userKey];
-  if(!w || !w.active || w.token!==token){
-    document.body.innerHTML="<h1 style='text-align:center;color:red;margin-top:20%'>🚫 Link không hợp lệ hoặc đã hết hạn</h1>";
-  } else {
-    // show countdown top
-    let timerDiv = document.createElement("div");
-    timerDiv.style.textAlign="center";
-    timerDiv.style.margin="15px";
-    timerDiv.style.fontWeight="bold";
-    document.body.prepend(timerDiv);
-
-    setInterval(()=>{
-      let remaining = w.expireAt - now();
-      timerDiv.innerHTML="⏳ Còn lại: " + formatTime(remaining);
-    },1000);
-
-    // load data.js only after valid
-    let s=document.createElement("script");
-    s.src="data.js";
-    document.body.appendChild(s);
-
-    let oldCheck = window.check;
-    window.check=function(){
-      w.today++;
-      w.total++;
-      saveWorkers();
-      if(oldCheck) oldCheck();
-    };
-  }
-}
-
-/* ===== ADMIN BUTTON ===== */
-
-let adminBtn=document.createElement("button");
-adminBtn.innerText="ADMIN";
-adminBtn.style.position="fixed";
-adminBtn.style.bottom="20px";
-adminBtn.style.right="20px";
-adminBtn.style.padding="10px 15px";
-adminBtn.style.background="#FFD700";
-adminBtn.style.border="none";
-adminBtn.style.borderRadius="10px";
-adminBtn.style.fontWeight="bold";
-adminBtn.onclick=openAdminLogin;
-document.body.appendChild(adminBtn);
+let btn=document.createElement("button");
+btn.innerText="ADMIN";
+btn.style.position="fixed";
+btn.style.bottom="20px";
+btn.style.right="20px";
+btn.style.padding="10px 15px";
+btn.style.background="#FFD700";
+btn.style.border="none";
+btn.style.borderRadius="10px";
+btn.onclick=openAdminLogin;
+document.body.appendChild(btn);
 
 
 </script>
