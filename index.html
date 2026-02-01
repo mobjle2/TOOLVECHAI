@@ -195,6 +195,52 @@ button{
 
 <body>
 
+<div id="loginScreen" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:radial-gradient(circle,#111,#000);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+  <div style="
+  background:#111;
+  padding:40px;
+  border-radius:20px;
+  width:340px;
+  border:1px solid rgba(255,215,0,0.3);
+  text-align:center;
+  ">
+
+    <h2 style="margin-bottom:20px;color:#FFD700;">🔐 VIP LOGIN</h2>
+
+    <input id="loginUser" placeholder="USER"
+      style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
+
+    <input id="loginPass" type="password" placeholder="PASSWORD"
+      style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
+
+    <button onclick="doLogin()" style="
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      background:linear-gradient(45deg,#FFD700,#ffb700);
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+    ">ĐĂNG NHẬP</button>
+
+    <div id="loginMsg" style="margin-top:10px;color:#f87171;"></div>
+
+  </div>
+</div>
+
+
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
   <input id="q" placeholder="Nhập mã cần kiểm tra">
@@ -353,221 +399,84 @@ function showVIP13(){
 }
 
 
-/* ===============================
-   👑 STABLE 10 WORKER SYSTEM
-================================ */
 
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "Tr11223344@";
 
-function randomToken(){
-  return Math.random().toString(36).substring(2,10);
+// ===== PRO MAX SECURITY SYSTEM =====
+
+// Disable console completely
+setInterval(function(){
+  console.clear();
+},1000);
+
+// Block DevTools open detection
+(function(){
+  function detectDevTools(){
+    const threshold = 160;
+    if (window.outerWidth - window.innerWidth > threshold || 
+        window.outerHeight - window.innerHeight > threshold){
+        document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>🚫 DEVTOOLS BLOCKED</h1>";
+    }
+  }
+  setInterval(detectDevTools,1000);
+})();
+
+// SHA-256
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-function now(){ return Date.now(); }
+// USER DATABASE (multi account)
 
-function formatTime(ms){
-  if(ms<=0) return "00:00:00";
-  let s=Math.floor(ms/1000);
-  let d=Math.floor(s/86400); s%=86400;
-  let h=Math.floor(s/3600); s%=3600;
-  let m=Math.floor(s/60); s%=60;
-  return (d>0?d+"d ":"") +
-         String(h).padStart(2,'0')+":" +
-         String(m).padStart(2,'0')+":" +
-         String(s).padStart(2,'0');
-}
+const users = [
+  {user:"admin", hash:"c5cdfda88ab58a89f659268255b6d835577101abbad85699fb8fe9949a258fe5"}
+];
 
-/* ===== FIXED WORKERS A → J ===== */
 
-let workers = JSON.parse(localStorage.getItem("workers_AJ")) || {
-  THOA:{name:"Thợ A",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOB:{name:"Thợ B",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOC:{name:"Thợ C",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOD:{name:"Thợ D",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOE:{name:"Thợ E",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOF:{name:"Thợ F",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOG:{name:"Thợ G",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOH:{name:"Thợ H",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOI:{name:"Thợ I",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-  THOJ:{name:"Thợ J",active:false,token:randomToken(),expireAt:0,today:0,total:0},
-};
+async function doLogin(){
+  const u = document.getElementById("loginUser").value.trim();
+  const p = document.getElementById("loginPass").value;
 
-function saveWorkers(){
-  localStorage.setItem("workers_AJ", JSON.stringify(workers));
-}
+  const hash = await sha256(p);
 
-/* ===== WORKER MODE ===== */
+  const found = users.find(acc => acc.user === u && acc.hash === hash);
 
-const params = new URLSearchParams(location.search);
-const userKey = params.get("u");
-const token = params.get("t");
-
-if(userKey){
-  let w = workers[userKey];
-
-  if(!w || !w.active || w.token!==token){
-    document.body.innerHTML="<h1 style='text-align:center;margin-top:20%;color:red;'>🚫 Link không hợp lệ hoặc đã hết hạn</h1>";
-  } else {
-
-    let timer = document.createElement("div");
-    timer.style.textAlign="center";
-    timer.style.margin="15px";
-    timer.style.fontWeight="bold";
-    document.body.prepend(timer);
-
-    setInterval(()=>{
-      timer.innerHTML="⏳ Còn lại: " + formatTime(w.expireAt - now());
-      if(now()>w.expireAt){
-        w.active=false;
-        saveWorkers();
-        location.reload();
-      }
-    },1000);
-
-    let s=document.createElement("script");
-    s.src="data.js";
-    document.body.appendChild(s);
-
-    let oldCheck = window.check;
-    window.check=function(){
-      w.today++;
-      w.total++;
-      saveWorkers();
-      if(oldCheck) oldCheck();
-    };
+  if(found){
+    sessionStorage.setItem("vipToken", btoa(u + ":" + Date.now()));
+    document.getElementById("loginScreen").style.display="none";
+    secureLoad();
+  }else{
+    document.getElementById("loginMsg").innerText="Sai USER hoặc PASSWORD!";
   }
 }
 
-/* ===== ADMIN ===== */
-
-function openAdmin(){
-
-  let overlay=document.createElement("div");
-  overlay.style.position="fixed";
-  overlay.style.top="0";
-  overlay.style.left="0";
-  overlay.style.width="100%";
-  overlay.style.height="100%";
-  overlay.style.background="rgba(0,0,0,0.85)";
-  overlay.style.display="flex";
-  overlay.style.justifyContent="center";
-  overlay.style.alignItems="center";
-  overlay.style.zIndex="9999";
-
-  overlay.innerHTML=`
-    <div style="background:#111;padding:25px;border-radius:15px;width:300px;">
-      <h3 style="color:#FFD700;text-align:center;">ADMIN LOGIN</h3>
-      <input id="adminUser" placeholder="User" style="width:100%;padding:8px;margin:8px 0;">
-      <input id="adminPass" type="password" placeholder="Pass" style="width:100%;padding:8px;margin:8px 0;">
-      <button onclick="adminLogin()" style="width:100%;padding:8px;background:#FFD700;border:none;">Đăng nhập</button>
-    </div>
-  `;
-
-  document.body.appendChild(overlay);
-
-  document.getElementById("adminUser").value =
-    localStorage.getItem("adminUser")||"";
-  document.getElementById("adminPass").value =
-    localStorage.getItem("adminPass")||"";
+// Encrypt loader (data.js encoded load)
+function secureLoad(){
+  const s = document.createElement("script");
+  s.src = "data.js?v=" + Date.now();
+  document.body.appendChild(s);
 }
 
-function adminLogin(){
-
-  let u=document.getElementById("adminUser").value;
-  let p=document.getElementById("adminPass").value;
-
-  if(u===ADMIN_USER && p===ADMIN_PASS){
-
-    localStorage.setItem("adminUser",u);
-    localStorage.setItem("adminPass",p);
-
-    document.body.removeChild(document.body.lastChild);
-    renderAdmin();
-
-  } else alert("Sai tài khoản");
-}
-
-function renderAdmin(){
-
-  let panel=document.createElement("div");
-  panel.style.position="fixed";
-  panel.style.right="0";
-  panel.style.top="0";
-  panel.style.width="380px";
-  panel.style.height="100%";
-  panel.style.background="#111";
-  panel.style.padding="20px";
-  panel.style.overflow="auto";
-  panel.style.zIndex="9999";
-
-  panel.innerHTML="<h2 style='color:#FFD700'>👑 ADMIN</h2><div id='list'></div>";
-  document.body.appendChild(panel);
-
-  renderWorkers();
-}
-
-function renderWorkers(){
-
-  let list=document.getElementById("list");
-  list.innerHTML="";
-
-  for(let k in workers){
-    let w=workers[k];
-    list.innerHTML+=`
-      <div style="border:1px solid #333;padding:10px;margin-bottom:10px;border-radius:10px;">
-        <b>${w.name}</b><br>
-        ${w.active?"🟢 MỞ":"🔴 KHÓA"}<br>
-        <button onclick="toggleWorker('${k}')">Bật/Tắt</button>
-        <button onclick="setTime('${k}')">⏳ Thời gian</button>
-        <button onclick="copyLink('${k}')">📋 Copy</button>
-      </div>
-    `;
+// Block right click + common inspect shortcuts
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("keydown", function(e){
+  if(
+    e.key === "F12" ||
+    (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) ||
+    (e.ctrlKey && ["U","S"].includes(e.key))
+  ){
+    e.preventDefault();
   }
-}
+});
 
-function toggleWorker(k){
-  let w=workers[k];
-  w.active=!w.active;
-  if(w.active) w.token=randomToken();
-  saveWorkers();
-  renderWorkers();
-}
 
-function setTime(k){
-  let d=parseInt(prompt("Ngày:",0))||0;
-  let h=parseInt(prompt("Giờ:",0))||0;
-  let m=parseInt(prompt("Phút:",0))||0;
-  workers[k].expireAt=now()+d*86400000+h*3600000+m*60000;
-  workers[k].active=true;
-  workers[k].token=randomToken();
-  saveWorkers();
-  renderWorkers();
-}
 
-function copyLink(k){
-  let w=workers[k];
-  let link=location.origin+location.pathname+"?u="+k+"&t="+w.token;
-  navigator.clipboard.writeText(link);
-  alert("Đã copy:\n"+link);
-}
 
-/* ADMIN BUTTON (hidden in worker mode) */
-
-if(!userKey){
-  let btn=document.createElement("button");
-  btn.innerText="ADMIN";
-  btn.style.position="fixed";
-  btn.style.bottom="20px";
-  btn.style.right="20px";
-  btn.style.padding="10px 15px";
-  btn.style.background="#FFD700";
-  btn.style.border="none";
-  btn.style.borderRadius="10px";
-  btn.onclick=openAdmin;
-  document.body.appendChild(btn);
-}
-
+window.addEventListener("load", function(){
+  sessionStorage.removeItem("vipToken");
+});
 
 </script>
 
