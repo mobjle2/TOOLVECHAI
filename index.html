@@ -222,25 +222,8 @@ z-index:9999;
     <input id="loginUser" placeholder="USER"
       style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
 
-<button type="button" onclick="togglePass()" 
-style="position:absolute;right:15px;top:50%;transform:translateY(-50%);
-background:none;border:none;color:#FFD700;font-weight:bold;cursor:pointer;">
-👁
-</button>
-
-</div>>
-
-    <div style="position:relative;">
-<input id="loginPass" type="password" placeholder="PASSWORD" style="padding-right:50px;"
+    <input id="loginPass" type="password" placeholder="PASSWORD"
       style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
-
-<button type="button" onclick="togglePass()" 
-style="position:absolute;right:15px;top:50%;transform:translateY(-50%);
-background:none;border:none;color:#FFD700;font-weight:bold;cursor:pointer;">
-👁
-</button>
-
-</div>>
 
     <button onclick="doLogin()" style="
       width:100%;
@@ -513,10 +496,36 @@ window.addEventListener("load", function(){
 });
 
 
-function togglePass(){
-  const p = document.getElementById("loginPass");
-  p.type = p.type === "password" ? "text" : "password";
-}
+
+// ===== PASSWORD TOGGLE (NO LAYOUT BREAK) =====
+window.addEventListener("DOMContentLoaded", function(){
+
+    const passInput = document.getElementById("loginPass");
+    if(!passInput) return;
+
+    // ensure parent relative (without breaking flex)
+    const parent = passInput.parentElement;
+    if(parent) parent.style.position = "relative";
+
+    // add padding so text doesn't overlap icon
+    passInput.style.paddingRight = "40px";
+
+    const eye = document.createElement("span");
+    eye.innerHTML = "👁";
+    eye.style.position = "absolute";
+    eye.style.right = "12px";
+    eye.style.top = "50%";
+    eye.style.transform = "translateY(-50%)";
+    eye.style.cursor = "pointer";
+    eye.style.color = "#FFD700";
+    eye.style.userSelect = "none";
+
+    eye.onclick = function(){
+        passInput.type = passInput.type === "password" ? "text" : "password";
+    };
+
+    parent.appendChild(eye);
+});
 
 </script>
 
