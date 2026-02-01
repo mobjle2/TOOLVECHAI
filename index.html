@@ -222,8 +222,25 @@ z-index:9999;
     <input id="loginUser" placeholder="USER"
       style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
 
-    <input id="loginPass" type="password" placeholder="PASSWORD"
+<button type="button" onclick="togglePass()" 
+style="position:absolute;right:15px;top:50%;transform:translateY(-50%);
+background:none;border:none;color:#FFD700;font-weight:bold;cursor:pointer;">
+👁
+</button>
+
+</div>>
+
+    <div style="position:relative;">
+<input id="loginPass" type="password" placeholder="PASSWORD" style="padding-right:50px;"
       style="width:100%;padding:12px;border-radius:10px;margin-bottom:15px;background:#000;color:white;border:1px solid #444;">
+
+<button type="button" onclick="togglePass()" 
+style="position:absolute;right:15px;top:50%;transform:translateY(-50%);
+background:none;border:none;color:#FFD700;font-weight:bold;cursor:pointer;">
+👁
+</button>
+
+</div>>
 
     <button onclick="doLogin()" style="
       width:100%;
@@ -430,8 +447,7 @@ async function sha256(message) {
 
 // USER DATABASE (multi account)
 const users = [
-  {user:"admin", hash:"8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"},
-  {user:"vipmaster", hash:"8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"}
+  {user:"Toolvechai", hash:"c5cdfda88ab58a89f659268255b6d835577101abbad85699fb8fe9949a258fe5"}
 ];
 
 async function doLogin(){
@@ -495,6 +511,12 @@ window.addEventListener("load", function(){
         if(pInput) pInput.value = savedPass;
     }
 });
+
+
+function togglePass(){
+  const p = document.getElementById("loginPass");
+  p.type = p.type === "password" ? "text" : "password";
+}
 
 </script>
 
