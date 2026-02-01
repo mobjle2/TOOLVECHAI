@@ -474,34 +474,21 @@ document.addEventListener("keydown", function(e){
 
 
 
-// ===== REMEMBER ADMIN (NO AUTO LOGIN) =====
-
-function rememberAdmin(u,p){
-  localStorage.setItem("rememberUser", u);
-  localStorage.setItem("rememberPass", p);
-}
-
+// ===== PREFILL LOGIN (NO AUTO LOGIN) =====
 window.addEventListener("load", function(){
-  const u = localStorage.getItem("rememberUser") || "";
-  const p = localStorage.getItem("rememberPass") || "";
+    const savedUser = localStorage.getItem("rememberUser");
+    const savedPass = localStorage.getItem("rememberPass");
 
-  const userInput = document.getElementById("loginUser");
-  const passInput = document.getElementById("loginPass");
+    if(savedUser){
+        const uInput = document.getElementById("loginUser");
+        if(uInput) uInput.value = savedUser;
+    }
 
-  if(userInput) userInput.value = u;
-  if(passInput) passInput.value = p;
+    if(savedPass){
+        const pInput = document.getElementById("loginPass");
+        if(pInput) pInput.value = savedPass;
+    }
 });
-
-// Patch doLogin to remember credentials
-const originalDoLogin = doLogin;
-doLogin = async function(){
-  const u = document.getElementById("loginUser").value;
-  const p = document.getElementById("loginPass").value;
-
-  rememberAdmin(u,p);
-  await originalDoLogin();
-};
-
 
 </script>
 
