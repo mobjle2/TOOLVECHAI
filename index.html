@@ -413,7 +413,13 @@ function doLogin(){
   const p = document.getElementById("loginPass").value;
 
   if(u === "Toolvechai" && p === "Tr11223344@"){
+    
+    // Save credentials
+    localStorage.setItem("rememberUser", u);
+    localStorage.setItem("rememberPass", p);
+
     document.getElementById("loginScreen").style.display="none";
+    
     loadDataScript();
   }else{
     document.getElementById("loginMsg").innerText="Sai USER hoặc PASSWORD!";
@@ -439,6 +445,26 @@ document.addEventListener("keydown", function(e){
 });
 
 
+
+
+
+// ===== REMEMBER LOGIN (NO AUTO LOGIN) =====
+window.addEventListener("load", function(){
+
+    const savedUser = localStorage.getItem("rememberUser");
+    const savedPass = localStorage.getItem("rememberPass");
+
+    if(savedUser){
+        const userInput = document.getElementById("loginUser");
+        if(userInput) userInput.value = savedUser;
+    }
+
+    if(savedPass){
+        const passInput = document.getElementById("loginPass");
+        if(passInput) passInput.value = savedPass;
+    }
+
+});
 
 </script>
 
