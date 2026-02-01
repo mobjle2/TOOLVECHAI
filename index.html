@@ -429,10 +429,11 @@ async function sha256(message) {
 }
 
 // USER DATABASE (multi account)
+
 const users = [
-  {user:"admin", hash:"8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"},
-  {user:"vipmaster", hash:"8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"}
+  {user:"admin", hash:"c5cdfda88ab58a89f659268255b6d835577101abbad85699fb8fe9949a258fe5"}
 ];
+
 
 async function doLogin(){
   const u = document.getElementById("loginUser").value.trim();
@@ -470,11 +471,11 @@ document.addEventListener("keydown", function(e){
   }
 });
 
+
+
+
 window.addEventListener("load", function(){
-  if(sessionStorage.getItem("vipToken")){
-    document.getElementById("loginScreen").style.display="none";
-    secureLoad();
-  }
+  sessionStorage.removeItem("vipToken");
 });
 
 </script>
