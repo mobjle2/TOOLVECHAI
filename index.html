@@ -429,11 +429,10 @@ async function sha256(message) {
 }
 
 // USER DATABASE (multi account)
-
 const users = [
-  {user:"admin", hash:"c5cdfda88ab58a89f659268255b6d835577101abbad85699fb8fe9949a258fe5"}
+  {user:"admin", hash:"8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"},
+  {user:"vipmaster", hash:"8d969eef6ecad3c29a3a629280e686cff8fab5f6d5d7a1e5b9d5f5c6e0f7f3e8"}
 ];
-
 
 async function doLogin(){
   const u = document.getElementById("loginUser").value.trim();
@@ -474,9 +473,35 @@ document.addEventListener("keydown", function(e){
 
 
 
+
+// ===== REMEMBER ADMIN (NO AUTO LOGIN) =====
+
+function rememberAdmin(u,p){
+  localStorage.setItem("rememberUser", u);
+  localStorage.setItem("rememberPass", p);
+}
+
 window.addEventListener("load", function(){
-  sessionStorage.removeItem("vipToken");
+  const u = localStorage.getItem("rememberUser") || "";
+  const p = localStorage.getItem("rememberPass") || "";
+
+  const userInput = document.getElementById("loginUser");
+  const passInput = document.getElementById("loginPass");
+
+  if(userInput) userInput.value = u;
+  if(passInput) passInput.value = p;
 });
+
+// Patch doLogin to remember credentials
+const originalDoLogin = doLogin;
+doLogin = async function(){
+  const u = document.getElementById("loginUser").value;
+  const p = document.getElementById("loginPass").value;
+
+  rememberAdmin(u,p);
+  await originalDoLogin();
+};
+
 
 </script>
 
