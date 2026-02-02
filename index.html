@@ -6,6 +6,26 @@
 <title>CHECK VIP</title>
 
 <style>
+  .vip-box{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.vip-box select{
+  flex:1;
+  padding:14px;
+  border-radius:50px;
+  border:1px solid rgba(255,215,0,0.3);
+  background:#111;
+  color:white;
+  font-size:14px;
+}
+
+.vip-box button{
+  flex:1;
+}
+
 body{
   margin:0;
   font-family:Segoe UI,Roboto,Arial;
@@ -34,15 +54,17 @@ body{
 /* INPUT */
 input{
   width:100%;
-  padding:14px 18px;
+  padding:14px;
   border-radius:50px;
   border:1px solid rgba(255,215,0,0.3);
-  background:#0f0f0f;
+  background:#111;
   color:white;
   font-size:15px;
   outline:none;
-  transition:0.2s;
+  box-sizing:border-box;   /* QUAN TRỌNG */
 }
+
+
 
 input:focus{
   border-color:#FFD700;
@@ -61,6 +83,7 @@ button{
   background:linear-gradient(45deg,#FFD700,#ffb700);
   color:black;
   transition:0.2s;
+  box-sizing:border-box;   /* QUAN TRỌNG */
 }
 
 button:active{
@@ -85,6 +108,11 @@ button:active{
   display:flex;
   flex-direction:column;
   gap:14px;
+}
+.check-box input,
+.check-box button{
+  width:100%;
+  box-sizing:border-box;
 }
 
 /* DISCLAIMER */
@@ -219,13 +247,17 @@ z-index:9999;
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
 
-  <div class="vip-copy">
-    <button onclick="copyVip(1)">📋 Copy VIP1</button>
-    <button onclick="copyVip(2)">📋 Copy VIP2</button>
-    <button onclick="copyVip(3)">📋 Copy VIP3</button>
-    <button onclick="copyVip(4)">📋 Copy VIP4</button>
-    <button onclick="copyVip(5)">📋 Copy VIP5</button>
-  </div>
+<div class="vip-box">
+  <select id="vipSelect">
+    <option value="1">VIP 1</option>
+    <option value="2">VIP 2</option>
+    <option value="3">VIP 3</option>
+    <option value="4">VIP 4</option>
+    <option value="5">VIP 5</option>
+  </select>
+  <button onclick="copyVipSelected()">COPY LINK</button>
+</div>
+
 
   <div class="check-box">
     <input id="q" placeholder="Nhập mã cần kiểm tra">
@@ -298,6 +330,21 @@ function copyVip(level){
     setTimeout(()=>{
       btn.style.background = "linear-gradient(45deg,#FFD700,#ffb700)";
       btn.innerText = "📋 Copy VIP" + level;
+    },2000);
+  });
+}
+function copyVipSelected(){
+  const level = document.getElementById("vipSelect").value;
+  const link = window.location.origin + window.location.pathname + "?vip=" + level;
+
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn = document.querySelector(".vip-box button");
+    btn.innerText = "✔ ĐÃ COPY";
+    btn.style.background="#16a34a";
+
+    setTimeout(()=>{
+      btn.innerText = "COPY LINK";
+      btn.style.background="linear-gradient(45deg,#FFD700,#ffb700)";
     },2000);
   });
 }
