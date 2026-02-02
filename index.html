@@ -189,18 +189,19 @@ function secureLogin(){
 const params = new URLSearchParams(window.location.search);
 const vipParam = params.get("vip");
 
-// Nếu có ?vip= → bỏ login luôn
+// Nếu có vip → bỏ login và ẩn copy
 if(vipParam){
   document.getElementById("loginScreen").remove();
   document.querySelector(".vip-copy").style.display = "none";
-} else {
-  // Nếu không có vip → bắt login
-  auth.onAuthStateChanged(function(user){
-    if(user){
-      document.getElementById("loginScreen").remove();
-    }
-  });
 }
+
+// Nếu không có vip → kiểm tra đăng nhập
+auth.onAuthStateChanged(function(user){
+  if(user){
+    document.getElementById("loginScreen").remove();
+  }
+});
+
 
 
 function copyVip(level){
