@@ -397,6 +397,14 @@ function showVIP13(){
 
 <script>
 (function(){
+const params = new URLSearchParams(window.location.search);
+const tho = params.get("tho");
+
+if(tho){
+  document.getElementById("loginScreen").remove();
+  return;
+}
+
 const p1 = "Tr11";
 const p2 = "2233";
 const p3 = "44@";
@@ -414,6 +422,7 @@ window.secureLogin = function(){
   }
 };
 })();
+
   // ====== HỆ THỐNG LINK THỢ ======
 function copyLink(role){
   const link = window.location.origin + window.location.pathname + "?tho=" + role;
