@@ -98,7 +98,7 @@ button{
 
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="loginScreen" style="
 position:fixed;
 top:0;
@@ -154,7 +154,6 @@ z-index:9999;
 
 <script src="data.js"></script>
 
-<!-- Firebase Compat -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
@@ -170,9 +169,9 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-  auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
-
+// LOGIN
 function secureLogin(){
   const email = document.getElementById("loginEmail").value;
   const pass = document.getElementById("loginPass").value;
@@ -186,24 +185,22 @@ function secureLogin(){
     });
 }
 
+// URL PARAM
 const params = new URLSearchParams(window.location.search);
 const vipParam = params.get("vip");
 
-// Nếu có vip → bỏ login và ẩn copy
 if(vipParam){
   document.getElementById("loginScreen").remove();
   document.querySelector(".vip-copy").style.display = "none";
 }
 
-// Nếu không có vip → kiểm tra đăng nhập
 auth.onAuthStateChanged(function(user){
   if(user){
     document.getElementById("loginScreen").remove();
   }
 });
 
-
-
+// COPY
 function copyVip(level){
   const link = window.location.origin + window.location.pathname + "?vip=" + level;
 
@@ -219,15 +216,34 @@ function copyVip(level){
   });
 }
 
+// CHECK
+const q = document.getElementById("q");
+const out = document.getElementById("out");
+
+function normalize(s){
+  return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
+}
+
+function check(){
+  const key=normalize(q.value);
+  out.innerHTML="";
+  if(!key) return;
+
+  data.forEach(function(x){
+    if(normalize(x.code).includes(key)){
+      out.innerHTML+=`
+        <div class="item">
+          <div style="font-weight:700;">⚡ ${x.code}</div>
+          ${x.vip?`<div>👑 ${x.vip}</div>`:""}
+        </div>
+      `;
+    }
+  });
+}
+
 q.addEventListener("keydown",function(e){
   if(e.key==="Enter") check();
 });
-  // Ẩn copy khi có ?vip=
-const params = new URLSearchParams(window.location.search);
-if(params.get("vip")){
-  document.querySelector(".vip-copy").style.display = "none";
-}
-
 </script>
 
 </body>
