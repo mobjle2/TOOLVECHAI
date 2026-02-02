@@ -194,6 +194,36 @@ button{
 </head>
 
 <body>
+<div id="loginScreen" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+">
+
+  <div style="width:350px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
+    <h2 style="text-align:center;color:gold;">🔐 LOGIN REQUIRED</h2>
+
+    <input id="email" type="email" placeholder="Nhập Gmail"
+    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+
+    <input id="password" type="password" placeholder="Nhập Password"
+    style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+
+    <button onclick="login()" 
+    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
+      LOGIN
+    </button>
+
+    <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
+  </div>
+</div>
 
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
@@ -351,6 +381,38 @@ function showVIP13(){
     document.getElementById("vip13Screen").style.opacity=0;
   },4000);
 }
+<script>
+const allowedAccounts = [
+  {email:"admin@gmail.com", password:"123456"},
+  {email:"vip@gmail.com", password:"vip123"}
+];
+
+function login(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const error = document.getElementById("loginError");
+
+  const found = allowedAccounts.find(acc => 
+    acc.email === email && acc.password === password
+  );
+
+  if(found){
+    document.getElementById("loginScreen").style.display = "none";
+    sessionStorage.setItem("loggedIn","true");
+  } else {
+    error.innerText = "Sai Gmail hoặc Password!";
+  }
+}
+
+window.onload = function(){
+  if(sessionStorage.getItem("loggedIn") !== "true"){
+    document.getElementById("loginScreen").style.display = "flex";
+  } else {
+    document.getElementById("loginScreen").style.display = "none";
+  }
+}
+</script>
+
 </script>
 
 </body>
