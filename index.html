@@ -258,12 +258,33 @@ const mmcMap={
 function detectChip(code){
   code = code.toUpperCase();
 
-  if(code.startsWith("KM")) return { name:"SAMSUNG", icon:"🟢" };
-  if(code.startsWith("H")) return { name:"SK hynix", icon:"🟣" };
-  if(code.startsWith("MT")) return { name:"MICRON", icon:"🔵" };
+  if(code.startsWith("KM") || code.startsWith("KLM") || code.startsWith("KLU") ||
+     code.startsWith("KMB") || code.startsWith("KM8") || code.startsWith("KMF") ||
+     code.startsWith("KMQ") || code.startsWith("KMR") || code.startsWith("KMD") ||
+     code.startsWith("KMG")){
+    return { name:"SAMSUNG", icon:"🟢" };
+  }
 
-  return { name:"UNKNOWN", icon:"⚪" };
+  if(code.startsWith("H9") || code.startsWith("H26") || code.startsWith("H28") ||
+     code.startsWith("H2") || code.startsWith("HN") || code.startsWith("H5")){
+    return { name:"SK hynix", icon:"🟣" };
+  }
+
+  if(code.startsWith("JZ") || code.startsWith("MT")){
+    return { name:"MICRON", icon:"🔵" };
+  }
+
+  if(code.startsWith("THG")){
+    return { name:"KIOXIA / TOSHIBA", icon:"🟠" };
+  }
+
+  if(code.startsWith("SDIN") || code.startsWith("SD") || code.startsWith("WDC")){
+    return { name:"SANDISK / WD", icon:"🔴" };
+  }
+
+  return { name:"UNKNOWN / OEM", icon:"⚪" };
 }
+
 
 function getVipClass(v){
   const num=parseInt(v.match(/\d+/));
