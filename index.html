@@ -221,14 +221,16 @@ let staffs = JSON.parse(localStorage.getItem("staffs")) || {
 function loginAdmin(){
   const email=document.getElementById("adminEmail").value.trim();
   const pass=document.getElementById("adminPass").value;
+  const error=document.getElementById("loginError");
 
   if(email==="admin@gmail.com" && pass==="123456"){
     localStorage.setItem("adminLogged","true");
     document.getElementById("loginScreen").style.display="none";
   }else{
-    alert("Sai thông tin đăng nhập!");
+    error.innerText="Sai tài khoản hoặc mật khẩu!";
   }
 }
+
 
 if(localStorage.getItem("adminLogged")==="true"){
   document.getElementById("loginScreen").style.display="none";
