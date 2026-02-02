@@ -61,30 +61,6 @@ button{padding:14px 18px;border-radius:30px;border:none;font-weight:700;cursor:p
 <script src="data.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-
-const vipKey = window.location.search.replace("?","");
-const allowedVips = ["VIP1","VIP2","VIP3","VIP4","VIP5"];
-
-if(allowedVips.includes(vipKey)){
-  const login = document.getElementById("loginScreen");
-  if(login) login.remove();
-  document.getElementById("copySection").style.display="none";
-}else{
-  const allowedEmail="lktrungnguyen@gmail.com";
-  const allowedPassword="Tr11223344@";
-  window.secureLogin=function(){
-    const email=document.getElementById("loginEmail").value.trim();
-    const pass=document.getElementById("loginPass").value.trim();
-    if(email===allowedEmail && pass===allowedPassword){
-      document.getElementById("loginScreen").remove();
-    }else{
-      document.getElementById("loginError").innerText="Sai Gmail hoặc Password!";
-    }
-  };
-}
-
-});
 
 function copyLink(role,btn){
   const link = window.location.origin + window.location.pathname + "?" + role;
@@ -153,6 +129,32 @@ function check(){
 
   if(!found) out.innerHTML="<div style='text-align:center;color:red;'>❌ Không xác định mã</div>";
 }
+  (function(){
+
+  const vipKey = window.location.search.replace("?","");
+  const allowedVips = ["VIP1","VIP2","VIP3","VIP4","VIP5"];
+
+  const loginScreen = document.getElementById("loginScreen");
+  const copySection = document.getElementById("copySection");
+
+  if(allowedVips.includes(vipKey)){
+    if(loginScreen) loginScreen.style.display="none";
+    if(copySection) copySection.style.display="none";
+  }else{
+    window.secureLogin = function(){
+      const email=document.getElementById("loginEmail").value.trim();
+      const pass=document.getElementById("loginPass").value.trim();
+
+      if(email==="lktrungnguyen@gmail.com" && pass==="Tr11223344@"){
+        loginScreen.style.display="none";
+      }else{
+        document.getElementById("loginError").innerText="Sai Gmail hoặc Password!";
+      }
+    }
+  }
+
+})();
+
 </script>
 </body>
 </html>
