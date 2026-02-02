@@ -154,55 +154,47 @@ z-index:9999;
 
 <script src="data.js"></script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!-- Firebase Compat -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyCEL7BDXvmNi2dp1VNpua7b2plpTiTOK3U",
   authDomain: "toolvechai.firebaseapp.com",
   projectId: "toolvechai",
   storageBucket: "toolvechai.firebasestorage.app",
   messagingSenderId: "947125032083",
-  appId: "1:947125032083:web:a7335aa5fd446a44446966",
-  measurementId: "G-N4W751H36H"
+  appId: "1:947125032083:web:a7335aa5fd446a44446966"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-window.secureLogin = function(){
+function secureLogin(){
   const email = document.getElementById("loginEmail").value;
   const pass = document.getElementById("loginPass").value;
 
-  signInWithEmailAndPassword(auth, email, pass)
+  auth.signInWithEmailAndPassword(email, pass)
     .then(() => {
       document.getElementById("loginScreen").remove();
     })
     .catch(() => {
       document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
     });
-};
+}
 
-onAuthStateChanged(auth, (user) => {
+auth.onAuthStateChanged(function(user){
   if(user){
     document.getElementById("loginScreen").remove();
   }
 });
 
-window.logoutUser = function(){
-  signOut(auth).then(()=>{
-    location.reload();
-  });
-};
-
-// ===== COPY VIP =====
-window.copyVip = function(level){
+function copyVip(level){
   const link = window.location.origin + window.location.pathname + "?vip=" + level;
   navigator.clipboard.writeText(link);
-};
+}
 
-// ===== CHECK LOGIC =====
 const q=document.getElementById("q");
 const out=document.getElementById("out");
 
@@ -215,7 +207,7 @@ function check(){
   out.innerHTML="";
   if(!key) return;
 
-  data.forEach(x=>{
+  data.forEach(function(x){
     if(normalize(x.code).includes(key)){
       out.innerHTML+=`
         <div class="item">
@@ -227,10 +219,9 @@ function check(){
   });
 }
 
-q.addEventListener("keydown",e=>{
+q.addEventListener("keydown",function(e){
   if(e.key==="Enter") check();
 });
-
 </script>
 
 </body>
