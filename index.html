@@ -186,11 +186,22 @@ function secureLogin(){
     });
 }
 
-auth.onAuthStateChanged(function(user){
-  if(user){
-    document.getElementById("loginScreen").remove();
-  }
-});
+const params = new URLSearchParams(window.location.search);
+const vipParam = params.get("vip");
+
+// Nếu có ?vip= → bỏ login luôn
+if(vipParam){
+  document.getElementById("loginScreen").remove();
+  document.querySelector(".vip-copy").style.display = "none";
+} else {
+  // Nếu không có vip → bắt login
+  auth.onAuthStateChanged(function(user){
+    if(user){
+      document.getElementById("loginScreen").remove();
+    }
+  });
+}
+
 
 function copyVip(level){
   const link = window.location.origin + window.location.pathname + "?vip=" + level;
