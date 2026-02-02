@@ -170,6 +170,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+  auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+
 
 function secureLogin(){
   const email = document.getElementById("loginEmail").value;
@@ -192,36 +194,28 @@ auth.onAuthStateChanged(function(user){
 
 function copyVip(level){
   const link = window.location.origin + window.location.pathname + "?vip=" + level;
-  navigator.clipboard.writeText(link);
-}
 
-const q=document.getElementById("q");
-const out=document.getElementById("out");
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn = document.querySelector(`.vip-copy button:nth-child(${level})`);
+    btn.style.background = "#16a34a";
+    btn.innerText = "✔ ĐÃ COPY";
 
-function normalize(s){
-  return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
-}
-
-function check(){
-  const key=normalize(q.value);
-  out.innerHTML="";
-  if(!key) return;
-
-  data.forEach(function(x){
-    if(normalize(x.code).includes(key)){
-      out.innerHTML+=`
-        <div class="item">
-          <div style="font-weight:700;">⚡ ${x.code}</div>
-          ${x.vip?`<div>👑 ${x.vip}</div>`:""}
-        </div>
-      `;
-    }
+    setTimeout(()=>{
+      btn.style.background = "linear-gradient(45deg,#FFD700,#ffb700)";
+      btn.innerText = "📋 Copy VIP" + level;
+    },2000);
   });
 }
 
 q.addEventListener("keydown",function(e){
   if(e.key==="Enter") check();
 });
+  // Ẩn copy khi có ?vip=
+const params = new URLSearchParams(window.location.search);
+if(params.get("vip")){
+  document.querySelector(".vip-copy").style.display = "none";
+}
+
 </script>
 
 </body>
