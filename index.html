@@ -397,7 +397,8 @@ function login(){
   );
 
   if(found){
-    document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("loginScreen").remove();
+
     sessionStorage.setItem("loggedIn","true");
   } else {
     error.innerText = "Sai Gmail hoặc Password!";
