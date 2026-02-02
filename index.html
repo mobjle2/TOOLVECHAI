@@ -6,54 +6,121 @@
 <title>CHECK VIP</title>
 
 <style>
-body{margin:0;font-family:Segoe UI,Roboto,Arial;background:radial-gradient(circle at top,#1a1a1a,#000);color:#f1f5f9;}
-.container{max-width:1000px;margin:30px auto;padding:0 16px;}
-.title{text-align:center;font-size:26px;font-weight:700;margin:30px 0;background:linear-gradient(90deg,#FFD700,#ffae00,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-input{width:100%;padding:16px;border-radius:30px;border:1px solid rgba(255,215,0,0.3);background:#111;color:white;font-size:16px;outline:none;}
-button{padding:14px;border-radius:30px;border:none;font-weight:700;cursor:pointer;background:linear-gradient(45deg,#FFD700,#ffb700);color:black;}
-#out{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:24px;}
-.item{background:#111;border-radius:25px;padding:20px;border:1px solid rgba(255,215,0,0.15);}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;margin-top:10px;}
+body{
+  margin:0;
+  font-family:Segoe UI,Roboto,Arial;
+  background:radial-gradient(circle at top,#1a1a1a,#000);
+  color:#f1f5f9;
+}
+
+.container{
+  max-width:1000px;
+  margin:30px auto;
+  padding:0 16px;
+}
+
+.title{
+  text-align:center;
+  font-size:26px;
+  font-weight:700;
+  margin:30px 0;
+  background:linear-gradient(90deg,#FFD700,#ffae00,#FFD700);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  border-radius:30px;
+  border:1px solid rgba(255,215,0,0.3);
+  background:#111;
+  color:white;
+  font-size:16px;
+  outline:none;
+}
+
+button{
+  padding:14px 18px;
+  border-radius:30px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(45deg,#FFD700,#ffb700);
+  color:black;
+  margin:4px;
+}
+
+#out{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+  margin-top:24px;
+}
+
+.item{
+  background:#111;
+  border-radius:20px;
+  padding:20px;
+  border:1px solid rgba(255,215,0,0.15);
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen" style="position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;">
   <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
     <h2 style="text-align:center;color:gold;">🔐 LOGIN REQUIRED</h2>
-    <input id="loginEmail" type="email" placeholder="Nhập Gmail" style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <input id="loginPass" type="password" placeholder="Nhập Password" style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <button onclick="secureLogin()" style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;">LOGIN</button>
+
+    <input id="loginEmail" type="email" placeholder="Nhập Gmail"
+    style="margin-top:15px;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+
+    <input id="loginPass" type="password" placeholder="Nhập Password"
+    style="margin-top:10px;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+
+    <button onclick="secureLogin()" style="margin-top:15px;width:100%;background:gold;">
+      LOGIN
+    </button>
+
     <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
   </div>
 </div>
 
 <div class="container">
+
   <div class="title">👑 CHECK VIP SYSTEM</div>
 
-  <div style="text-align:center;margin-bottom:15px;">
-    <button onclick="copyLink('VIP1',this)">📋 Copy VIP 1</button>
-    <button onclick="copyLink('VIP2',this)">📋 Copy VIP 2</button>
-    <button onclick="copyLink('VIP3',this)">📋 Copy VIP 3</button>
-    <button onclick="copyLink('VIP4',this)">📋 Copy VIP 4</button>
-    <button onclick="copyLink('VIP5',this)">📋 Copy VIP 5</button>
+  <!-- COPY LINKS -->
+  <div id="copySection" style="text-align:center;margin-bottom:15px;">
+    <button onclick="copyLink('VIP1',this)">📋 Copy VIP1</button>
+    <button onclick="copyLink('VIP2',this)">📋 Copy VIP2</button>
+    <button onclick="copyLink('VIP3',this)">📋 Copy VIP3</button>
+    <button onclick="copyLink('VIP4',this)">📋 Copy VIP4</button>
+    <button onclick="copyLink('VIP5',this)">📋 Copy VIP5</button>
   </div>
 
   <input id="q" placeholder="Nhập mã cần kiểm tra">
   <button onclick="check()" style="width:100%;margin-top:14px;">CHECK</button>
+
   <div id="out"></div>
 </div>
 
 <script src="data.js"></script>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const tho = params.get("tho");
+// ==========================
+// VIP LINK DETECTION
+// ==========================
+const vipKey = window.location.search.replace("?","");
+const allowedVips = ["VIP1","VIP2","VIP3","VIP4","VIP5"];
 
-// ===== LOGIN =====
-if(tho){
+if(allowedVips.includes(vipKey)){
+  // Bỏ login
   document.getElementById("loginScreen").remove();
+  // Ẩn nút copy
+  document.getElementById("copySection").style.display="none";
 }else{
   const allowedEmail="lktrungnguyen@gmail.com";
   const allowedPassword="Tr11223344@";
@@ -69,9 +136,12 @@ if(tho){
   };
 }
 
-// ===== COPY LINK =====
+// ==========================
+// COPY LINK
+// ==========================
 function copyLink(role,btn){
-  const link = window.location.origin + window.location.pathname + "?tho=" + role;
+  const link = window.location.origin + window.location.pathname + "?" + role;
+
   const temp=document.createElement("input");
   temp.value=link;
   document.body.appendChild(temp);
@@ -91,8 +161,13 @@ function copyLink(role,btn){
   },2000);
 }
 
-// ===== CHECK =====
-function normalize(s){return s.toUpperCase().replace(/[^A-Z0-9]/g,"");}
+// ==========================
+// CHECK FUNCTION
+// ==========================
+function normalize(s){
+  return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
+}
+
 function check(){
   const key=normalize(document.getElementById("q").value);
   const out=document.getElementById("out");
@@ -100,10 +175,16 @@ function check(){
   if(!key)return;
 
   let found=false;
+
   data.forEach(x=>{
     if(normalize(x.code).includes(key)){
       found=true;
-      out.innerHTML+=`<div class="item"><b>${x.code}</b><br>${x.vip?x.vip:""}</div>`;
+      out.innerHTML+=`
+        <div class="item">
+          <b>${x.code}</b><br>
+          ${x.vip ? "👑 "+x.vip : ""}
+        </div>
+      `;
     }
   });
 
