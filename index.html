@@ -159,9 +159,20 @@ const mmcMap={
 
 function copyVip(level){
   const link = window.location.origin + window.location.pathname + "?vip=" + level;
-  navigator.clipboard.writeText(link);
-  alert("Đã copy VIP " + level);
+
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn = document.querySelector(`.vip-copy button:nth-child(${level})`);
+
+    btn.style.background = "#16a34a";
+    btn.innerText = "✔ ĐÃ COPY";
+
+    setTimeout(()=>{
+      btn.style.background = "linear-gradient(45deg,#FFD700,#ffb700)";
+      btn.innerText = "📋 Copy VIP" + level;
+    },2000);
+  });
 }
+
 
 function detectChip(code){
   code = code.toUpperCase();
@@ -243,6 +254,14 @@ function check(){
 q.addEventListener("keydown",e=>{
   if(e.key==="Enter") check();
 });
+  // Ẩn nút copy nếu đang ở link VIP
+const params = new URLSearchParams(window.location.search);
+const vipParam = params.get("vip");
+
+if(vipParam){
+  document.querySelector(".vip-copy").style.display = "none";
+}
+
 </script>
 
 </body>
