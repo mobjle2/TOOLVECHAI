@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHECK VIP SYSTEM</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI,Roboto,Arial;
+  background:radial-gradient(circle at top,#0f172a,#020617);
+  color:#f1f5f9;
+}
+
+/* LOGIN */
+.loginScreen{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:radial-gradient(circle at top,#1a1a1a,#000);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.loginBox{
+  background:rgba(15,23,42,0.95);
+  padding:50px;
+  border-radius:25px;
+  width:350px;
+  text-align:center;
+  border:1px solid rgba(255,215,0,0.3);
+  box-shadow:0 0 40px rgba(255,215,0,0.4);
+}
+
+.loginTitle{
+  font-size:24px;
+  font-weight:800;
+  margin-bottom:25px;
+  background:linear-gradient(90deg,#FFD700,#ffae00,#FFD700);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.loginBox input{
+  width:100%;
+  padding:15px;
+  border-radius:15px;
+  border:1px solid rgba(255,215,0,0.3);
+  background:#111827;
+  color:white;
+  margin-bottom:20px;
+}
+
+.loginBox button{
+  width:100%;
+  padding:15px;
+  border-radius:15px;
+  border:none;
+  font-weight:700;
+  background:linear-gradient(45deg,#FFD700,#ffb700);
+  color:black;
+  cursor:pointer;
+}
+
+/* MAIN */
+.main{ display:flex; height:100vh; }
+.left{ flex:7; padding:50px; }
+.right{ flex:3; padding:40px 25px; background:#081022; border-left:1px solid rgba(255,255,255,0.05); }
+
+.box, .adminBox{
+  background:#0b1220;
+  border-radius:25px;
+  padding:40px;
+  height:100%;
+}
+
+.title{
+  text-align:center;
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:30px;
+  background:linear-gradient(90deg,#FFD700,#ffae00,#FFD700);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.inputRow{ display:flex; gap:20px; }
+
+input.mainInput{
+  flex:1;
+  padding:18px;
+  border-radius:20px;
+  border:1px solid rgba(255,215,0,0.3);
+  background:#111827;
+  color:white;
+}
+
+button.checkBtn{
+  padding:18px 45px;
+  border-radius:20px;
+  border:none;
+  font-weight:700;
+  background:linear-gradient(45deg,#FFD700,#ffb700);
+  color:black;
+  cursor:pointer;
+}
+
+#out{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:20px;
+  margin-top:30px;
+}
+
+.item{
+  background:#111827;
+  padding:20px;
+  border-radius:20px;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 16px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  margin-top:6px;
+}
+
+.chip{ background:#22c55e; color:black; }
+.mmc{ background:#0ea5e9; color:black; }
+.vip{ background:#6d28d9; }
+
+.staff{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#111c35;
+  padding:12px;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+
+.status{
+  padding:6px 15px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.open{ background:#22c55e; color:black; }
+.lock{ background:#facc15; color:black; }
+
+.copy{
+  font-size:12px;
+  color:#60a5fa;
+  cursor:pointer;
+  display:block;
+  margin-top:4px;
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="loginScreen">
+  <div class="loginBox">
+    <div class="loginTitle">👑 ADMIN LOGIN</div>
+    <input type="password" id="adminPass" placeholder="Nhập mật khẩu">
+    <button onclick="loginAdmin()">ĐĂNG NHẬP</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="left">
+    <div class="box">
+      <div class="title">CHECK VIP SYSTEM</div>
+      <div class="inputRow">
+        <input id="q" class="mainInput" placeholder="Nhập mã cần kiểm tra">
+        <button class="checkBtn" onclick="check()">CHECK</button>
+      </div>
+      <div id="out"></div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="adminBox">
+      <h3>ADMIN PANEL</h3>
+
+      <div class="staff">
+        <div>
+          <strong>Thợ A</strong>
+          <span class="copy" onclick="copyLink('THOA')">🔗 Copy link</span>
+        </div>
+        <div class="status open" onclick="toggle(this,'THOA')">ĐANG MỞ</div>
+      </div>
+
+      <div class="staff">
+        <div>
+          <strong>Thợ B</strong>
+          <span class="copy" onclick="copyLink('THOB')">🔗 Copy link</span>
+        </div>
+        <div class="status open" onclick="toggle(this,'THOB')">ĐANG MỞ</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const currentUser = params.get("u");
+
+let staffs = {
+  THOA:{open:true},
+  THOB:{open:true}
+};
+
+function loginAdmin(){
+  const pass=document.getElementById("adminPass").value;
+  if(pass==="123456"){
+    window.location="?u=ADMIN";
+  }else{
+    alert("Sai mật khẩu!");
+  }
+}
+
+if(currentUser==="ADMIN"){
+  document.getElementById("loginScreen").style.display="none";
+}
+
+if(currentUser && currentUser!=="ADMIN"){
+  document.querySelector(".right").style.display="none";
+  document.querySelector(".left").style.flex="1";
+  document.getElementById("loginScreen").style.display="none";
+}
+
+function normalize(s){
+  return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
+}
+
+function detectChip(code){
+  code = code.toUpperCase();
+  if(code.startsWith("KM")||code.startsWith("KLM")) return "SAMSUNG";
+  if(code.startsWith("H")) return "SK hynix";
+  if(code.startsWith("JZ")) return "MICRON";
+  return "UNKNOWN";
+}
+
+function check(){
+  if(currentUser && currentUser!=="ADMIN"){
+    if(staffs[currentUser] && !staffs[currentUser].open){
+      alert("Tài khoản đang bị khóa!");
+      return;
+    }
+  }
+
+  const key=normalize(document.getElementById("q").value);
+  const out=document.getElementById("out");
+  out.innerHTML="";
+
+  data.forEach(x=>{
+    if(normalize(x.code).includes(key)){
+      out.innerHTML+=`
+        <div class="item">
+          <div><strong>${x.code}</strong></div>
+          <div class="badge chip">🟢 ${detectChip(x.code)}</div>
+          ${x.mmc?`<div class="badge mmc">💾 ${x.mmc}</div>`:""}
+          ${x.vip?`<div class="badge vip">👑 ${x.vip}</div>`:""}
+        </div>
+      `;
+    }
+  });
+}
+
+function toggle(el,key){
+  staffs[key].open=!staffs[key].open;
+  el.classList.toggle("open");
+  el.classList.toggle("lock");
+  el.innerText=staffs[key].open?"ĐANG MỞ":"ĐANG KHÓA";
+}
+
+function copyLink(key){
+  const url=window.location.origin+window.location.pathname+"?u="+key;
+  navigator.clipboard.writeText(url);
+  alert("Đã copy: "+url);
+}
+</script>
+
+</body>
+</html>
