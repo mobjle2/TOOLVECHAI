@@ -88,11 +88,32 @@ button{
 }
 
 .item{
-  background:#111;
-  border-radius:20px;
+  background:linear-gradient(145deg,#111,#1a1a1a);
+  border-radius:25px;
   padding:20px;
-  border:1px solid rgba(255,215,0,0.2);
+  border:1px solid rgba(255,215,0,0.15);
 }
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 16px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  margin-top:10px;
+}
+
+/* VIP COLORS */
+.vip-5{ background:#facc15; color:black; }
+.vip-6{ background:linear-gradient(90deg,#facc15,#fb923c); color:black; }
+.vip-7{ background:linear-gradient(90deg,#fb923c,#ef4444); color:white; }
+.vip-8{ background:linear-gradient(90deg,#6d28d9,#a855f7); color:white; }
+.vip-9{ background:linear-gradient(90deg,#06b6d4,#0ea5e9); color:white; }
+.vip-10{ background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700); color:black; }
+.vip-11{ background:linear-gradient(90deg,#ff4d00,#ff0000); color:white; }
+.vip-13{ background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000); color:white; }
 </style>
 </head>
 
@@ -153,7 +174,6 @@ z-index:9999;
 </div>
 
 <script src="data.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
@@ -220,6 +240,31 @@ function copyVip(level){
 const q = document.getElementById("q");
 const out = document.getElementById("out");
 
+const mmcMap={
+ MMC1:"16G",MMC2:"32G",MMC3:"64G",
+ MMC4:"128G",MMC5:"256G",MMC6:"512G"
+};
+
+function detectChip(code){
+  code = code.toUpperCase();
+  if(code.startsWith("KM")) return { name:"SAMSUNG", icon:"🟢" };
+  if(code.startsWith("H")) return { name:"SK hynix", icon:"🟣" };
+  if(code.startsWith("MT")) return { name:"MICRON", icon:"🔵" };
+  return { name:"UNKNOWN", icon:"⚪" };
+}
+
+function getVipClass(v){
+  const num=parseInt(v.match(/\d+/));
+  if(num==5) return "vip-5";
+  if(num==6) return "vip-6";
+  if(num==7) return "vip-7";
+  if(num==8) return "vip-8";
+  if(num==9) return "vip-9";
+  if(num==10) return "vip-10";
+  if(num<=12) return "vip-11";
+  return "vip-13";
+}
+
 function normalize(s){
   return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
 }
@@ -229,16 +274,28 @@ function check(){
   out.innerHTML="";
   if(!key) return;
 
+  let found=false;
+
   data.forEach(function(x){
     if(normalize(x.code).includes(key)){
+      found=true;
+      const size=mmcMap[x.mmc]||"";
+      const chip=detectChip(x.code);
+
       out.innerHTML+=`
         <div class="item">
           <div style="font-weight:700;">⚡ ${x.code}</div>
-          ${x.vip?`<div>👑 ${x.vip}</div>`:""}
+          <div class="badge">${chip.icon} ${chip.name}</div>
+          ${x.mmc?`<div class="badge" style="background:#0ea5e9;color:black;">💾 ${x.mmc} (${size})</div>`:""}
+          ${x.vip?`<div class="badge ${getVipClass(x.vip)}">👑 ${x.vip}</div>`:""}
         </div>
       `;
     }
   });
+
+  if(!found){
+    out.innerHTML=`<div style="text-align:center;padding:20px;color:#f87171;">❌ Không xác định mã</div>`;
+  }
 }
 
 q.addEventListener("keydown",function(e){
