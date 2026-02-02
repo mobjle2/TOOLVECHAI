@@ -229,6 +229,15 @@ z-index:9999;
 
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
+  <div style="text-align:center;margin-bottom:15px;">
+  <button onclick="copyLink('A')" style="width:auto;padding:10px 18px;margin:4px;font-size:13px;border-radius:20px;">
+    📋 Copy Link Thợ A
+  </button>
+  <button onclick="copyLink('B')" style="width:auto;padding:10px 18px;margin:4px;font-size:13px;border-radius:20px;">
+    📋 Copy Link Thợ B
+  </button>
+</div>
+
   <input id="q" placeholder="Nhập mã cần kiểm tra">
   <button onclick="check()">CHECK</button>
   <div class="disclaimer">
@@ -405,6 +414,26 @@ window.secureLogin = function(){
   }
 };
 })();
+  // ====== HỆ THỐNG LINK THỢ ======
+function copyLink(role){
+  const link = window.location.origin + window.location.pathname + "?tho=" + role;
+  navigator.clipboard.writeText(link);
+  alert("Đã copy link thợ " + role);
+}
+
+// Kiểm tra nếu là link thợ
+const params = new URLSearchParams(window.location.search);
+const tho = params.get("tho");
+
+if(tho){
+  // Ẩn phần tạo link nếu là thợ
+  document.querySelectorAll("button").forEach(btn=>{
+    if(btn.innerText.includes("Copy Link")){
+      btn.style.display="none";
+    }
+  });
+}
+
 </script>
 
 </body>
