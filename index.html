@@ -437,10 +437,16 @@ window.secureLogin = function(){
   // ====== HỆ THỐNG LINK THỢ ======
 function copyLink(role){
   const link = window.location.origin + window.location.pathname + "?tho=" + role;
-  navigator.clipboard.writeText(link);
-  alert("Đã copy link thợ " + role);
-}
 
+  const tempInput = document.createElement("input");
+  tempInput.value = link;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempInput);
+
+  alert("Đã copy: " + link);
+}
 // Kiểm tra nếu là link thợ
 const params = new URLSearchParams(window.location.search);
 const tho = params.get("tho");
