@@ -13,19 +13,55 @@ body{
   color:#f1f5f9;
 }
 
-/* ===== LAYOUT ===== */
-.main{display:flex;height:100vh;}
-.left{flex:7;padding:50px;}
-.right{flex:3;padding:40px 25px;background:#081022;border-left:1px solid rgba(255,255,255,0.05);}
-
-.box,.adminBox{
-  background:#0b1220;
-  border-radius:30px;
-  padding:40px;
-  height:100%;
+/* LOGIN */
+.loginScreen{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
 }
 
-/* ===== TITLE ===== */
+.loginBox{
+  background:#0b1220;
+  padding:50px;
+  border-radius:30px;
+  width:350px;
+  text-align:center;
+  box-shadow:0 0 40px rgba(255,215,0,0.3);
+}
+
+.loginBox input{
+  width:100%;
+  padding:15px;
+  border-radius:20px;
+  border:none;
+  background:#111827;
+  color:white;
+  margin-bottom:15px;
+}
+
+.loginBox button{
+  width:100%;
+  padding:15px;
+  border-radius:20px;
+  border:none;
+  font-weight:700;
+  background:gold;
+  color:black;
+  cursor:pointer;
+}
+
+/* LAYOUT */
+.main{display:flex;height:100vh;}
+.left{flex:7;padding:50px;}
+.right{flex:3;padding:40px;background:#081022;border-left:1px solid rgba(255,255,255,0.05);}
+.box,.adminBox{background:#0b1220;border-radius:30px;padding:40px;height:100%;}
+
+/* TITLE */
 .title{
   text-align:center;
   font-size:32px;
@@ -36,7 +72,7 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
-/* ===== INPUT ===== */
+/* INPUT */
 .inputRow{display:flex;gap:20px;}
 .mainInput{
   flex:1;
@@ -45,21 +81,18 @@ body{
   border:1px solid rgba(255,215,0,0.3);
   background:#111827;
   color:white;
-  font-size:16px;
 }
-
 .checkBtn{
   padding:20px 50px;
   border-radius:30px;
   border:none;
   font-weight:700;
-  font-size:16px;
   background:linear-gradient(45deg,#FFD700,#ffb700);
   color:black;
   cursor:pointer;
 }
 
-/* ===== RESULT STYLE (OLD GLOW STYLE) ===== */
+/* RESULT */
 #out{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
@@ -73,12 +106,6 @@ body{
   padding:30px;
   border:1px solid rgba(255,215,0,0.15);
   box-shadow:0 0 40px rgba(255,215,0,0.08);
-  transition:0.3s;
-}
-
-.item:hover{
-  transform:translateY(-5px);
-  box-shadow:0 0 60px rgba(255,215,0,0.2);
 }
 
 .code{
@@ -96,18 +123,12 @@ body{
   margin-right:10px;
 }
 
-/* CHIP */
-.chip{
-  background:#16a34a;
-  color:black;
-}
-
-/* VIP LEVELS GLOW */
+.chip{background:#16a34a;color:black;}
 .vip8{background:#7c3aed;box-shadow:0 0 25px #7c3aed;}
 .vip9{background:#06b6d4;box-shadow:0 0 25px #06b6d4;}
 .vip10{background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700);color:black;box-shadow:0 0 40px gold;}
 
-/* ===== ADMIN ===== */
+/* ADMIN */
 .staff{
   display:flex;
   justify-content:space-between;
@@ -139,6 +160,15 @@ body{
 </style>
 </head>
 <body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="loginScreen">
+  <div class="loginBox">
+    <input type="text" id="adminEmail" placeholder="Gmail">
+    <input type="password" id="adminPass" placeholder="Mật khẩu">
+    <button onclick="loginAdmin()">ĐĂNG NHẬP</button>
+  </div>
+</div>
 
 <div class="main">
 
@@ -182,17 +212,26 @@ body{
 
 <script src="data.js"></script>
 <script>
-const params = new URLSearchParams(window.location.search);
-const currentUser = params.get("u");
 
 let staffs = JSON.parse(localStorage.getItem("staffs")) || {
   THOA:{open:true},
   THOB:{open:true}
 };
 
-if(currentUser && currentUser!=="ADMIN"){
-  document.querySelector(".right").style.display="none";
-  document.querySelector(".left").style.flex="1";
+function loginAdmin(){
+  const email=document.getElementById("adminEmail").value.trim();
+  const pass=document.getElementById("adminPass").value;
+
+  if(email==="admin@gmail.com" && pass==="123456"){
+    localStorage.setItem("adminLogged","true");
+    document.getElementById("loginScreen").style.display="none";
+  }else{
+    alert("Sai thông tin đăng nhập!");
+  }
+}
+
+if(localStorage.getItem("adminLogged")==="true"){
+  document.getElementById("loginScreen").style.display="none";
 }
 
 function normalize(s){
@@ -209,38 +248,12 @@ function getVipClass(v){
 
 function detectChip(code){
   code = code.toUpperCase();
-  if(code.startsWith("KM")||code.startsWith("KLM")||code.startsWith("KLU")||
-     code.startsWith("KMB")||code.startsWith("KMQ")||code.startsWith("KMR")||
-     code.startsWith("KMD")||code.startsWith("KMG")) return "SAMSUNG";
-  if(code.startsWith("H9")||code.startsWith("H26")||code.startsWith("H28")||
-     code.startsWith("H2")||code.startsWith("HN")) return "SK hynix";
-  if(code.startsWith("JZ")||code.startsWith("MT")) return "MICRON";
-  if(code.startsWith("THG")) return "KIOXIA";
-  if(code.startsWith("SDIN")||code.startsWith("SD")) return "SANDISK";
+  if(code.startsWith("KM")||code.startsWith("KLM")||code.startsWith("KLU")) return "SAMSUNG";
+  if(code.startsWith("H9")||code.startsWith("H26")) return "SK hynix";
   return "UNKNOWN";
 }
 
 function check(){
-  const saved = JSON.parse(localStorage.getItem("staffs"));
-
-  if(currentUser && currentUser!=="ADMIN"){
-    if(saved && saved[currentUser] && !saved[currentUser].open){
-      document.getElementById("out").innerHTML = `
-        <div style="
-          margin-top:40px;
-          padding:30px;
-          background:#1e1b4b;
-          border-radius:20px;
-          text-align:center;
-          font-weight:700;
-          font-size:18px;
-          color:#facc15;
-        ">
-          ⚠ TÀI KHOẢN ĐÃ BỊ KHÓA
-        </div>`;
-      return;
-    }
-  }
 
   const key=normalize(document.getElementById("q").value);
   const out=document.getElementById("out");
@@ -277,6 +290,7 @@ function copyLink(key,el){
     el.style.color="#60a5fa";
   },2000);
 }
+
 </script>
 
 </body>
