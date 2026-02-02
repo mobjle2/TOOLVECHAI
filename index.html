@@ -105,8 +105,6 @@ button{
   font-size:13px;
   font-weight:700;
   margin-top:10px;
-  position:relative;
-  overflow:hidden;
 }
 
 /* VIP STYLES */
@@ -122,6 +120,37 @@ button{
 </head>
 
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+  <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
+    <h2 style="text-align:center;color:gold;">🔐 LOGIN REQUIRED</h2>
+
+    <input id="loginEmail" type="email" placeholder="Nhập Gmail"
+    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+
+    <input id="loginPass" type="password" placeholder="Nhập Password"
+    style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+
+    <button onclick="secureLogin()" 
+    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
+      LOGIN
+    </button>
+
+    <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
+  </div>
+</div>
 
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
@@ -140,7 +169,7 @@ button{
   </div>
 
   <div class="disclaimer">
-    ⚠ Tool làm ve chai, chỉ mang tính tham khảo — data tổng hợp nhiều nguồn phân VIP nên có thể sai sót.
+    ⚠ Tool làm ve chai, chỉ mang tính tham khảo.
   </div>
 
   <div id="out"></div>
@@ -162,46 +191,13 @@ function copyVip(level){
 
   navigator.clipboard.writeText(link).then(()=>{
     const btn = document.querySelector(`.vip-copy button:nth-child(${level})`);
-
     btn.style.background = "#16a34a";
     btn.innerText = "✔ ĐÃ COPY";
-
     setTimeout(()=>{
       btn.style.background = "linear-gradient(45deg,#FFD700,#ffb700)";
       btn.innerText = "📋 Copy VIP" + level;
     },2000);
   });
-}
-
-
-function detectChip(code){
-  code = code.toUpperCase();
-
-  if(code.startsWith("KM")||code.startsWith("KLM")||code.startsWith("KLU")||
-     code.startsWith("KMB")||code.startsWith("KM8")||code.startsWith("KMF")||
-     code.startsWith("KMQ")||code.startsWith("KMR")||code.startsWith("KMD")||
-     code.startsWith("KMG")){
-    return { name:"SAMSUNG", icon:"🟢" };
-  }
-
-  if(code.startsWith("H9")||code.startsWith("H26")||code.startsWith("H28")||
-     code.startsWith("H2")||code.startsWith("HN")||code.startsWith("H5")){
-    return { name:"SK hynix", icon:"🟣" };
-  }
-
-  if(code.startsWith("JZ")||code.startsWith("MT")){
-    return { name:"MICRON", icon:"🔵" };
-  }
-
-  if(code.startsWith("THG")){
-    return { name:"KIOXIA / TOSHIBA", icon:"🟠" };
-  }
-
-  if(code.startsWith("SDIN")||code.startsWith("SD")||code.startsWith("WDC")){
-    return { name:"SANDISK / WD", icon:"🔴" };
-  }
-
-  return { name:"UNKNOWN / OEM", icon:"⚪" };
 }
 
 function normalize(s){
@@ -227,41 +223,46 @@ function check(){
   out.innerHTML="";
   if(!key) return;
 
-  let found=false;
-
   data.forEach(x=>{
     if(normalize(x.code).includes(key)){
-      found=true;
       const size=mmcMap[x.mmc]||"";
-      const chip=detectChip(x.code);
-
       out.innerHTML+=`
         <div class="item">
           <div style="font-weight:700;">⚡ ${x.code}</div>
-          <div class="badge">${chip.icon} ${chip.name}</div>
-          ${x.mmc?`<div class="badge" style="background:#0ea5e9;color:black;">💾 ${x.mmc} (${size})</div>`:""}
+          ${x.mmc?`<div class="badge">💾 ${x.mmc} (${size})</div>`:""}
           ${x.vip?`<div class="badge ${getVipClass(x.vip)}">👑 ${x.vip}</div>`:""}
         </div>
       `;
     }
   });
-
-  if(!found){
-    out.innerHTML=`<div style="text-align:center;padding:20px;color:#f87171;">❌ Không xác định mã</div>`;
-  }
 }
 
 q.addEventListener("keydown",e=>{
   if(e.key==="Enter") check();
 });
-  // Ẩn nút copy nếu đang ở link VIP
-const params = new URLSearchParams(window.location.search);
-const vipParam = params.get("vip");
 
-if(vipParam){
-  document.querySelector(".vip-copy").style.display = "none";
+// Ẩn copy khi có ?vip=
+const params = new URLSearchParams(window.location.search);
+if(params.get("vip")){
+  document.querySelector(".vip-copy").style.display="none";
 }
 
+// LOGIN
+(function(){
+const allowedEmail = "lktrungnguyen@gmail.com";
+const allowedPassword = "Tr11223344@";
+
+window.secureLogin = function(){
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+
+  if(email === allowedEmail && pass === allowedPassword){
+    document.getElementById("loginScreen").remove();
+  } else {
+    document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
+  }
+};
+})();
 </script>
 
 </body>
