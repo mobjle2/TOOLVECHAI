@@ -6,7 +6,7 @@
 <title>CHECK VIP</title>
 
 <style>
-  .vip-box{
+.vip-box{
   display:flex;
   gap:10px;
   margin-bottom:18px;
@@ -33,14 +33,12 @@ body{
   color:#f1f5f9;
 }
 
-/* CONTAINER */
 .container{
   max-width:1100px;
   margin:20px auto 60px;
   padding:0 14px;
 }
 
-/* TITLE */
 .title{
   text-align:center;
   font-size:22px;
@@ -51,7 +49,6 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
-/* INPUT */
 input{
   width:100%;
   padding:14px;
@@ -61,17 +58,9 @@ input{
   color:white;
   font-size:15px;
   outline:none;
-  box-sizing:border-box;   /* QUAN TRỌNG */
+  box-sizing:border-box;
 }
 
-
-
-input:focus{
-  border-color:#FFD700;
-  box-shadow:0 0 12px rgba(255,215,0,0.5);
-}
-
-/* BUTTON */
 button{
   width:100%;
   padding:14px;
@@ -83,39 +72,15 @@ button{
   background:linear-gradient(45deg,#FFD700,#ffb700);
   color:black;
   transition:0.2s;
-  box-sizing:border-box;   /* QUAN TRỌNG */
+  box-sizing:border-box;
 }
 
-button:active{
-  transform:scale(0.96);
-}
-
-/* COPY GROUP */
-.vip-copy{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-bottom:22px;
-}
-
-.vip-copy button{
-  padding:12px;
-  font-size:13px;
-}
-
-/* CHECK BOX */
 .check-box{
   display:flex;
   flex-direction:column;
   gap:14px;
 }
-.check-box input,
-.check-box button{
-  width:100%;
-  box-sizing:border-box;
-}
 
-/* DISCLAIMER */
 .disclaimer{
   margin-top:8px;
   font-size:11px;
@@ -123,7 +88,6 @@ button:active{
   text-align:center;
 }
 
-/* RESULT GRID */
 #out{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -131,28 +95,13 @@ button:active{
   margin-top:20px;
 }
 
-/* CARD */
 .item{
   background:linear-gradient(145deg,#0e0e0e,#181818);
   border-radius:18px;
   padding:14px;
   border:1px solid rgba(255,215,0,0.15);
-  backdrop-filter:blur(6px);
-  transition:0.25s;
 }
 
-.item:hover{
-  transform:translateY(-4px);
-}
-
-/* CODE TEXT */
-.item div:first-child{
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-
-/* BADGE */
 .badge{
   display:inline-flex;
   align-items:center;
@@ -164,56 +113,16 @@ button:active{
   margin-top:6px;
 }
 
-/* VIP EFFECTS */
-.vip-8{
-  background:linear-gradient(90deg,#6d28d9,#a855f7);
-  box-shadow:0 0 14px #a855f7;
-}
-
-.vip-9{
-  background:linear-gradient(90deg,#06b6d4,#0ea5e9);
-  box-shadow:0 0 16px #22d3ee;
-}
-
-.vip-10{
-  background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700);
-  box-shadow:0 0 20px gold;
-  position:relative;
-  overflow:hidden;
-}
-
-.vip-10::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:200%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.6),transparent);
-  animation:shine 2s infinite;
-}
-
-@keyframes shine{
-  0%{ left:-100%; }
-  100%{ left:100%; }
-}
-
-/* DESKTOP */
 @media(min-width:768px){
   #out{
     grid-template-columns:repeat(3,1fr);
   }
-  .vip-copy{
-    grid-template-columns:repeat(5,1fr);
-  }
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen" style="
 position:fixed;
 top:0;
@@ -228,18 +137,14 @@ z-index:9999;
 ">
   <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
     <h2 style="text-align:center;color:gold;">🔐 LOGIN REQUIRED</h2>
-
     <input id="loginEmail" type="email" placeholder="Nhập Gmail"
     style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-
     <input id="loginPass" type="password" placeholder="Nhập Password"
     style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-
     <button onclick="secureLogin()" 
     style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
       LOGIN
     </button>
-
     <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
   </div>
 </div>
@@ -247,17 +152,16 @@ z-index:9999;
 <div class="container">
   <div class="title">👑 CHECK VIP SYSTEM</div>
 
-<div class="vip-box">
-  <select id="vipSelect">
-    <option value="1">VIP 1</option>
-    <option value="2">VIP 2</option>
-    <option value="3">VIP 3</option>
-    <option value="4">VIP 4</option>
-    <option value="5">VIP 5</option>
-  </select>
-  <button onclick="copyVipSelected()">COPY LINK</button>
-</div>
-
+  <div class="vip-box">
+    <select id="vipSelect">
+      <option value="1">VIP 1</option>
+      <option value="2">VIP 2</option>
+      <option value="3">VIP 3</option>
+      <option value="4">VIP 4</option>
+      <option value="5">VIP 5</option>
+    </select>
+    <button onclick="copyVipSelected()">COPY LINK</button>
+  </div>
 
   <div class="check-box">
     <input id="q" placeholder="Nhập mã cần kiểm tra">
@@ -289,7 +193,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
-// LOGIN
 function secureLogin(){
   const email = document.getElementById("loginEmail").value;
   const pass = document.getElementById("loginPass").value;
@@ -303,13 +206,15 @@ function secureLogin(){
     });
 }
 
-// URL PARAM
 const params = new URLSearchParams(window.location.search);
 const vipParam = params.get("vip");
 
 if(vipParam){
   document.getElementById("loginScreen").remove();
-  document.querySelector(".vip-copy").style.display = "none";
+  const vipBox = document.querySelector(".vip-box");
+  if(vipBox){
+    vipBox.style.display = "none";
+  }
 }
 
 auth.onAuthStateChanged(function(user){
@@ -318,21 +223,6 @@ auth.onAuthStateChanged(function(user){
   }
 });
 
-// COPY
-function copyVip(level){
-  const link = window.location.origin + window.location.pathname + "?vip=" + level;
-
-  navigator.clipboard.writeText(link).then(()=>{
-    const btn = document.querySelector(`.vip-copy button:nth-child(${level})`);
-    btn.style.background = "#16a34a";
-    btn.innerText = "✔ ĐÃ COPY";
-
-    setTimeout(()=>{
-      btn.style.background = "linear-gradient(45deg,#FFD700,#ffb700)";
-      btn.innerText = "📋 Copy VIP" + level;
-    },2000);
-  });
-}
 function copyVipSelected(){
   const level = document.getElementById("vipSelect").value;
   const link = window.location.origin + window.location.pathname + "?vip=" + level;
@@ -349,34 +239,8 @@ function copyVipSelected(){
   });
 }
 
-// CHECK
 const q = document.getElementById("q");
 const out = document.getElementById("out");
-
-const mmcMap={
- MMC1:"16G",MMC2:"32G",MMC3:"64G",
- MMC4:"128G",MMC5:"256G",MMC6:"512G"
-};
-
-function detectChip(code){
-  code = code.toUpperCase();
-  if(code.startsWith("KM")) return { name:"SAMSUNG", icon:"🟢" };
-  if(code.startsWith("H")) return { name:"SK hynix", icon:"🟣" };
-  if(code.startsWith("MT")) return { name:"MICRON", icon:"🔵" };
-  return { name:"UNKNOWN", icon:"⚪" };
-}
-
-function getVipClass(v){
-  const num=parseInt(v.match(/\d+/));
-  if(num==5) return "vip-5";
-  if(num==6) return "vip-6";
-  if(num==7) return "vip-7";
-  if(num==8) return "vip-8";
-  if(num==9) return "vip-9";
-  if(num==10) return "vip-10";
-  if(num<=12) return "vip-11";
-  return "vip-13";
-}
 
 function normalize(s){
   return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
@@ -387,28 +251,16 @@ function check(){
   out.innerHTML="";
   if(!key) return;
 
-  let found=false;
-
   data.forEach(function(x){
     if(normalize(x.code).includes(key)){
-      found=true;
-      const size=mmcMap[x.mmc]||"";
-      const chip=detectChip(x.code);
-
       out.innerHTML+=`
         <div class="item">
           <div style="font-weight:700;">⚡ ${x.code}</div>
-          <div class="badge">${chip.icon} ${chip.name}</div>
-          ${x.mmc?`<div class="badge" style="background:#0ea5e9;color:black;">💾 ${x.mmc} (${size})</div>`:""}
-          ${x.vip?`<div class="badge ${getVipClass(x.vip)}">👑 ${x.vip}</div>`:""}
+          ${x.vip?`<div class="badge">👑 ${x.vip}</div>`:""}
         </div>
       `;
     }
   });
-
-  if(!found){
-    out.innerHTML=`<div style="text-align:center;padding:20px;color:#f87171;">❌ Không xác định mã</div>`;
-  }
 }
 
 q.addEventListener("keydown",function(e){
