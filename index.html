@@ -126,6 +126,40 @@ button{
 .vip-10{ background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700); color:black; }
 .vip-11{ background:linear-gradient(90deg,#ff4d00,#ff0000); color:white; }
 .vip-13{ background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000); color:white; }
+.info-card{
+  margin-top:20px;
+  padding:18px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#0e0e0e,#1a1a1a);
+  border:1px solid rgba(255,215,0,0.15);
+  box-shadow:0 0 20px rgba(255,215,0,0.05);
+  text-align:center;
+}
+
+.info-warning{
+  color:#ff4d4d;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.info-donate{
+  font-size:13px;
+  opacity:0.85;
+  margin-bottom:12px;
+}
+
+.info-bank{
+  font-size:14px;
+  font-weight:700;
+  color:#FFD700;
+  margin-bottom:10px;
+}
+
+.info-contact{
+  font-size:12px;
+  opacity:0.6;
+}
 
 </style>
 </head>
@@ -178,27 +212,25 @@ z-index:9999;
     <button onclick="check()">CHECK</button>
   </div>
 
-<div class="notice-box">
-  ⚠ Tool làm ve chai chỉ mang tính tham khảo.<br>
-  Đúng sai còn tùy theo nguồn phân VIP.
+<div class="info-card">
+  <div class="info-warning">
+    ⚠ Tool chỉ mang tính tham khảo, không đảm bảo chính xác tuyệt đối 100%.
+  </div>
+
+  <div class="info-donate">
+    Anh em cảm thấy hay có thể donate ☕ để phát triển thêm.
+  </div>
+
+  <div class="info-bank">
+    🏦 Vietcombank | Nguyen Minh Trung<br>
+    STK: <strong>9907373199</strong>
+  </div>
+
+  <div class="info-contact">
+    📱 Liên hệ: Telegram – 0907373199
+  </div>
 </div>
 
-<div class="support-card">
-  <div class="support-title">☕ Ủng hộ phát triển</div>
-
-  <div class="support-text">
-    Tool ve chai làm miễn phí phục vụ anh em ve chai.<br>
-    Nếu anh em thấy hữu ích có thể ủng hộ ly cafe để có động lực phát triển tiếp.
-  </div>
-
-  <div class="bank-info">
-    <strong>STK:</strong> 9907373199<br>
-    Vietcombank – Nguyen Minh Trung
-  </div>
-
-  <div class="contact-info">
-    Telegram: 0907373199
-  </div>
 </div>
 
 
