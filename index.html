@@ -127,9 +127,16 @@ button{
 .item{
   background:linear-gradient(145deg,#0e0e0e,#181818);
   border-radius:18px;
-  padding:14px;
+  padding:16px;
   border:1px solid rgba(255,215,0,0.15);
-  min-height:110px; /* cho card đều */
+
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+
+  min-height:auto;   /* bỏ ép chiều cao */
+}
+
 }
 
 
