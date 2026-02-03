@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHECK VIP</title>
+
+<style>
+.vip-box{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.vip-box select{
+  flex:1;
+  padding:14px;
+  border-radius:50px;
+  border:1px solid rgba(255,215,0,0.3);
+  background:#111;
+  color:white;
+  font-size:14px;
+}
+
+.vip-box button{
+  flex:1;
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI,Roboto,Arial;
+  background:radial-gradient(circle at top,#111,#000);
+  color:#f1f5f9;
+}
+
+.container{
+  max-width:1100px;
+  margin:20px auto 60px;
+  padding:0 14px;
+}
+
+.title{
+  text-align:center;
+  font-size:22px;
+  font-weight:800;
+  margin:20px 0 25px;
+  background:linear-gradient(90deg,#FFD700,#ffae00,#FFD700);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border-radius:50px;
+  border:1px solid rgba(255,215,0,0.3);
+  background:#111;
+  color:white;
+  font-size:15px;
+  outline:none;
+  box-sizing:border-box;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border-radius:50px;
+  border:none;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  background:linear-gradient(45deg,#FFD700,#ffb700);
+  color:black;
+  transition:0.2s;
+  box-sizing:border-box;
+}
+
+.check-box{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.disclaimer{
+  margin-top:8px;
+  font-size:11px;
+  opacity:0.6;
+  text-align:center;
+}
+
+#out{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:20px;
+}
+
+.item{
+  background:linear-gradient(145deg,#0e0e0e,#181818);
+  border-radius:18px;
+  padding:14px;
+  border:1px solid rgba(255,215,0,0.15);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  margin-top:6px;
+}
+
+@media(min-width:768px){
+  #out{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+  .vip-5{ background:#facc15; color:black; }
+.vip-6{ background:linear-gradient(90deg,#facc15,#fb923c); color:black; }
+.vip-7{ background:linear-gradient(90deg,#fb923c,#ef4444); color:white; }
+.vip-8{ background:linear-gradient(90deg,#6d28d9,#a855f7); color:white; }
+.vip-9{ background:linear-gradient(90deg,#06b6d4,#0ea5e9); color:white; }
+.vip-10{ background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700); color:black; }
+.vip-11{ background:linear-gradient(90deg,#ff4d00,#ff0000); color:white; }
+.vip-13{ background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000); color:white; }
+.info-card{
+  margin-top:20px;
+  padding:18px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#0e0e0e,#1a1a1a);
+  border:1px solid rgba(255,215,0,0.15);
+  box-shadow:0 0 20px rgba(255,215,0,0.05);
+  text-align:center;
+}
+
+.info-warning{
+  color:#ff4d4d;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.info-donate{
+  font-size:13px;
+  opacity:0.85;
+  margin-bottom:12px;
+}
+
+.info-bank{
+  font-size:14px;
+  font-weight:700;
+  color:#FFD700;
+  margin-bottom:10px;
+}
+
+.info-contact{
+  font-size:12px;
+  opacity:0.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="loginScreen" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+  <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
+    <h2 style="text-align:center;color:gold;">🔐 Tool Ve Chai Admin</h2>
+    <input id="loginEmail" type="email" placeholder="Nhập Gmail"
+    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+    <input id="loginPass" type="password" placeholder="Nhập Password"
+    style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
+    <button onclick="secureLogin()" 
+    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
+      LOGIN
+    </button>
+    <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="title">🛠 Tool Ve Chai Check VIP V1</div>
+
+
+  <div class="vip-box">
+    <select id="vipSelect">
+      <option value="1">VIP 1</option>
+      <option value="2">VIP 2</option>
+      <option value="3">VIP 3</option>
+      <option value="4">VIP 4</option>
+      <option value="5">VIP 5</option>
+    </select>
+    <button onclick="copyVipSelected()">COPY LINK</button>
+  </div>
+
+  <div class="check-box">
+    <input id="q" placeholder="Nhập mã cần kiểm tra">
+    <button onclick="check()">CHECK</button>
+  </div>
+
+<div class="info-card">
+  <div class="info-warning">
+    ⚠ Tool chỉ mang tính tham khảo, không đảm bảo chính xác tuyệt đối 100%.
+  </div>
+
+  <div class="info-donate">
+    Anh em cảm thấy hay có thể donate ☕ để phát triển thêm.
+  </div>
+
+  <div class="info-bank">
+    🏦 Vietcombank | Nguyen Minh Trung<br>
+    STK: <strong>9907373199</strong>
+  </div>
+
+  <div class="info-contact">
+    📱 Liên hệ: Telegram – 0907373199
+  </div>
+</div>
+
+</div>
+
+
+
+  <div id="out"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCEL7BDXvmNi2dp1VNpua7b2plpTiTOK3U",
+  authDomain: "toolvechai.firebaseapp.com",
+  projectId: "toolvechai",
+  storageBucket: "toolvechai.firebasestorage.app",
+  messagingSenderId: "947125032083",
+  appId: "1:947125032083:web:a7335aa5fd446a44446966"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+function secureLogin(){
+  const email = document.getElementById("loginEmail").value;
+  const pass = document.getElementById("loginPass").value;
+
+  auth.signInWithEmailAndPassword(email, pass)
+    .then(() => {
+      document.getElementById("loginScreen").remove();
+    })
+    .catch(() => {
+      document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
+    });
+}
+
+const params = new URLSearchParams(window.location.search);
+const vipParam = params.get("vip");
+
+if(vipParam){
+  document.getElementById("loginScreen").remove();
+  const vipBox = document.querySelector(".vip-box");
+  if(vipBox){
+    vipBox.style.display = "none";
+  }
+}
+
+auth.onAuthStateChanged(function(user){
+  if(user){
+    document.getElementById("loginScreen").remove();
+  }
+});
+
+function copyVipSelected(){
+  const level = document.getElementById("vipSelect").value;
+  const link = window.location.origin + window.location.pathname + "?vip=" + level;
+
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn = document.querySelector(".vip-box button");
+    btn.innerText = "✔ ĐÃ COPY";
+    btn.style.background="#16a34a";
+
+    setTimeout(()=>{
+      btn.innerText = "COPY LINK";
+      btn.style.background="linear-gradient(45deg,#FFD700,#ffb700)";
+    },2000);
+  });
+}
+
+const q = document.getElementById("q");
+const out = document.getElementById("out");
+const mmcMap={
+ MMC1:"16G",MMC2:"32G",MMC3:"64G",
+ MMC4:"128G",MMC5:"256G",MMC6:"512G"
+};
+
+function detectChip(code){
+  code = code.toUpperCase();
+
+  if(code.startsWith("KM") || code.startsWith("KLM") || code.startsWith("KLU") ||
+     code.startsWith("KMB") || code.startsWith("KM8") || code.startsWith("KMF") ||
+     code.startsWith("KMQ") || code.startsWith("KMR") || code.startsWith("KMD") ||
+     code.startsWith("KMG")){
+    return { name:"SAMSUNG", icon:"🟢" };
+  }
+
+  if(code.startsWith("H9") || code.startsWith("H26") || code.startsWith("H28") ||
+     code.startsWith("H2") || code.startsWith("HN") || code.startsWith("H5")){
+    return { name:"SK hynix", icon:"🟣" };
+  }
+
+  if(code.startsWith("JZ") || code.startsWith("MT")){
+    return { name:"MICRON", icon:"🔵" };
+  }
+
+  if(code.startsWith("THG")){
+    return { name:"KIOXIA / TOSHIBA", icon:"🟠" };
+  }
+
+  if(code.startsWith("SDIN") || code.startsWith("SD") || code.startsWith("WDC")){
+    return { name:"SANDISK / WD", icon:"🔴" };
+  }
+
+  return { name:"UNKNOWN / OEM", icon:"⚪" };
+}
+
+
+function getVipClass(v){
+  const num=parseInt(v.match(/\d+/));
+  if(num==5) return "vip-5";
+  if(num==6) return "vip-6";
+  if(num==7) return "vip-7";
+  if(num==8) return "vip-8";
+  if(num==9) return "vip-9";
+  if(num==10) return "vip-10";
+  if(num<=12) return "vip-11";
+  return "vip-13";
+}
+
+function normalize(s){
+  return s.toUpperCase().replace(/[^A-Z0-9]/g,"");
+}
+
+function check(){
+  const key=normalize(q.value);
+  out.innerHTML="";
+  if(!key) return;
+
+  let found=false;
+
+  data.forEach(function(x){
+    if(normalize(x.code).includes(key)){
+      found=true;
+
+      const size = mmcMap[x.mmc] || "";
+      const chip = detectChip(x.code);
+
+      out.innerHTML+=`
+        <div class="item">
+          <div style="font-weight:700;">⚡ ${x.code}</div>
+
+          <div class="badge">
+            ${chip.icon} ${chip.name}
+          </div>
+
+          ${x.mmc?`
+            <div class="badge" style="background:#0ea5e9;color:black;">
+              💾 ${x.mmc} (${size})
+            </div>
+          `:""}
+
+          ${x.vip?`
+            <div class="badge ${getVipClass(x.vip)}">
+              👑 ${x.vip}
+            </div>
+          `:""}
+        </div>
+      `;
+    }
+  });
+
+  if(!found){
+    out.innerHTML=`<div style="text-align:center;padding:20px;color:#f87171;">❌ Không xác định mã</div>`;
+  }
+}
+
+
+q.addEventListener("keydown",function(e){
+  if(e.key==="Enter") check();
+});
+</script>
+
+</body>
+</html>
