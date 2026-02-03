@@ -391,7 +391,28 @@ html += `
     </button>
   </div>
 `;
-</script>
+  });
 
-</body>
-</html>
+  document.getElementById("linkList").innerHTML = html;
+}
+
+function copyLink(id){
+  const link = window.location.origin +
+               window.location.pathname +
+               "?u=" + id;
+
+  navigator.clipboard.writeText(link);
+  alert("Đã copy link!");
+}
+
+async function toggleLink(id,current){
+  await db.collection("shareLinks").doc(id).update({
+    active: !current
+  });
+  loadLinks();
+}
+
+async function deleteLink(id){
+  await db.collection("shareLinks").doc(id).delete();
+  loadLinks();
+}
