@@ -135,6 +135,22 @@ z-index:9999;
   <button onclick="check()"
     style="width:100%;padding:12px;border-radius:10px;margin-top:10px;">
     CHECK
+    <!-- ===== ADMIN TOOLS ===== -->
+<div id="adminPanel" style="display:none;margin-top:30px;">
+
+  <hr style="margin:20px 0;">
+
+  <h3>🔗 Quản lý Link</h3>
+
+  <button onclick="createLink()"
+    style="width:100%;padding:12px;border-radius:10px;background:#16a34a;color:white;">
+    ➕ Tạo link mới
+  </button>
+
+  <div id="linkList" style="margin-top:15px;"></div>
+
+</div>
+
   </button>
 
  <div id="out" style="
@@ -231,9 +247,17 @@ function secureLogin(){
 }
 
 auth.onAuthStateChanged(function(user){
+
   if(user){
     document.getElementById("loginScreen").remove();
+
+    // Nếu KHÔNG có ?u= thì mới hiện admin
+    if(!userParam){
+      document.getElementById("adminPanel").style.display = "block";
+      loadLinks();
+    }
   }
+
 });
 
 // MAP MMC
@@ -315,6 +339,43 @@ async function check(){
   }
 }
 
+// ====== DÁN CODE QUẢN LÝ LINK Ở ĐÂY ======
+
+async function createLink(){
+  const id = Date.now().toString(36) +
+             Math.random().toString(36).substring(2,6);
+
+  await db.collection("shareLinks").doc(id).set({
+    active:true,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  alert("Đã tạo link!");
+  loadLinks();
+}
+
+async function loadLinks(){
+  const snap = await db.collection("shareLinks").get();
+
+  let html = "";
+
+  snap.forEach(doc=>{
+    const d = doc.data();
+
+    html += `
+      <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
+        <div><strong>ID:</strong> ${doc.id}</div>
+
+        <div style="margin:5px 0;">
+          <span style="background:${d.active ? '#16a34a' : '#facc15'};
+                       padding:4px 10px;
+                       border-radius:999px;
+                       font-size:12px;">
+            ${d.active ? 'ĐANG MỞ' : 'ĐANG KHÓA'}
+          </span>
+        </div>
+
+        <button onclick="copyLink('${doc.id}'
 
  
 </script>
