@@ -348,12 +348,14 @@ async function check(){
 
 // ====== DÁN CODE QUẢN LÝ LINK Ở ĐÂY ======
 
-async function createLink(){
+// ===== QUẢN LÝ LINK CHUẨN =====
+
+async function createLink() {
   const id = Date.now().toString(36) +
              Math.random().toString(36).substring(2,6);
 
   await db.collection("shareLinks").doc(id).set({
-    active:true,
+    active: true,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
 
@@ -361,43 +363,45 @@ async function createLink(){
   loadLinks();
 }
 
-async function loadLinks(){
-  const snap = await db.collection("shareLinks").get();
+async function loadLinks() {
 
+  const snap = await db.collection("shareLinks").get();
   let html = "";
 
-  snap.forEach(doc=>{
+  snap.forEach(doc => {
+
     const d = doc.data();
 
-html += `
-  <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
-    <div><strong>ID:</strong> ${doc.id}</div>
+    html += `
+      <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
+        <div><strong>ID:</strong> ${doc.id}</div>
 
-    <div style="margin:5px 0;">
-      <span style="background:${d.active ? '#16a34a' : '#facc15'};
-                   padding:4px 10px;
-                   border-radius:999px;
-                   font-size:12px;">
-        ${d.active ? 'ĐANG MỞ' : 'ĐANG KHÓA'}
-      </span>
-    </div>
+        <div style="margin:5px 0;">
+          <span style="
+            background:${d.active ? '#16a34a' : '#facc15'};
+            padding:4px 10px;
+            border-radius:999px;
+            font-size:12px;">
+            ${d.active ? 'ĐANG MỞ' : 'ĐANG KHÓA'}
+          </span>
+        </div>
 
-    <button onclick="copyLink('${doc.id}')">Copy</button>
-    <button onclick="toggleLink('${doc.id}', ${d.active})">
-      ${d.active ? 'Khóa' : 'Mở'}
-    </button>
-    <button onclick="deleteLink('${doc.id}')"
-      style="background:#dc2626;color:white;">
-      Xóa
-    </button>
-  </div>
-`;
+        <button onclick="copyLink('${doc.id}')">Copy</button>
+        <button onclick="toggleLink('${doc.id}', ${d.active})">
+          ${d.active ? 'Khóa' : 'Mở'}
+        </button>
+        <button onclick="deleteLink('${doc.id}')"
+          style="background:#dc2626;color:white;">
+          Xóa
+        </button>
+      </div>
+    `;
   });
 
   document.getElementById("linkList").innerHTML = html;
 }
 
-function copyLink(id){
+function copyLink(id) {
   const link = window.location.origin +
                window.location.pathname +
                "?u=" + id;
@@ -406,14 +410,19 @@ function copyLink(id){
   alert("Đã copy link!");
 }
 
-async function toggleLink(id,current){
+async function toggleLink(id, current) {
   await db.collection("shareLinks").doc(id).update({
     active: !current
   });
   loadLinks();
 }
 
-async function deleteLink(id){
+async function deleteLink(id) {
   await db.collection("shareLinks").doc(id).delete();
   loadLinks();
 }
+</script>
+
+</body>
+</html>
+
