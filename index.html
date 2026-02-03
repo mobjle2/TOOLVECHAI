@@ -194,6 +194,7 @@ button:not(.mini-check){
   box-sizing:border-box;
 }
 
+
 .info-warning{
   color:#ff4d4d;
   font-size:13px;
@@ -202,22 +203,28 @@ button:not(.mini-check){
 }
 
 .info-donate{
-  font-size:13px;
-  opacity:0.85;
-  margin-bottom:12px;
-}
-
-.info-bank{
   font-size:14px;
-  font-weight:500;
-  color:#e5e7eb; /* màu trắng dịu */
   margin-bottom:10px;
 }
 
+.info-bank{
+  font-size:15px;
+  font-weight:600;
+  line-height:1.5;
+  word-break:break-word; /* tránh tràn dòng */
+}
 
 .info-contact{
-  font-size:12px;
-  opacity:0.6;
+  font-size:13px;
+  opacity:0.7;
+  margin-top:6px;
+}
+
+@media(max-width:480px){
+  .info-card{
+    font-size:14px;
+    padding:14px 16px;
+  }
 }
 
 </style>
