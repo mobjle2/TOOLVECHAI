@@ -368,22 +368,29 @@ async function loadLinks(){
   snap.forEach(doc=>{
     const d = doc.data();
 
-    html += `
-      <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
-        <div><strong>ID:</strong> ${doc.id}</div>
+html += `
+  <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
+    <div><strong>ID:</strong> ${doc.id}</div>
 
-        <div style="margin:5px 0;">
-          <span style="background:${d.active ? '#16a34a' : '#facc15'};
-                       padding:4px 10px;
-                       border-radius:999px;
-                       font-size:12px;">
-            ${d.active ? 'ĐANG MỞ' : 'ĐANG KHÓA'}
-          </span>
-        </div>
+    <div style="margin:5px 0;">
+      <span style="background:${d.active ? '#16a34a' : '#facc15'};
+                   padding:4px 10px;
+                   border-radius:999px;
+                   font-size:12px;">
+        ${d.active ? 'ĐANG MỞ' : 'ĐANG KHÓA'}
+      </span>
+    </div>
 
-        <button onclick="copyLink('${doc.id}'
-
- 
+    <button onclick="copyLink('${doc.id}')">Copy</button>
+    <button onclick="toggleLink('${doc.id}', ${d.active})">
+      ${d.active ? 'Khóa' : 'Mở'}
+    </button>
+    <button onclick="deleteLink('${doc.id}')"
+      style="background:#dc2626;color:white;">
+      Xóa
+    </button>
+  </div>
+`;
 </script>
 
 </body>
