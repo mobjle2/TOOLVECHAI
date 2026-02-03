@@ -105,10 +105,33 @@ button{
 
 #out{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:repeat(2,1fr); /* Mobile mặc định */
   gap:14px;
   margin-top:20px;
 }
+
+/* Tablet */
+@media (min-width:768px){
+  #out{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+/* PC */
+@media (min-width:1024px){
+  #out{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+.item{
+  background:linear-gradient(145deg,#0e0e0e,#181818);
+  border-radius:18px;
+  padding:14px;
+  border:1px solid rgba(255,215,0,0.15);
+  min-height:110px; /* cho card đều */
+}
+
 
 .item{
   background:linear-gradient(145deg,#0e0e0e,#181818);
