@@ -25,6 +25,19 @@
 .vip-box button{
   flex:1;
 }
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(registration) {
+        console.log('ServiceWorker registered');
+      })
+      .catch(function(error) {
+        console.log('ServiceWorker failed:', error);
+      });
+  });
+}
+</script>
 
 body{
   margin:0;
