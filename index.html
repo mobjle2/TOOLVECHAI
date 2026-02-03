@@ -99,10 +99,13 @@ button{
   box-sizing:border-box;
 }
 
-.check-box{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+.check-box input{
+  box-shadow:0 0 15px rgba(255,215,0,0.2);
+  transition:0.3s;
+}
+
+.check-box input:focus{
+  box-shadow:0 0 25px rgba(255,215,0,0.5);
 }
 
 .disclaimer{
@@ -239,9 +242,9 @@ z-index:9999;
 </div>
 
 <div class="check-box">
-  <input id="q" placeholder="Nhập mã cần kiểm tra">
-  <button onclick="check()">CHECK</button>
+  <input id="q" placeholder="Nhập mã cần kiểm tra (Nhấn Enter để kiểm tra)">
 </div>
+
 
 <div id="out"></div>
 
