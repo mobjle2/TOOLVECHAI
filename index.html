@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
+
 body{
   font-family:Arial;
   background:#111;
@@ -28,6 +29,40 @@ body{
   font-size:12px;
   margin-top:5px;
 }
+
+/* ====== THÊM TỪ ĐÂY ====== */
+
+@media(min-width:900px){
+  #out{
+    grid-template-columns:repeat(3,1fr) !important;
+  }
+}
+
+.mmc-badge{
+  background:linear-gradient(90deg,#1fb6ff,#0ea5e9);
+  color:white;
+}
+
+.vip-8{
+  background:linear-gradient(90deg,#7c3aed,#a855f7);
+  color:white;
+  box-shadow:0 0 20px rgba(168,85,247,0.7);
+}
+
+.vip-9{
+  background:linear-gradient(90deg,#06b6d4,#0ea5e9);
+  color:white;
+  box-shadow:0 0 20px rgba(14,165,233,0.7);
+}
+
+.vip-10{
+  background:linear-gradient(90deg,#FFD700,#ffcc00);
+  color:black;
+  box-shadow:0 0 25px rgba(255,215,0,0.9);
+}
+
+/* ====== KẾT THÚC THÊM ====== */
+
 </style>
 
 </head>
@@ -69,7 +104,13 @@ z-index:9999;
     CHECK
   </button>
 
-  <div id="out" style="margin-top:20px;"></div>
+ <div id="out" style="
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+"></div>
+
 </div>
 
 <script>
@@ -172,8 +213,9 @@ async function check(){
         <div class="item">
           <div style="font-weight:700;">⚡ ${x.code}</div>
           <div class="badge">${chip.icon} ${chip.name}</div>
-          ${x.mmc ? `<div class="badge">💾 ${x.mmc} (${size})</div>` : ""}
-          ${x.vip ? `<div class="badge">👑 ${x.vip}</div>` : ""}
+         ${x.mmc ? `<div class="badge mmc-badge">💾 ${x.mmc} (${size})</div>` : ""}
+         ${x.vip ? `<div class="badge vip-${x.vip.replace(/\D/g,'')}">👑 ${x.vip}</div>` : ""}
+
         </div>
       `;
     });
