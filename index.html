@@ -159,15 +159,24 @@ const db = firebase.firestore();
 const params = new URLSearchParams(window.location.search);
 const userParam = params.get("u");
 
+// Nếu có ?u= thì chạy chế độ USER
 if(userParam){
+
+  // Ẩn login screen nếu đang đăng nhập
+  const loginScreen = document.getElementById("loginScreen");
+  if(loginScreen) loginScreen.remove();
+
+  // Ẩn toàn bộ admin tools
+  const adminBox = document.getElementById("adminTools");
+  if(adminBox) adminBox.style.display = "none";
+
+  // Kiểm tra link trong Firestore
   checkUserAccess(userParam);
 }
 
-// Kiểm tra quyền link
 async function checkUserAccess(id){
 
   try{
-
     const doc = await db.collection("shareLinks").doc(id).get();
 
     if(!doc.exists){
@@ -180,14 +189,11 @@ async function checkUserAccess(id){
       return;
     }
 
-    // Ẩn admin nếu là user
-    const adminBox = document.getElementById("adminTools");
-    if(adminBox) adminBox.style.display = "none";
-
   }catch(e){
     document.body.innerHTML = "❌ Lỗi quyền truy cập!";
   }
 }
+
 
 
 auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
