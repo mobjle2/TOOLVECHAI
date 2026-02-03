@@ -184,39 +184,7 @@ async function check(){
 }
 
 
-  try{
-
-    const snapshot = await db.collection("codes")
-      .where("search", ">=", key)
-      .where("search", "<=", key + "\uf8ff")
-      .limit(20)
-      .get();
-
-    if(snapshot.empty){
-      out.innerHTML="❌ Không xác định mã";
-      return;
-    }
-
-    snapshot.forEach(doc => {
-
-      const x = doc.data();
-      const chip = detectChip(x.code);
-      const size = mmcMap[x.mmc] || "";
-
-      out.innerHTML+=`
-        <div class="item">
-          <b>⚡ ${x.code}</b><br>
-          ${chip.icon} ${chip.name}<br>
-          ${x.mmc ? "💾 "+x.mmc+" ("+size+")<br>" : ""}
-          ${x.vip ? "👑 "+x.vip : ""}
-        </div>
-      `;
-    });
-
-  }catch(e){
-    out.innerHTML="❌ Lỗi quyền truy cập";
-  }
-}
+ 
 </script>
 
 </body>
