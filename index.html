@@ -161,17 +161,35 @@ const userParam = params.get("u");
 
 // Nếu có ?u= thì chạy chế độ USER
 if(userParam){
+  runUserMode(userParam);
+}
 
-  // Ẩn login screen nếu đang đăng nhập
-  const loginScreen = document.getElementById("loginScreen");
-  if(loginScreen) loginScreen.remove();
+async function runUserMode(id){
 
-  // Ẩn toàn bộ admin tools
-  const adminBox = document.getElementById("adminTools");
-  if(adminBox) adminBox.style.display = "none";
+  try{
 
-  // Kiểm tra link trong Firestore
-  checkUserAccess(userParam);
+    const doc = await db.collection("shareLinks").doc(id).get();
+
+    if(!doc.exists){
+      document.body.innerHTML = "❌ Link không tồn tại!";
+      return;
+    }
+
+    if(!doc.data().active){
+      document.body.innerHTML = "🔒 Link đã bị khóa!";
+      return;
+    }
+
+    // Nếu hợp lệ → bỏ login screen hoàn toàn
+    const loginScreen = document.getElementById("loginScreen");
+    if(loginScreen) loginScreen.remove();
+
+    // Tắt luôn Firebase auth auto login
+    auth.signOut();
+
+  }catch(e){
+    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
+  }
 }
 
 async function checkUserAccess(id){
