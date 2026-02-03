@@ -5,13 +5,32 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CHECK VIP</title>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-</head>
+<style>
+body{
+  font-family:Arial;
+  background:#111;
+  color:white;
+}
+.item{
+  background:#1a1a1a;
+  padding:15px;
+  margin-bottom:10px;
+  border-radius:10px;
+}
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+  margin-top:5px;
+}
+</style>
 
+</head>
 <body>
 
 <div id="loginScreen" style="
@@ -61,7 +80,6 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -81,7 +99,6 @@ function secureLogin(){
     });
 }
 
-// Nếu đã login thì tự bỏ màn hình login
 auth.onAuthStateChanged(function(user){
   if(user){
     document.getElementById("loginScreen").remove();
@@ -98,40 +115,23 @@ const mmcMap={
 function detectChip(code){
   code = code.toUpperCase();
 
-  if(code.startsWith("KM") || code.startsWith("KLM") || code.startsWith("KLU") ||
-     code.startsWith("KMB") || code.startsWith("KM8") || code.startsWith("KMF") ||
-     code.startsWith("KMQ") || code.startsWith("KMR") || code.startsWith("KMD") ||
-     code.startsWith("KMG")){
-    return { name:"SAMSUNG", icon:"🟢" };
-  }
-
-  if(code.startsWith("H9") || code.startsWith("H26") || code.startsWith("H28") ||
-     code.startsWith("H2") || code.startsWith("HN") || code.startsWith("H5")){
-    return { name:"SK hynix", icon:"🟣" };
-  }
-
-  if(code.startsWith("JZ") || code.startsWith("MT")){
-    return { name:"MICRON", icon:"🔵" };
-  }
-
-  if(code.startsWith("THG")){
-    return { name:"KIOXIA / TOSHIBA", icon:"🟠" };
-  }
-
-  if(code.startsWith("SDIN") || code.startsWith("SD") || code.startsWith("WDC")){
-    return { name:"SANDISK / WD", icon:"🔴" };
-  }
+  if(code.startsWith("KM")) return { name:"SAMSUNG", icon:"🟢" };
+  if(code.startsWith("H")) return { name:"SK hynix", icon:"🟣" };
+  if(code.startsWith("JZ")) return { name:"MICRON", icon:"🔵" };
+  if(code.startsWith("THG")) return { name:"KIOXIA", icon:"🟠" };
+  if(code.startsWith("SD")) return { name:"SANDISK", icon:"🔴" };
 
   return { name:"UNKNOWN / OEM", icon:"⚪" };
 }
 
-// CHECK CODE FROM FIRESTORE (SEARCH 3 KÝ TỰ)
+// CHECK (SEARCH 3 KÝ TỰ)
 async function check(){
 
-  const q = document.getElementById("q");
-  const out = document.getElementById("out");
+  const key = document.getElementById("q").value
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g,"");
 
-  const key = q.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+  const out = document.getElementById("out");
   out.innerHTML="";
 
   if(key.length < 3){
@@ -155,70 +155,21 @@ async function check(){
     snapshot.forEach(doc => {
 
       const x = doc.data();
-      const size = mmcMap[x.mmc] || "";
       const chip = detectChip(x.code);
+      const size = mmcMap[x.mmc] || "";
 
       out.innerHTML+=`
         <div class="item">
-          <div style="font-weight:700;">⚡ ${x.code}</div>
-
-          <div class="badge">
-            ${chip.icon} ${chip.name}
-          </div>
-
-          ${x.mmc?`
-            <div class="badge" style="background:#0ea5e9;color:black;">
-              💾 ${x.mmc} (${size})
-            </div>
-          `:""}
-
-          ${x.vip?`
-            <div class="badge ${getVipClass(x.vip)}">
-              👑 ${x.vip}
-            </div>
-          `:""}
+          <b>⚡ ${x.code}</b><br>
+          ${chip.icon} ${chip.name}<br>
+          ${x.mmc ? "💾 "+x.mmc+" ("+size+")<br>" : ""}
+          ${x.vip ? "👑 "+x.vip : ""}
         </div>
       `;
     });
 
   }catch(e){
     out.innerHTML="❌ Lỗi quyền truy cập";
-  }
-}
-
-
-  out.innerHTML = "";
-
-  if(!input) return;
-
-  try {
-
-    await db.collection("codes").doc(code).set({
-  ...fields,
-  code: code,
-  search: code.toUpperCase().replace(/[^A-Z0-9]/g,"")
-});
-
-    if(!doc.exists){
-      out.innerHTML = "❌ Không xác định mã";
-      return;
-    }
-
-    const data = doc.data();
-    const chip = detectChip(input);
-    const size = mmcMap[data.mmc] || "";
-
-    out.innerHTML = `
-      <div>
-        <b>⚡ ${input}</b><br>
-        ${chip.icon} ${chip.name}<br>
-        ${data.mmc ? "💾 "+data.mmc+" ("+size+")<br>" : ""}
-        ${data.vip ? "👑 "+data.vip : ""}
-      </div>
-    `;
-
-  } catch(e){
-    out.innerHTML = "❌ Chưa đăng nhập hoặc không có quyền truy cập";
   }
 }
 </script>
