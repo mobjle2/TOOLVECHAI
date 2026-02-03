@@ -207,36 +207,17 @@ z-index:9999;
     <button onclick="copyVipSelected()">COPY LINK</button>
   </div>
 
-  <div class="check-box">
+  <div class="check-<div class="info-warning" style="text-align:center;margin-bottom:10px;">
+⚠ Tool chỉ mang tính tham khảo, không đảm bảo chính xác tuyệt đối 100%.
+</div>
+
+<div class="check-box">
+box">
     <input id="q" placeholder="Nhập mã cần kiểm tra">
     <button onclick="check()">CHECK</button>
-  </div>
-
-<div class="info-card">
-  <div class="info-warning">
-    ⚠ Tool chỉ mang tính tham khảo, không đảm bảo chính xác tuyệt đối 100%.
-  </div>
-
-  <div class="info-donate">
-    Anh em cảm thấy hay có thể donate ☕ để phát triển thêm.
-  </div>
-
-  <div class="info-bank">
-    🏦 Vietcombank | Nguyen Minh Trung<br>
-    STK: <strong>9907373199</strong>
-  </div>
-
-  <div class="info-contact">
-    📱 Liên hệ: Telegram – 0907373199
-  </div>
+<div id="out"></div>
 </div>
 
-</div>
-
-
-
-  <div id="out"></div>
-</div>
 
 <script src="data.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -404,6 +385,22 @@ q.addEventListener("keydown",function(e){
   if(e.key==="Enter") check();
 });
 </script>
+<div class="info-card" style="max-width:1100px;margin:40px auto 60px;">
+  
+  <div class="info-donate">
+    Anh em cảm thấy hay có thể donate ☕ để phát triển thêm.
+  </div>
+
+  <div class="info-bank">
+    🏦 Vietcombank | Nguyen Minh Trung<br>
+    STK: <strong>9907373199</strong>
+  </div>
+
+  <div class="info-contact">
+    📱 Liên hệ: Telegram – 0907373199
+  </div>
+
+</div>
 
 </body>
 </html>
