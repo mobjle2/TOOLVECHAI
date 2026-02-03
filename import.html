@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Import Codes</title>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<h2>IMPORT 500 CODES</h2>
+<button onclick="importData()">Start Import</button>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCEL7BDXvmNi2dp1VNpua7b2plpTiTOK3U",
+  authDomain: "toolvechai.firebaseapp.com",
+  projectId: "toolvechai"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+
+// ⬇⬇⬇ DÁN TOÀN BỘ 500 DÒNG DATA VÀO ĐÂY ⬇⬇⬇
+const data = [
+
+  // DÁN TỪ data.js Ở ĐÂY
+  // ví dụ:
+  {code:"H26M52103FMR", mmc:"MMC1"},
+  {code:"KM8F9001JM-B813", vip:"VIP 9"},
+
+];
+
+async function importData(){
+
+  for (let item of data) {
+
+    const { code, ...fields } = item;
+
+    await db.collection("codes").doc(code).set(fields);
+
+    console.log("Imported:", code);
+  }
+
+  alert("IMPORT HOÀN TẤT!");
+}
+
+</script>
+
+</body>
+</html>
