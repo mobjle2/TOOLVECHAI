@@ -417,7 +417,12 @@ async function importData(){
 
       const { code, ...fields } = item;
 
-      await db.collection("codes").doc(code).set(fields);
+      await db.collection("codes").doc(code).set({
+  ...fields,
+  code: code,
+  search: code.toUpperCase().replace(/[^A-Z0-9]/g,"")
+});
+
 
       console.log("Imported:", code);
     }
