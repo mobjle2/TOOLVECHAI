@@ -127,17 +127,62 @@ function detectChip(code){
 // CHECK (SEARCH 3 KÝ TỰ)
 async function check(){
 
-  const key = document.getElementById("q").value
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g,"");
-
+  const q = document.getElementById("q");
   const out = document.getElementById("out");
-  out.innerHTML="";
 
-  if(key.length < 3){
-    out.innerHTML = "⚠ Nhập ít nhất 3 ký tự";
+  const key = q.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+  out.innerHTML = "";
+
+  if(key.length !== 3){
+    out.innerHTML = "⚠ Nhập đúng 3 ký tự";
     return;
   }
+
+  try{
+
+    const prefixSnap = await db.collection("codes")
+      .where("prefix3", "==", key)
+      .get();
+
+    const suffixSnap = await db.collection("codes")
+      .where("suffix3", "==", key)
+      .get();
+
+    const results = new Map();
+
+    prefixSnap.forEach(doc => {
+      results.set(doc.id, doc.data());
+    });
+
+    suffixSnap.forEach(doc => {
+      results.set(doc.id, doc.data());
+    });
+
+    if(results.size === 0){
+      out.innerHTML = "❌ Không xác định mã";
+      return;
+    }
+
+    results.forEach(x => {
+
+      const size = mmcMap[x.mmc] || "";
+      const chip = detectChip(x.code);
+
+      out.innerHTML += `
+        <div class="item">
+          <div style="font-weight:700;">⚡ ${x.code}</div>
+          <div class="badge">${chip.icon} ${chip.name}</div>
+          ${x.mmc ? `<div class="badge">💾 ${x.mmc} (${size})</div>` : ""}
+          ${x.vip ? `<div class="badge">👑 ${x.vip}</div>` : ""}
+        </div>
+      `;
+    });
+
+  }catch(e){
+    out.innerHTML = "❌ Lỗi quyền truy cập";
+  }
+}
+
 
   try{
 
