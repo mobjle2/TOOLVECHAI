@@ -156,6 +156,39 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+const params = new URLSearchParams(window.location.search);
+const userParam = params.get("u");
+
+if(userParam){
+  checkUserAccess(userParam);
+}
+
+// Kiểm tra quyền link
+async function checkUserAccess(id){
+
+  try{
+
+    const doc = await db.collection("shareLinks").doc(id).get();
+
+    if(!doc.exists){
+      document.body.innerHTML = "❌ Link không tồn tại!";
+      return;
+    }
+
+    if(!doc.data().active){
+      document.body.innerHTML = "🔒 Link đã bị khóa!";
+      return;
+    }
+
+    // Ẩn admin nếu là user
+    const adminBox = document.getElementById("adminTools");
+    if(adminBox) adminBox.style.display = "none";
+
+  }catch(e){
+    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
+  }
+}
+
 
 auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
