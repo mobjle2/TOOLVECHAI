@@ -136,7 +136,11 @@ async function check(){
 
   try {
 
-    const doc = await db.collection("codes").doc(input).get();
+    await db.collection("codes").doc(code).set({
+  ...fields,
+  code: code,
+  search: code.toUpperCase().replace(/[^A-Z0-9]/g,"")
+});
 
     if(!doc.exists){
       out.innerHTML = "❌ Không xác định mã";
