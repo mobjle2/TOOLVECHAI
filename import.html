@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Import Codes</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+  <h2>IMPORT 500 CODES</h2>
+  <button onclick="importData()">Start Import</button>
+
 <script>
 
 const firebaseConfig = {
@@ -10,9 +25,10 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 
-// ===== DÁN 500 DÒNG VÀO GIỮA 2 DẤU [ ] NÀY =====
+// ===== DATA =====
 const data = [
-  {code:"H26M52103FMR", mmc:"MMC1"},
+
+{code:"H26M52103FMR", mmc:"MMC1"},
   {code:"H26M52104FMR", mmc:"MMC1"},
   {code:"H26M52208FPR", mmc:"MMC1"},
   {code:"H26M54002EMR", mmc:"MMC1"},
@@ -387,22 +403,33 @@ const data = [
   {code:"H9RT1GGM6X", vip:"VIP 11"},
   {code:"H9RT2G6AS5", vip:"VIP 11"},
   {code:"KM8F9001JA-B816", vip:"VIP 11"},
-  {code:"H9RT2GGA65", vip:"VIP 12"},  {code:"KMJIA001RM-BC07", vip:"VIP 12"},
-  {code:"H9RT2G7M75", vip:"VIP 13"}
+  {code:"H9RT2GGA65", vip:"VIP 12"},
+  {code:"KMJIA001RM-BC07", vip:"VIP 12"},
+  {code:"H9RT2G7M75", vip:"VIP 13"},
+
 ];
 
 async function importData(){
 
-  for (let item of data) {
+  try {
 
-    const { code, ...fields } = item;
+    for (let item of data) {
 
-    await db.collection("codes").doc(code).set(fields);
+      const { code, ...fields } = item;
 
-    console.log("Imported:", code);
+      await db.collection("codes").doc(code).set(fields);
+
+      console.log("Imported:", code);
+    }
+
+    alert("IMPORT HOÀN TẤT!");
+
+  } catch (error) {
+    console.error("LỖI:", error);
+    alert("Có lỗi, mở F12 xem console!");
   }
-
-  alert("IMPORT HOÀN TẤT!");
 }
 
 </script>
+</body>
+</html>
