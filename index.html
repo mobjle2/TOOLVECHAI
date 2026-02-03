@@ -33,6 +33,29 @@ body{
   color:#f1f5f9;
   padding-bottom:170px; /* thêm dòng này */
 }
+.warning-wrapper{
+  margin:25px 0 20px; /* tạo khoảng cách với ô nhập */
+  overflow:hidden;
+  border-radius:12px;
+  background:rgba(255,0,0,0.08);
+  border:1px solid rgba(255,0,0,0.3);
+}
+
+.warning-text{
+  white-space:nowrap;
+  display:inline-block;
+  padding:12px 0;
+  font-size:16px;
+  font-weight:700;
+  color:#ff4d4d;
+  font-family: 'Segoe UI', sans-serif;
+  animation:scrollWarning 12s linear infinite;
+}
+
+@keyframes scrollWarning{
+  from{ transform:translateX(100%); }
+  to{ transform:translateX(-100%); }
+}
 
 .container{
   max-width:1100px;
@@ -206,19 +229,22 @@ z-index:9999;
       <option value="4">VIP 4</option>
       <option value="5">VIP 5</option>
     </select>
-    <button onclick="copyVipSelected()">COPY LINK</button>
-  </div>
+<button onclick="copyVipSelected()">COPY LINK</button>
+</div>
 
-  <div class="check-<div class="info-warning" style="text-align:center;margin-bottom:10px;">
-⚠ Tool chỉ mang tính tham khảo, không đảm bảo chính xác tuyệt đối 100%.
+<div class="warning-wrapper">
+  <div class="warning-text">
+    ⚠ Tool chỉ mang tính tham khảo, không đảm bảo chính xác tuyệt đối 100%.
+  </div>
 </div>
 
 <div class="check-box">
-
-    <input id="q" placeholder="Nhập mã cần kiểm tra">
-    <button onclick="check()">CHECK</button>
-<div id="out"></div>
+  <input id="q" placeholder="Nhập mã cần kiểm tra">
+  <button onclick="check()">CHECK</button>
 </div>
+
+<div id="out"></div>
+
 
 
 <script src="data.js"></script>
