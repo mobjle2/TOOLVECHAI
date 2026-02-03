@@ -318,21 +318,27 @@ async function check(){
       return;
     }
 
-    results.forEach(x => {
+ results.forEach(x => {
 
-      const size = mmcMap[x.mmc] || "";
-      const chip = detectChip(x.code);
+  const size = mmcMap[x.mmc] || "";
+  const chip = detectChip(x.code);
 
-      out.innerHTML += `
-        <div class="item">
-          <div style="font-weight:700;">⚡ ${x.code}</div>
-          <div class="badge">${chip.icon} ${chip.name}</div>
-         ${x.mmc ? `<div class="badge mmc-badge">💾 ${x.mmc} (${size})</div>` : ""}
-         ${x.vip ? `<div class="badge vip-${x.vip.replace(/\D/g,'')}">👑 ${x.vip}</div>` : ""}
+  let vipClass = "";
+  if(x.vip){
+    const vipNumber = x.vip.replace(/[^0-9]/g,"");
+    vipClass = "vip-" + vipNumber;
+  }
 
-        </div>
-      `;
-    });
+  out.innerHTML += `
+    <div class="item">
+      <div style="font-weight:700;">⚡ ${x.code}</div>
+      <div class="badge">${chip.icon} ${chip.name}</div>
+      ${x.mmc ? `<div class="badge mmc-badge">💾 ${x.mmc} (${size})</div>` : ""}
+      ${x.vip ? `<div class="badge ${vipClass}">👑 ${x.vip}</div>` : ""}
+    </div>
+  `;
+});
+
 
   }catch(e){
     out.innerHTML = "❌ Lỗi quyền truy cập";
