@@ -386,7 +386,7 @@ async function loadLinks() {
           </span>
         </div>
 
-        <button onclick="copyLink('${doc.id}')">Copy</button>
+        <button onclick="copyLink('${doc.id}', this)">Copy</button>
         <button onclick="toggleLink('${doc.id}', ${d.active})">
           ${d.active ? 'Khóa' : 'Mở'}
         </button>
@@ -401,14 +401,28 @@ async function loadLinks() {
   document.getElementById("linkList").innerHTML = html;
 }
 
-function copyLink(id) {
+function copyLink(id, btn) {
+
   const link = window.location.origin +
                window.location.pathname +
                "?u=" + id;
 
   navigator.clipboard.writeText(link);
-  alert("Đã copy link!");
+
+  // Đổi giao diện nút
+  const oldText = btn.innerText;
+
+  btn.innerText = "Đã copy ✓";
+  btn.style.background = "#16a34a";
+  btn.style.color = "white";
+
+  setTimeout(() => {
+    btn.innerText = oldText;
+    btn.style.background = "";
+    btn.style.color = "";
+  }, 2000);
 }
+
 
 async function toggleLink(id, current) {
   await db.collection("shareLinks").doc(id).update({
