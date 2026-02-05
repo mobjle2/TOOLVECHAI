@@ -162,35 +162,32 @@ const doc = await db.collection("users").doc(user.email).get();
 });
 
 
-// CHECK VIP (demo data.js cần tồn tại)
-function check(){
-  const key = document.getElementById("q").value.trim().toUpperCase();
+async function check(){
+  const key = document.getElementById("q").value.trim();
   const out = document.getElementById("out");
-  out.innerHTML="";
+  out.innerHTML = "";
 
   if(!key) return;
 
-  let found=false;
+  const snap = await db.collection("codes")
+                       .where("search","==", key.replace(/[^A-Z0-9]/gi,"").toUpperCase())
+                       .get();
 
-  data.forEach(x=>{
-    if(x.code.toUpperCase().includes(key)){
-      found=true;
+  if(snap.empty){
+    out.innerHTML = "❌ Không tìm thấy mã";
+    return;
+  }
 
-      let vipClass="";
-      if(x.vip){
-        const num = x.vip.replace(/[^0-9]/g,"");
-        vipClass="vip-"+num;
-      }
-
-      out.innerHTML+=`
-        <div class="item">
-          <div><b>⚡ ${x.code}</b></div>
-          ${x.mmc ? `<div class="badge mmc-badge">💾 ${x.mmc}</div>` : ""}
-          ${x.vip ? `<div class="badge ${vipClass}">👑 ${x.vip}</div>` : ""}
-        </div>
-      `;
-    }
+  snap.forEach(doc=>{
+    const x = doc.data();
+    out.innerHTML += `
+      <div class="item">
+        <div><b>⚡ ${x.code}</b></div>
+        <div class="badge">👑 ${x.vip}</div>
+      </div>
+    `;
   });
+}
 
   if(!found){
     out.innerHTML="❌ Không tìm thấy mã";
