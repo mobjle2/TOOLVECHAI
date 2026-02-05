@@ -42,7 +42,6 @@ body{
   border-radius:20px;
   border:1px solid #222;
   transition:0.3s;
-  position:relative;
 }
 
 .result-card:hover{
@@ -50,21 +49,12 @@ body{
   transform:translateY(-4px);
 }
 
-/* ===== BRAND ===== */
-.brand{
-  color:#22c55e;
-  font-size:13px;
-  margin-top:8px;
-}
-
 /* ===== VIP BADGE ===== */
 .vip-badge{
-  display:inline-block;
   padding:6px 16px;
   border-radius:999px;
   font-size:13px;
   font-weight:600;
-  margin-top:12px;
   color:white;
 }
 
@@ -84,26 +74,9 @@ body{
   box-shadow:0 0 25px #ffcc00aa;
 }
 </style>
-
 </head>
 
 <body>
-
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" style="position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;">
-  <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
-    <h2 style="text-align:center;color:gold;">🔐 Tool Ve Chai Admin</h2>
-    <input id="loginEmail" type="email" placeholder="Nhập Gmail"
-    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <input id="loginPass" type="password" placeholder="Nhập Password"
-    style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <button onclick="secureLogin()" 
-    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
-      LOGIN
-    </button>
-    <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
-  </div>
-</div>
 
 <div style="padding:20px;max-width:900px;margin:auto;">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
@@ -116,19 +89,6 @@ body{
   CHECK
   </button>
 
-  <!-- ADMIN PANEL -->
-  <div id="adminPanel" style="display:none;margin-top:30px;">
-    <hr style="margin:20px 0;">
-    <h3>🔗 Quản lý Link</h3>
-
-    <button onclick="createLink()"
-      style="width:100%;padding:12px;border-radius:10px;background:#16a34a;color:white;">
-      ➕ Tạo link mới
-    </button>
-
-    <div id="linkList" style="margin-top:15px;"></div>
-  </div>
-
   <div id="out" style="margin-top:20px;"></div>
 </div>
 
@@ -140,55 +100,13 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
-
-auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
-
-// ===== USER MODE (?u=) =====
-const params = new URLSearchParams(window.location.search);
-const userParam = params.get("u");
-
-if(userParam){
-  runUserMode(userParam);
-}
-async function runUserMode(id){
-  try{
-    const doc = await db.collection("shareLinks").doc(id).get();
-
-    if(!doc.exists){
-      document.body.innerHTML = "❌ Link không tồn tại!";
-      return;
-    }
-
-    if(!doc.data().active){
-      document.body.innerHTML = "🔒 Link đã bị khóa!";
-      return;
-    }
-
-    // Ẩn login nếu có
-    const login = document.getElementById("loginScreen");
-    if(login) login.style.display = "none";
-
-    // Ẩn admin panel nếu có
-    const admin = document.getElementById("adminPanel");
-    if(admin) admin.style.display = "none";
-
-    // Không cần auth ở user mode
-    auth.signOut();
-
-  }catch(e){
-    console.error(e);
-    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
-  }
-}
 
 async function check(){
   try{
     const key = document.getElementById("q").value.trim().toUpperCase();
     const out = document.getElementById("out");
     out.innerHTML = "";
-
     if(!key) return;
 
     const snap = await db.collection("codes").get();
@@ -203,68 +121,47 @@ async function check(){
       if(codeValue.includes(key)){
         found = true;
 
+        const vipNumber = x.vip.replace("VIP ","");
+
         html += `
-          <div style="
-            background:#0f0f0f;
-            border:1px solid #2a2a2a;
-            border-radius:16px;
-            padding:18px;
-            margin-bottom:18px;
-          ">
+          <div class="result-card">
 
             <div style="
               font-size:18px;
               font-weight:600;
-              margin-bottom:6px;
+              margin-bottom:12px;
             ">
               ⚡ ${x.code}
             </div>
 
             <div style="
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:13px;
-  width:100%;
-">
+              display:flex;
+              justify-content:space-between;
+              align-items:center;
+              width:100%;
+            ">
 
+              <div style="
+                display:flex;
+                align-items:center;
+                gap:6px;
+                color:#22c55e;
+                font-size:14px;
+              ">
+                <span style="
+                  width:8px;
+                  height:8px;
+                  background:#22c55e;
+                  border-radius:50%;
+                "></span>
+                SAMSUNG
+              </div>
 
-             <div style="
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:13px;
-  width:100%;
-">
+              <span class="vip-badge vip-${vipNumber}">
+                👑 ${x.vip}
+              </span>
 
-  <span style="
-    display:flex;
-    align-items:center;
-    gap:6px;
-    color:#22c55e;
-  ">
-    <span style="
-      width:8px;
-      height:8px;
-      background:#22c55e;
-      border-radius:50%;
-      display:inline-block;
-    "></span>
-    SAMSUNG
-  <span style="
-  background:#2563eb;
-  color:white;
-  padding:4px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-">
-  👑 ${x.vip}
-</span>
-
-
-</div>
-
+            </div>
 
           </div>
         `;
@@ -274,11 +171,7 @@ async function check(){
     html += "</div>";
 
     if(!found){
-      out.innerHTML = `
-        <div style="color:#ef4444;margin-top:15px;">
-          ❌ Không tìm thấy mã
-        </div>
-      `;
+      out.innerHTML = '<div style="color:#ef4444;">❌ Không tìm thấy mã</div>';
     }else{
       out.innerHTML = html;
     }
@@ -288,114 +181,7 @@ async function check(){
     alert("Lỗi đọc dữ liệu");
   }
 }
-
-
-
-// ===== LOGIN =====
-function secureLogin(){
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass = document.getElementById("loginPass").value.trim();
-
-  auth.signInWithEmailAndPassword(email, pass)
-    .catch(()=>{
-      document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
-    });
-}
-
-// ===== CHECK ROLE =====
-auth.onAuthStateChanged(async user=>{
-
-  if(userParam) return; // Nếu đang mở link user thì bỏ qua login
-
-  if(!user) return;
-
-
-  try{
-    const doc = await db.collection("users").doc(user.email).get();
-
-    if(!doc.exists || doc.data().role !== "admin"){
-      alert("Bạn không có quyền admin!");
-      auth.signOut();
-      return;
-    }
-
-    document.getElementById("loginScreen").remove();
-    document.getElementById("adminPanel").style.display="block";
-    loadLinks();
-
-  }catch(e){
-    console.error(e);
-    alert("Lỗi phân quyền");
-  }
-});
-
-
-async function createLink(){
-  const id = Date.now().toString(36)+Math.random().toString(36).substring(2,6);
-
-  await db.collection("shareLinks").doc(id).set({
-    active:true,
-    createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  alert("Đã tạo link!");
-  loadLinks();
-}
-
-async function loadLinks(){
-  const snap = await db.collection("shareLinks").get();
-  let html="";
-
-  snap.forEach(doc=>{
-    const d=doc.data();
-
-    html+=`
-      <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
-        <div><strong>ID:</strong> ${doc.id}</div>
-        <div style="margin:5px 0;">
-          <span style="background:${d.active?'#16a34a':'#facc15'};padding:4px 10px;border-radius:999px;font-size:12px;">
-          ${d.active?'ĐANG MỞ':'ĐANG KHÓA'}
-          </span>
-        </div>
-        <button onclick="copyLink('${doc.id}',this)">Copy</button>
-        <button onclick="toggleLink('${doc.id}',${d.active})">
-          ${d.active?'Khóa':'Mở'}
-        </button>
-        <button onclick="deleteLink('${doc.id}')" style="background:#dc2626;color:white;">Xóa</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("linkList").innerHTML=html;
-}
-
-function copyLink(id,btn){
-  const link = window.location.origin+window.location.pathname+"?u="+id;
-  navigator.clipboard.writeText(link);
-
-  const old=btn.innerText;
-  btn.innerText="Đã copy ✓";
-  btn.style.background="#16a34a";
-  btn.style.color="white";
-
-  setTimeout(()=>{
-    btn.innerText=old;
-    btn.style.background="";
-    btn.style.color="";
-  },2000);
-}
-
-async function toggleLink(id,current){
-  await db.collection("shareLinks").doc(id).update({active:!current});
-  loadLinks();
-}
-
-async function deleteLink(id){
-  await db.collection("shareLinks").doc(id).delete();
-  loadLinks();
-}
 </script>
-
 
 </body>
 </html>
