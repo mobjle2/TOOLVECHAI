@@ -298,11 +298,24 @@ async function check(){
     const x=doc.data();
     if((x.code||"").toUpperCase().includes(key)){
       found=true;
-      html+=`
-      <div class="result-card">
-        <div class="code">⚡ ${x.code}</div>
-        <span class="vip vip-${x.vip}">👑 ${x.vip}</span>
-      </div>`;
+     html+=`
+<div class="result-card">
+  <div class="code">⚡ ${x.code}</div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+
+    <div style="display:flex;align-items:center;gap:6px;color:#22c55e;font-size:13px;">
+      <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;"></span>
+      SAMSUNG
+    </div>
+
+    <span class="vip vip-${x.vip}">
+      👑 ${x.vip}
+    </span>
+
+  </div>
+</div>`;
+;
     }
   });
 
