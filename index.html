@@ -176,32 +176,38 @@ async function check(){
 
     if(!key) return;
 
-    const searchKey = key.replace(/[^A-Z0-9]/g,'');
+    const inputClean = key.replace(/[^A-Z0-9]/g,'');
 
-    const snap = await db.collection("codes")
-      .where("search","==", searchKey)
-      .get();
+    const snap = await db.collection("codes").get();
 
-    if(snap.empty){
-      out.innerHTML = "❌ Không tìm thấy mã";
-      return;
-    }
+    let found = false;
 
     snap.forEach(doc=>{
       const x = doc.data();
-      out.innerHTML += `
-        <div class="item">
-          <div><b>⚡ ${x.code}</b></div>
-          <div class="badge">👑 ${x.vip}</div>
-        </div>
-      `;
+      const search = (x.search || "").toUpperCase();
+
+      if(search === inputClean){
+        found = true;
+
+        out.innerHTML += `
+          <div class="item">
+            <div><b>⚡ ${x.code}</b></div>
+            <div class="badge">👑 ${x.vip}</div>
+          </div>
+        `;
+      }
     });
+
+    if(!found){
+      out.innerHTML = "❌ Không tìm thấy mã";
+    }
 
   }catch(e){
     console.error(e);
     alert("Lỗi đọc dữ liệu");
   }
 }
+
 
 // ===== LINK MANAGEMENT =====
 async function createLink(){
