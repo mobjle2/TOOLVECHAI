@@ -152,6 +152,36 @@ const userParam = params.get("u");
 if(userParam){
   runUserMode(userParam);
 }
+async function runUserMode(id){
+  try{
+    const doc = await db.collection("shareLinks").doc(id).get();
+
+    if(!doc.exists){
+      document.body.innerHTML = "❌ Link không tồn tại!";
+      return;
+    }
+
+    if(!doc.data().active){
+      document.body.innerHTML = "🔒 Link đã bị khóa!";
+      return;
+    }
+
+    // Ẩn login nếu có
+    const login = document.getElementById("loginScreen");
+    if(login) login.style.display = "none";
+
+    // Ẩn admin panel nếu có
+    const admin = document.getElementById("adminPanel");
+    if(admin) admin.style.display = "none";
+
+    // Không cần auth ở user mode
+    auth.signOut();
+
+  }catch(e){
+    console.error(e);
+    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
+  }
+}
 
 async function check(){
   try{
@@ -226,7 +256,11 @@ function secureLogin(){
 
 // ===== CHECK ROLE =====
 auth.onAuthStateChanged(async user=>{
+
+  if(userParam) return; // Nếu đang mở link user thì bỏ qua login
+
   if(!user) return;
+
 
   try{
     const doc = await db.collection("users").doc(user.email).get();
