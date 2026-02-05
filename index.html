@@ -3,28 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CHECK VIP</title>
+<title>Tool Ve Chai V1</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
-
 body{
   font-family:Arial;
   background:#111;
   color:white;
 }
+
 .item{
   background:#1a1a1a;
   padding:15px;
   margin-bottom:10px;
   border-radius:10px;
 }
+
 .badge{
   display:inline-block;
   padding:4px 10px;
@@ -33,89 +31,27 @@ body{
   margin-top:5px;
 }
 
-/* ====== THÊM TỪ ĐÂY ====== */
-
-@media(min-width:900px){
-  #out{
-    grid-template-columns:repeat(3,1fr) !important;
-  }
-}
-
 .mmc-badge{
-  background:linear-gradient(90deg,#1fb6ff,#0ea5e9);
+  background:#0ea5e9;
   color:white;
 }
 
-.vip-8{
-  background:linear-gradient(90deg,#7c3aed,#a855f7);
-  color:white;
-  box-shadow:0 0 20px rgba(168,85,247,0.7);
-}
-
-.vip-9{
-  background:linear-gradient(90deg,#06b6d4,#0ea5e9);
-  color:white;
-  box-shadow:0 0 20px rgba(14,165,233,0.7);
-}
-
-.vip-10{
-  background:linear-gradient(90deg,#FFD700,#ffcc00);
-  color:black;
-  box-shadow:0 0 25px rgba(255,215,0,0.9);
-}
-
-/* ===== THÊM VIP CÒN THIẾU Ở ĐÂY ===== */
-
-.vip-5{
-  background:#facc15;
-  color:black;
-}
-
-.vip-6{
-  background:linear-gradient(90deg,#facc15,#fb923c);
-  color:black;
-}
-
-.vip-7{
-  background:linear-gradient(90deg,#fb923c,#ef4444);
-  color:white;
-}
-
-.vip-11{
-  background:linear-gradient(90deg,#ff4d00,#ff0000);
-  color:white;
-}
-
-.vip-12{
-  background:linear-gradient(90deg,#ff0000,#990000);
-  color:white;
-}
-
-.vip-13{
-  background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000);
-  color:white;
-}
-
-/* ===== HẾT PHẦN THÊM ===== */
-
-
+.vip-5{background:#facc15;color:black;}
+.vip-6{background:linear-gradient(90deg,#facc15,#fb923c);color:black;}
+.vip-7{background:linear-gradient(90deg,#fb923c,#ef4444);color:white;}
+.vip-8{background:linear-gradient(90deg,#7c3aed,#a855f7);color:white;}
+.vip-9{background:linear-gradient(90deg,#06b6d4,#0ea5e9);color:white;}
+.vip-10{background:linear-gradient(90deg,#FFD700,#ffcc00);color:black;}
+.vip-11{background:#ff4d00;color:white;}
+.vip-12{background:#990000;color:white;}
+.vip-13{background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000);color:white;}
 </style>
-
 </head>
+
 <body>
 
-<div id="loginScreen" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-">
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;">
   <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
     <h2 style="text-align:center;color:gold;">🔐 Tool Ve Chai Admin</h2>
     <input id="loginEmail" type="email" placeholder="Nhập Gmail"
@@ -134,64 +70,31 @@ z-index:9999;
   <h2>🛠 Tool Ve Chai Check VIP</h2>
 
   <input id="q" placeholder="Nhập mã cần kiểm tra"
-  style="
-    width:100%;
-    padding:16px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#111;
-    color:white;
-    font-size:16px;
-    margin-top:15px;
-    box-sizing:border-box;
-  ">
+  style="width:100%;padding:16px;border-radius:12px;border:1px solid #333;background:#111;color:white;margin-top:15px;">
 
-<button onclick="check()"
-  style="
-    width:100%;
-    padding:16px;
-    border-radius:12px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    font-weight:bold;
-    font-size:16px;
-    margin-top:15px;
-    box-sizing:border-box;
-    cursor:pointer;
-  ">
+  <button onclick="check()"
+  style="width:100%;padding:16px;border-radius:12px;border:none;background:#2563eb;color:white;font-weight:bold;margin-top:15px;">
   CHECK
-</button>
-
-
-
-<!-- ===== ADMIN TOOLS ===== -->
-<div id="adminPanel" style="display:none;margin-top:30px;">
-
-  <hr style="margin:20px 0;">
-
-  <h3>🔗 Quản lý Link</h3>
-
-  <button onclick="createLink()"
-    style="width:100%;padding:12px;border-radius:10px;background:#16a34a;color:white;">
-    ➕ Tạo link mới
   </button>
 
-  <div id="linkList" style="margin-top:15px;"></div>
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" style="display:none;margin-top:30px;">
+    <hr style="margin:20px 0;">
+    <h3>🔗 Quản lý Link</h3>
 
-</div>
+    <button onclick="createLink()"
+      style="width:100%;padding:12px;border-radius:10px;background:#16a34a;color:white;">
+      ➕ Tạo link mới
+    </button>
 
+    <div id="linkList" style="margin-top:15px;"></div>
+  </div>
 
- <div id="out" style="
-  margin-top:20px;
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-"></div>
-
+  <div id="out" style="margin-top:20px;"></div>
 </div>
 
 <script>
+// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCEL7BDXvmNi2dp1VNpua7b2plpTiTOK3U",
   authDomain: "toolvechai.firebaseapp.com",
@@ -201,65 +104,34 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+// USER MODE (?u=)
 const params = new URLSearchParams(window.location.search);
 const userParam = params.get("u");
 
-// Nếu có ?u= thì chạy chế độ USER
 if(userParam){
   runUserMode(userParam);
 }
 
 async function runUserMode(id){
-
   try{
-
     const doc = await db.collection("shareLinks").doc(id).get();
-
     if(!doc.exists){
       document.body.innerHTML = "❌ Link không tồn tại!";
       return;
     }
-
     if(!doc.data().active){
       document.body.innerHTML = "🔒 Link đã bị khóa!";
       return;
     }
-
-    // Nếu hợp lệ → bỏ login screen hoàn toàn
-    const loginScreen = document.getElementById("loginScreen");
-    if(loginScreen) loginScreen.remove();
-
-    // Tắt luôn Firebase auth auto login
+    document.getElementById("loginScreen").remove();
     auth.signOut();
-
-  }catch(e){
+  }catch{
     document.body.innerHTML = "❌ Lỗi quyền truy cập!";
   }
 }
-
-async function checkUserAccess(id){
-
-  try{
-    const doc = await db.collection("shareLinks").doc(id).get();
-
-    if(!doc.exists){
-      document.body.innerHTML = "❌ Link không tồn tại!";
-      return;
-    }
-
-    if(!doc.data().active){
-      document.body.innerHTML = "🔒 Link đã bị khóa!";
-      return;
-    }
-
-  }catch(e){
-    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
-  }
-}
-
-
-
-auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
 // LOGIN
 function secureLogin(){
@@ -267,201 +139,124 @@ function secureLogin(){
   const pass = document.getElementById("loginPass").value;
 
   auth.signInWithEmailAndPassword(email, pass)
-    .then(() => {
-      document.getElementById("loginScreen").remove();
-    })
-    .catch(() => {
+    .catch(()=>{
       document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
     });
 }
 
-auth.onAuthStateChanged(function(user){
-
+auth.onAuthStateChanged(user=>{
   if(user){
     document.getElementById("loginScreen").remove();
-
-    // Nếu KHÔNG có ?u= thì mới hiện admin
     if(!userParam){
-      document.getElementById("adminPanel").style.display = "block";
+      document.getElementById("adminPanel").style.display="block";
       loadLinks();
     }
   }
-
 });
 
-// MAP MMC
-const mmcMap={
- MMC1:"16G",MMC2:"32G",MMC3:"64G",
- MMC4:"128G",MMC5:"256G",MMC6:"512G"
-};
-
-// DETECT CHIP
-function detectChip(code){
-  code = code.toUpperCase();
-
-  if(code.startsWith("KM")) return { name:"SAMSUNG", icon:"🟢" };
-  if(code.startsWith("H")) return { name:"SK hynix", icon:"🟣" };
-  if(code.startsWith("JZ")) return { name:"MICRON", icon:"🔵" };
-  if(code.startsWith("THG")) return { name:"KIOXIA", icon:"🟠" };
-  if(code.startsWith("SD")) return { name:"SANDISK", icon:"🔴" };
-
-  return { name:"UNKNOWN / OEM", icon:"⚪" };
-}
-
-// CHECK (4 KÝ TỰ + FULL MÃ)
-
+// CHECK VIP (demo data.js cần tồn tại)
 function check(){
-  const input = document.getElementById("keyInput").value.trim().toUpperCase();
-  const result = document.getElementById("result");
+  const key = document.getElementById("q").value.trim().toUpperCase();
+  const out = document.getElementById("out");
+  out.innerHTML="";
 
-  if(!input){
-    result.innerHTML = "❌ Nhập mã trước đã";
-    result.style.color = "red";
-    return;
-  }
+  if(!key) return;
 
-  const key = input.replace(/[^A-Z0-9]/g,'');
-
-  let found = false;
+  let found=false;
 
   data.forEach(x=>{
-    const full = (x.code || "").toUpperCase().replace(/[^A-Z0-9]/g,'');
-    const search = (x.search || "").toUpperCase().replace(/[^A-Z0-9]/g,'');
-    const prefix4 = full.substring(0,4);
+    if(x.code.toUpperCase().includes(key)){
+      found=true;
 
-    const isFullMatch = key === full;
-    const isSearchMatch = key === search;
-    const is4Match = key.length === 4 && key === prefix4;
+      let vipClass="";
+      if(x.vip){
+        const num = x.vip.replace(/[^0-9]/g,"");
+        vipClass="vip-"+num;
+      }
 
-    if(isFullMatch || isSearchMatch || is4Match){
-      result.innerHTML = "✅ Hợp lệ - " + (x.vip || "");
-      result.style.color = "#00ff88";
-      found = true;
+      out.innerHTML+=`
+        <div class="item">
+          <div><b>⚡ ${x.code}</b></div>
+          ${x.mmc ? `<div class="badge mmc-badge">💾 ${x.mmc}</div>` : ""}
+          ${x.vip ? `<div class="badge ${vipClass}">👑 ${x.vip}</div>` : ""}
+        </div>
+      `;
     }
   });
 
   if(!found){
-    result.innerHTML = "❌ Không hợp lệ";
-    result.style.color = "red";
+    out.innerHTML="❌ Không tìm thấy mã";
   }
 }
 
-  const size = mmcMap[x.mmc] || "";
-  const chip = detectChip(x.code);
-
-  let vipClass = "";
-  if(x.vip){
-    const vipNumber = x.vip.replace(/[^0-9]/g,"");
-    vipClass = "vip-" + vipNumber;
-  }
-
-  out.innerHTML += `
-    <div class="item">
-      <div style="font-weight:700;">⚡ ${x.code}</div>
-      <div class="badge">${chip.icon} ${chip.name}</div>
-      ${x.mmc ? `<div class="badge mmc-badge">💾 ${x.mmc} (${size})</div>` : ""}
-      ${x.vip ? `<div class="badge ${vipClass}">👑 ${x.vip}</div>` : ""}
-    </div>
-  `;
-});
-
-
-  }catch(e){
-    out.innerHTML = "❌ Lỗi quyền truy cập";
-  }
-}
-
-// ====== DÁN CODE QUẢN LÝ LINK Ở ĐÂY ======
-
-// ===== QUẢN LÝ LINK CHUẨN =====
-
-async function createLink() {
-  const id = Date.now().toString(36) +
-             Math.random().toString(36).substring(2,6);
+// LINK MANAGEMENT
+async function createLink(){
+  const id = Date.now().toString(36)+Math.random().toString(36).substring(2,6);
 
   await db.collection("shareLinks").doc(id).set({
-    active: true,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    active:true,
+    createdAt:firebase.firestore.FieldValue.serverTimestamp()
   });
 
   alert("Đã tạo link!");
   loadLinks();
 }
 
-async function loadLinks() {
-
+async function loadLinks(){
   const snap = await db.collection("shareLinks").get();
-  let html = "";
+  let html="";
 
-  snap.forEach(doc => {
+  snap.forEach(doc=>{
+    const d=doc.data();
 
-    const d = doc.data();
-
-    html += `
+    html+=`
       <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
         <div><strong>ID:</strong> ${doc.id}</div>
-
         <div style="margin:5px 0;">
-          <span style="
-            background:${d.active ? '#16a34a' : '#facc15'};
-            padding:4px 10px;
-            border-radius:999px;
-            font-size:12px;">
-            ${d.active ? 'ĐANG MỞ' : 'ĐANG KHÓA'}
+          <span style="background:${d.active?'#16a34a':'#facc15'};padding:4px 10px;border-radius:999px;font-size:12px;">
+          ${d.active?'ĐANG MỞ':'ĐANG KHÓA'}
           </span>
         </div>
-
-        <button onclick="copyLink('${doc.id}', this)">Copy</button>
-        <button onclick="toggleLink('${doc.id}', ${d.active})">
-          ${d.active ? 'Khóa' : 'Mở'}
+        <button onclick="copyLink('${doc.id}',this)">Copy</button>
+        <button onclick="toggleLink('${doc.id}',${d.active})">
+          ${d.active?'Khóa':'Mở'}
         </button>
-        <button onclick="deleteLink('${doc.id}')"
-          style="background:#dc2626;color:white;">
-          Xóa
-        </button>
+        <button onclick="deleteLink('${doc.id}')" style="background:#dc2626;color:white;">Xóa</button>
       </div>
     `;
   });
 
-  document.getElementById("linkList").innerHTML = html;
+  document.getElementById("linkList").innerHTML=html;
 }
 
-function copyLink(id, btn) {
-
-  const link = window.location.origin +
-               window.location.pathname +
-               "?u=" + id;
-
+function copyLink(id,btn){
+  const link = window.location.origin+window.location.pathname+"?u="+id;
   navigator.clipboard.writeText(link);
 
-  // Đổi giao diện nút
-  const oldText = btn.innerText;
+  const old=btn.innerText;
+  btn.innerText="Đã copy ✓";
+  btn.style.background="#16a34a";
+  btn.style.color="white";
 
-  btn.innerText = "Đã copy ✓";
-  btn.style.background = "#16a34a";
-  btn.style.color = "white";
-
-  setTimeout(() => {
-    btn.innerText = oldText;
-    btn.style.background = "";
-    btn.style.color = "";
-  }, 2000);
+  setTimeout(()=>{
+    btn.innerText=old;
+    btn.style.background="";
+    btn.style.color="";
+  },2000);
 }
 
-
-async function toggleLink(id, current) {
-  await db.collection("shareLinks").doc(id).update({
-    active: !current
-  });
+async function toggleLink(id,current){
+  await db.collection("shareLinks").doc(id).update({active:!current});
   loadLinks();
 }
 
-async function deleteLink(id) {
+async function deleteLink(id){
   await db.collection("shareLinks").doc(id).delete();
   loadLinks();
 }
 </script>
 
+<script src="data.js"></script>
+
 </body>
 </html>
-
