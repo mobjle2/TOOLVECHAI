@@ -57,7 +57,9 @@ body{
   border-radius:14px;
   padding:14px 18px;
   display:flex;
-  justify-content:space-between;
+align-items:center;
+gap:12px;
+
   align-items:center;
   margin-bottom:12px;
   transition:0.2s;
@@ -300,27 +302,8 @@ body{
 <div style="padding:20px;max-width:900px;margin:auto;">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
 
-<div style="
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:8px;
-">
-
-
-  
-
-  style="
-    flex:1;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#111;
-    color:white;
-  ">
-
 <div style="position:relative;flex:1;">
-  <input id="q" placeholder="Nhập mã cần kiểm tra"
+  
     style="
       width:100%;
       padding:14px 50px 14px 16px;
@@ -330,7 +313,11 @@ body{
       color:white;
     ">
 
-  <button onclick="check()"
+ <div class="search-wrapper">
+  <input id="q" placeholder="Nhập mã cần kiểm tra">
+  <button class="search-btn" onclick="check()">⚡</button>
+</div>
+
     style="
       position:absolute;
       right:6px;
