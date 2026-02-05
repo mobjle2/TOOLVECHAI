@@ -83,6 +83,47 @@ body{
   color:black;
   box-shadow:0 0 25px #ffcc00aa;
 }
+html += `
+  <div style="
+    background:#151515;
+    padding:16px;
+    border-radius:14px;
+    margin-bottom:14px;
+    border:1px solid #222;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  ">
+
+    <div style="font-weight:600;">
+      ${doc.id}
+    </div>
+
+    <div style="display:flex;gap:8px;">
+
+      <button class="link-btn"
+      style="background:#1f2937;color:white;"
+      onclick="copyLink('${doc.id}',this)">
+        🔗
+      </button>
+
+      <button class="link-btn"
+      style="background:${d.active ? '#22c55e' : '#f59e0b'};color:white;"
+      onclick="toggleLink('${doc.id}',${d.active})">
+        ${d.active ? '🔓' : '🔒'}
+      </button>
+
+      <button class="link-btn"
+      style="background:#dc2626;color:white;"
+      onclick="deleteLink('${doc.id}')">
+        🗑
+      </button>
+
+    </div>
+
+  </div>
+`;
+  
 </style>
 
 </head>
@@ -139,12 +180,23 @@ body{
   <!-- ADMIN PANEL -->
   <div id="adminPanel" style="display:none;margin-top:30px;">
     <hr style="margin:20px 0;">
-    <h3>🔗 Quản lý Link</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+  <h3 style="margin:0;">🔗 Quản lý Link</h3>
 
-    <button onclick="createLink()"
-      style="width:100%;padding:12px;border-radius:10px;background:#16a34a;color:white;">
-      ➕ Tạo link mới
-    </button>
+  <button onclick="createLink()"
+  style="
+    padding:8px 14px;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:13px;
+    border:none;
+    cursor:pointer;
+  ">
+    + Tạo
+  </button>
+</div>
+
 
     <div id="linkList" style="margin-top:15px;"></div>
   </div>
