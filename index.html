@@ -167,20 +167,24 @@ body{
 <body>
 
 <!-- LOGIN SCREEN -->
-<div id="loginScreen" style="position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;">
-  <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
-    <h2 style="text-align:center;color:gold;">🔐 Tool Ve Chai Admin</h2>
-    <input id="loginEmail" type="email" placeholder="Nhập Gmail"
-    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <input id="loginPass" type="password" placeholder="Nhập Password"
-    style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <button onclick="secureLogin()" 
-    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
-      LOGIN
-    </button>
-    <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
+<div id="loginScreen">
+  <div class="login-card">
+
+    <div class="login-title">
+      🛠 Tool Ve Chai
+      <span>Admin Dashboard</span>
+    </div>
+
+    <input id="loginEmail" type="email" placeholder="Email đăng nhập">
+    <input id="loginPass" type="password" placeholder="Mật khẩu">
+
+    <button onclick="secureLogin()">Đăng nhập</button>
+
+    <div id="loginError"></div>
+
   </div>
 </div>
+
 
 <div style="padding:20px;max-width:900px;margin:auto;">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
