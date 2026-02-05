@@ -223,61 +223,66 @@ async function check(){
       if(codeValue.includes(key)){
         found = true;
 
-        html += `
-          <div style="
-            background:#0f0f0f;
-            border:1px solid #2a2a2a;
-            border-radius:16px;
-            padding:18px;
-            margin-bottom:18px;
-          ">
+       html += `
+  <div style="
+    background:#151515;
+    padding:16px;
+    border-radius:14px;
+    margin-bottom:14px;
+    border:1px solid #222;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  ">
 
-            <div style="
-              font-size:18px;
-              font-weight:600;
-              margin-bottom:6px;
-            ">
-              ⚡ ${x.code}
-            </div>
+    <div style="font-weight:600;">
+      ${doc.id}
+    </div>
 
-            <div style="
-              display:inline-flex;
-              align-items:center;
-              gap:10px;
-              font-size:13px;
-            ">
+    <div style="display:flex;gap:10px;align-items:center;">
 
-              <span style="
-                display:flex;
-                align-items:center;
-                gap:6px;
-                color:#22c55e;
-              ">
-                <span style="
-                  width:8px;
-                  height:8px;
-                  background:#22c55e;
-                  border-radius:50%;
-                  display:inline-block;
-                "></span>
-                SAMSUNG
-              </span>
+      <button onclick="copyLink('${doc.id}',this)"
+      style="
+        background:#1f2937;
+        color:white;
+        border:none;
+        padding:6px 10px;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+        🔗
+      </button>
 
-              <span style="
-                background:#2563eb;
-                color:white;
-               padding:3px 8px;
-                border-radius:999px;
-                font-size:11px;
-                font-weight:500;
-              ">
-                👑 ${x.vip}
-              </span>
+      <button onclick="toggleLink('${doc.id}',${d.active})"
+      style="
+        background:${d.active ? '#22c55e' : '#f59e0b'};
 
-            </div>
+        color:white;
+        border:none;
+        padding:6px 10px;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+        ${d.active ? '🔓' : '🔒'}
+      </button>
 
-          </div>
-        `;
+      <button onclick="deleteLink('${doc.id}')"
+      style="
+        background:#dc2626;
+        color:white;
+        border:none;
+        padding:6px 10px;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+        🗑
+      </button>
+
+    </div>
+
+  </div>
+`;
+
       }
     });
 
@@ -364,9 +369,7 @@ async function loadLinks(){
       <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
         <div><strong>ID:</strong> ${doc.id}</div>
         <div style="margin:5px 0;">
-          <span style="background:${d.active?'#16a34a':'#facc15'};padding:4px 10px;border-radius:999px;font-size:12px;">
-          ${d.active?'ĐANG MỞ':'ĐANG KHÓA'}
-          </span>
+        
         </div>
         <button onclick="copyLink('${doc.id}',this)">Copy</button>
         <button onclick="toggleLink('${doc.id}',${d.active})">
