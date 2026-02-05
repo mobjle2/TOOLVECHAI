@@ -348,9 +348,10 @@ async function createLink(){
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   });
 
-  alert("Đã tạo link!");
-  loadLinks();
+  // Không hiện thông báo
+  // Không load lại danh sách
 }
+
 
 async function loadLinks(){
   const snap = await db.collection("shareLinks").get();
