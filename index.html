@@ -144,15 +144,22 @@ function secureLogin(){
     });
 }
 
-auth.onAuthStateChanged(user=>{
-  if(user){
-    document.getElementById("loginScreen").remove();
-    if(!userParam){
-      document.getElementById("adminPanel").style.display="block";
-      loadLinks();
-    }
+auth.onAuthStateChanged(async user=>{
+  if(!user) return;
+
+  const doc = await db.collection("users").doc(user.uid).get();
+
+  if(!doc.exists || doc.data().role !== "admin"){
+    alert("Bạn không có quyền admin!");
+    auth.signOut();
+    return;
   }
+
+  document.getElementById("loginScreen").remove();
+  document.getElementById("adminPanel").style.display="block";
+  loadLinks();
 });
+
 
 // CHECK VIP (demo data.js cần tồn tại)
 function check(){
