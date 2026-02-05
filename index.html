@@ -188,38 +188,63 @@ async function check(){
         if(x.vip.includes("9")) vipClass="vip-9";
         if(x.vip.includes("10")) vipClass="vip-10";
 
-        html += `
-          <div class="result-card">
-            <div style="font-size:18px;font-weight:600;">
-              ⚡ ${x.code}
-            </div>
-
-            <div class="brand">● SAMSUNG</div>
-
-            <div style="
-  margin-top:10px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-">
-
-  <div style="
-    color:#22c55e;
-    font-size:13px;
+       html += `
+  <div class="result-card" style="
+    background:#0f0f0f;
+    border:1px solid #2a2a2a;
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:18px;
   ">
-    ● SAMSUNG
+
+    <div style="
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:8px;
+      letter-spacing:0.5px;
+    ">
+      ⚡ ${x.code}
+    </div>
+
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:14px;
+    ">
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:6px;
+        font-size:13px;
+        color:#22c55e;
+      ">
+        <span style="
+          width:8px;
+          height:8px;
+          background:#22c55e;
+          border-radius:50%;
+          display:inline-block;
+        "></span>
+        SAMSUNG
+      </div>
+
+      <div style="
+        padding:3px 10px;
+        border-radius:999px;
+        font-size:12px;
+        font-weight:500;
+        background:#2563eb;
+        color:white;
+      ">
+        👑 ${x.vip}
+      </div>
+
+    </div>
+
   </div>
+`;
 
-  <div class="vip-badge ${vipClass}">
-    👑 ${x.vip}
-  </div>
-
-</div>
-
-          </div>
-        `;
-      }
-    });
 
     html += "</div>";
 
