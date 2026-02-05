@@ -348,9 +348,9 @@ async function createLink(){
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   });
 
-  // Không hiện thông báo
-  // Không load lại danh sách
+  loadLinks(); // vẫn hiện link mới
 }
+
 
 
 async function loadLinks(){
