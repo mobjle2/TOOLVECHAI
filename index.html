@@ -108,15 +108,25 @@ body{
 <div style="padding:20px;max-width:900px;margin:auto;">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
 
-  <input id="q" placeholder="Nhập mã cần kiểm tra"
-  style="width:100%;padding:16px;border-radius:12px;border:1px solid #333;background:#111;color:white;margin-top:15px;">
+  <form onsubmit="check(); return false;" style="margin-top:15px;">
+    
+    <input 
+      id="q" 
+      placeholder="Nhập mã cần kiểm tra"
+      autocomplete="off"
+      style="width:100%;padding:16px;border-radius:12px;border:1px solid #333;background:#111;color:white;"
+    >
 
-  <button onclick="check()"
-  style="width:100%;padding:16px;border-radius:12px;border:none;background:#2563eb;color:white;font-weight:bold;margin-top:15px;">
-  CHECK
-  </button>
+    <button 
+      type="submit"
+      style="width:100%;padding:16px;border-radius:12px;border:none;background:#2563eb;color:white;font-weight:bold;margin-top:15px;">
+      CHECK
+    </button>
+
+  </form>
 
   <!-- ADMIN PANEL -->
+
   <div id="adminPanel" style="display:none;margin-top:30px;">
     <hr style="margin:20px 0;">
     <h3>🔗 Quản lý Link</h3>
