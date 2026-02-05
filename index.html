@@ -189,48 +189,55 @@ async function check(){
         .replace(/[^A-Z0-9]/g,'')
         .toUpperCase();
 
-if(codeClean.includes(inputClean)){
-  found = true;
+      if(codeClean.includes(inputClean)){
+        found = true;
 
-  out.innerHTML += `
-    <div style="
-      background:#111;
-      padding:16px;
-      border-radius:14px;
-      margin-bottom:14px;
-      border:1px solid #222;
-      box-shadow:0 0 0 1px #1f1f1f inset;
-    ">
-      <div style="
-        font-size:18px;
-        font-weight:600;
-        color:#ffffff;
-        letter-spacing:0.5px;
-      ">
-        ⚡ ${x.code}
-      </div>
+        out.innerHTML += `
+          <div style="
+            background:#111;
+            padding:16px;
+            border-radius:14px;
+            margin-bottom:14px;
+            border:1px solid #222;
+            box-shadow:0 0 0 1px #1f1f1f inset;
+          ">
+            <div style="
+              font-size:18px;
+              font-weight:600;
+              color:#ffffff;
+              letter-spacing:0.5px;
+            ">
+              ⚡ ${x.code}
+            </div>
 
-      <div style="
-        margin-top:10px;
-        display:inline-block;
-        padding:6px 14px;
-        border-radius:999px;
-        font-size:13px;
-        font-weight:500;
-        background:#2563eb;
-        color:#ffffff;
-      ">
-        👑 ${x.vip}
-      </div>
-    </div>
-  `;
-}
-
-
+            <div style="
+              margin-top:10px;
+              display:inline-block;
+              padding:6px 14px;
+              border-radius:999px;
+              font-size:13px;
+              font-weight:500;
+              background:#2563eb;
+              color:#ffffff;
+            ">
+              👑 ${x.vip}
+            </div>
+          </div>
+        `;
+      }
     });
 
     if(!found){
-      out.innerHTML = "❌ Không tìm thấy mã";
+      out.innerHTML = `
+        <div style="
+          margin-top:10px;
+          color:#ef4444;
+          font-weight:500;
+          font-size:15px;
+        ">
+          ❌ Không tìm thấy mã
+        </div>
+      `;
     }
 
   }catch(e){
@@ -238,7 +245,6 @@ if(codeClean.includes(inputClean)){
     alert("Lỗi đọc dữ liệu");
   }
 }
-
 
 
 
