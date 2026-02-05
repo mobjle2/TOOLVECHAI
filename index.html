@@ -308,46 +308,43 @@ function detectChip(code){
   return { name:"UNKNOWN / OEM", icon:"⚪" };
 }
 
-// CHECK (SEARCH 3 KÝ TỰ)
-async function check(){
+// CHECK (4 KÝ TỰ + FULL MÃ)
 
-  const q = document.getElementById("q");
-  const out = document.getElementById("out");
+function check(){
+  const input = document.getElementById("keyInput").value.trim().toUpperCase();
+  const result = document.getElementById("result");
 
-  const key = q.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
-  out.innerHTML = "";
-
-  if(key.length !== 3){
-    out.innerHTML = "⚠ Nhập đúng 3 ký tự";
+  if(!input){
+    result.innerHTML = "❌ Nhập mã trước đã";
+    result.style.color = "red";
     return;
   }
 
-  try{
+  const key = input.replace(/[^A-Z0-9]/g,'');
 
-    const prefixSnap = await db.collection("codes")
-      .where("prefix3", "==", key)
-      .get();
+  let found = false;
 
-    const suffixSnap = await db.collection("codes")
-      .where("suffix3", "==", key)
-      .get();
+  data.forEach(x=>{
+    const full = (x.code || "").toUpperCase().replace(/[^A-Z0-9]/g,'');
+    const search = (x.search || "").toUpperCase().replace(/[^A-Z0-9]/g,'');
+    const prefix4 = full.substring(0,4);
 
-    const results = new Map();
+    const isFullMatch = key === full;
+    const isSearchMatch = key === search;
+    const is4Match = key.length === 4 && key === prefix4;
 
-    prefixSnap.forEach(doc => {
-      results.set(doc.id, doc.data());
-    });
-
-    suffixSnap.forEach(doc => {
-      results.set(doc.id, doc.data());
-    });
-
-    if(results.size === 0){
-      out.innerHTML = "❌ Không xác định mã";
-      return;
+    if(isFullMatch || isSearchMatch || is4Match){
+      result.innerHTML = "✅ Hợp lệ - " + (x.vip || "");
+      result.style.color = "#00ff88";
+      found = true;
     }
+  });
 
- results.forEach(x => {
+  if(!found){
+    result.innerHTML = "❌ Không hợp lệ";
+    result.style.color = "red";
+  }
+}
 
   const size = mmcMap[x.mmc] || "";
   const chip = detectChip(x.code);
