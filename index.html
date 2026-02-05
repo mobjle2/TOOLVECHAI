@@ -10,195 +10,127 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
 body{
-  font-family:Arial;
-  background:#0b0b0b;
+  background:#0b0f19;
   color:white;
 }
 
-/* ===== GRID ===== */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.search-box{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.search-box input{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #1f2937;
+  background:#111827;
+  color:white;
+}
+
+.search-box button{
+  padding:0 28px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(90deg,#2563eb,#3b82f6);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
 .result-grid{
   display:grid;
   gap:20px;
-  margin-top:20px;
-  grid-template-columns:repeat(2,1fr);
+  margin-top:25px;
 }
 
-@media(max-width:768px){
-  .result-card{
-    padding:14px;
-  }
+@media(min-width:1024px){
+  .result-grid{ grid-template-columns:repeat(3,1fr); }
 }
 
-
-
-
-
-
-.result-card:hover{
-  transform:translateY(-3px);
-  border-color:#333;
+@media(min-width:600px) and (max-width:1023px){
+  .result-grid{ grid-template-columns:repeat(2,1fr); }
 }
 
-/* ===== BRAND ===== */
-.brand{
-  color:#22c55e;
-  font-size:13px;
-  margin-top:8px;
+@media(max-width:599px){
+  .result-grid{ grid-template-columns:1fr; }
 }
-
-/* ===== VIP BADGE ===== */
-.vip-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-  background:#1e293b;
-}
-
-
-
-.link-card{
-  background:#141414;
-  border:1px solid #222;
-  border-radius:14px;
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-  transition:0.2s;
-}
-
-.link-card:hover{
-  border-color:#2563eb;
-  transform:translateY(-2px);
-}
-
-.link-id{
-  font-weight:600;
-  font-size:14px;
-}
-
-.link-status{
-  margin-top:6px;
-  font-size:12px;
-  padding:4px 10px;
-  border-radius:999px;
-  display:inline-block;
-}
-
-.link-status.open{
-  background:#16a34a22;
-  color:#22c55e;
-}
-
-.link-status.lock{
-  background:#facc1522;
-  color:#facc15;
-}
-
-.link-actions{
-  display:flex;
-  gap:8px;
-}
-
-.icon-btn{
-  border:none;
-  background:#1f1f1f;
-  padding:8px 10px;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.icon-btn:hover{
-  background:#2563eb;
-  color:white;
-}
-
-.icon-btn.delete:hover{
-  background:#dc2626;
-}
-#linkList{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-}
-
-@media(max-width:768px){
-  #linkList{
-    grid-template-columns:1fr;
-  }
-}
-.loading{
-  text-align:center;
-  margin-top:20px;
-  font-size:14px;
-  color:#facc15;
-  letter-spacing:1px;
-}
-
-.dots::after{
-  content:'';
-  animation:dots 1.2s infinite;
-}
-
-@keyframes dots{
-  0%{content:'';}
-  33%{content:'.';}
-  66%{content:'..';}
-  100%{content:'...';}
-}
-/* ===== STYLE GIỐNG ẢNH ĐẸP ===== */
 
 .result-card{
-  background:linear-gradient(145deg,#0e0e0e,#181818);
+  background:linear-gradient(145deg,#111827,#1f2937);
   border-radius:18px;
-  padding:16px;
-  border:1px solid #1f1f1f;
-  transition:0.2s;
-  box-shadow:0 0 25px rgba(0,0,0,0.4);  
+  padding:20px;
+  border:1px solid #1f2937;
+  transition:0.25s;
 }
 
-
-
-
-.vip-8{
-  background:linear-gradient(90deg,#6d28d9,#a855f7);
-  color:white;
+.result-card:hover{
+  transform:translateY(-5px);
+  border-color:#2563eb;
+  box-shadow:0 0 25px rgba(37,99,235,0.3);
 }
 
-.vip-9{
-  background:linear-gradient(90deg,#06b6d4,#0ea5e9);
-  color:white;
+.code-title{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:10px;
 }
 
-.vip-10{
-  background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700);
-  color:black;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  color:#22c55e;
 }
 
-.vip-5{ background:#facc15; color:black; }
-.vip-6{ background:linear-gradient(90deg,#facc15,#fb923c); color:black; }
-.vip-7{ background:linear-gradient(90deg,#fb923c,#ef4444); color:white; }
-.vip-11{ background:linear-gradient(90deg,#ff4d00,#ff0000); color:white; }
-.vip-13{ background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000); color:white; }
-
-@media(max-width:768px){
-  .result-card{
-    padding:16px;
-  }
-  .badge{
-    font-size:11px;
-    padding:5px 14px;
-  }
+.dot{
+  width:8px;
+  height:8px;
+  background:#22c55e;
+  border-radius:50%;
 }
 
+.vip-badge{
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:13px;
+}
+
+.vip-8{ background:linear-gradient(90deg,#6d28d9,#a855f7); }
+.vip-9{ background:linear-gradient(90deg,#06b6d4,#0ea5e9); }
+.vip-10{ background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700); color:black; }
+.vip-11{ background:linear-gradient(90deg,#ff4d00,#ff0000); }
+.vip-13{ background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000); }
+
+.loading{
+  text-align:center;
+  margin-top:25px;
+  color:#facc15;
+}
 </style>
+
 
 </head>
 
@@ -220,36 +152,18 @@ body{
   </div>
 </div>
 
-<div style="padding:20px;max-width:900px;margin:auto;">
-  <h2>🛠 Tool Ve Chai Check VIP</h2>
+<div class="container">
 
- <div style="display:flex;gap:10px;margin-top:15px;">
-  
-  <input id="q" placeholder="Nhập mã cần kiểm tra"
-  style="
-    flex:1;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#111;
-    color:white;
-  ">
+  <div class="header">
+    <h2>🛠 Tool Ve Chai Check VIP</h2>
+  </div>
 
-  <button onclick="check()"
-  style="
-    padding:0 25px;
-    border-radius:12px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-  ">
-    CHECK
-  </button>
+  <div class="search-box">
+    <input id="q" placeholder="Nhập mã cần kiểm tra...">
+    <button onclick="check()">CHECK</button>
+  </div>
 
-</div>
-
+  <div id="out"></div>
 
   <!-- ADMIN PANEL -->
   <div id="adminPanel" style="display:none;margin-top:30px;">
@@ -350,15 +264,23 @@ async function check(){
 
         html += `
   <div class="result-card">
+    <div class="code-title">⚡ ${x.code}</div>
 
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      
+      <div class="brand">
+        <span class="dot"></span>
+        SAMSUNG
+      </div>
 
-            <div style="
-              font-size:18px;
-              font-weight:600;
-              margin-bottom:6px;
-            ">
-              ⚡ ${x.code}
-            </div>
+      <span class="vip-badge vip-${x.vip}">
+        👑 VIP ${x.vip}
+      </span>
+
+    </div>
+  </div>
+`;
+
 
             <div style="
               display:inline-flex;
