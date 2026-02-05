@@ -156,6 +156,25 @@ body{
     grid-template-columns:1fr;
   }
 }
+.loading{
+  text-align:center;
+  margin-top:20px;
+  font-size:14px;
+  color:#facc15;
+  letter-spacing:1px;
+}
+
+.dots::after{
+  content:'';
+  animation:dots 1.2s infinite;
+}
+
+@keyframes dots{
+  0%{content:'';}
+  33%{content:'.';}
+  66%{content:'..';}
+  100%{content:'...';}
+}
 
 </style>
 
@@ -281,9 +300,19 @@ async function check(){
   try{
     const key = document.getElementById("q").value.trim().toUpperCase();
     const out = document.getElementById("out");
-    out.innerHTML = "";
 
     if(!key) return;
+
+    // HIỆN LOADING TRƯỚC
+    out.innerHTML = `
+      <div class="loading">
+        🔎 Đang quét dữ liệu<span class="dots"></span>
+      </div>
+    `;
+
+    // Delay 800ms cho nhìn pro
+    await new Promise(resolve => setTimeout(resolve, 800));
+
 
     const snap = await db.collection("codes").get();
     let found = false;
