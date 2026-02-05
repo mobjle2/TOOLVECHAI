@@ -170,16 +170,14 @@ auth.onAuthStateChanged(async user=>{
 // ===== CHECK VIP =====
 async function check(){
   try{
-    const key = document.getElementById("q").value.trim();
+    const key = document.getElementById("q").value.trim().toUpperCase();
     const out = document.getElementById("out");
     out.innerHTML = "";
 
     if(!key) return;
 
-    // Chuẩn hóa input giống hệt field search
-    const searchKey = key.replace(/[^A-Za-z0-9]/g,"").toUpperCase();
+    const inputClean = key.replace(/[^A-Z0-9]/g,'');
 
-    // Lấy toàn bộ codes
     const snap = await db.collection("codes").get();
 
     let found = false;
@@ -187,11 +185,11 @@ async function check(){
     snap.forEach(doc=>{
       const x = doc.data();
 
-      const searchValue = (x.search || "")
-        .replace(/[^A-Za-z0-9]/g,"")
+      const codeClean = (x.code || "")
+        .replace(/[^A-Z0-9]/g,'')
         .toUpperCase();
 
-      if(searchValue.includes(searchKey)){
+      if(codeClean.includes(inputClean)){
         found = true;
 
         out.innerHTML += `
@@ -212,6 +210,7 @@ async function check(){
     alert("Lỗi đọc dữ liệu");
   }
 }
+
 
 
 
