@@ -25,8 +25,8 @@ body{
 }
 
 @media(max-width:768px){
-  .result-grid{
-    grid-template-columns:1fr;
+  .result-card{
+    padding:14px;
   }
 }
 
@@ -34,9 +34,10 @@ body{
 
 
 
+
 .result-card:hover{
-  border-color:#facc15;
-  transform:translateY(-4px);
+  transform:translateY(-3px);
+  border-color:#333;
 }
 
 /* ===== BRAND ===== */
@@ -366,12 +367,8 @@ async function check(){
               font-size:13px;
             ">
 
-              <span style="
-                display:flex;
-                align-items:center;
-                gap:6px;
-                color:#22c55e;
-              ">
+             <span class="brand" style="display:flex;align-items:center;gap:6px;">
+
                 <span style="
                   width:8px;
                   height:8px;
@@ -383,8 +380,9 @@ async function check(){
               </span>
 
               <span class="vip-badge vip-${x.vip}">
-           👑 ${x.vip}
-          </span>
+             👑 VIP ${x.vip}
+            </span>
+
 
 
             </div>
