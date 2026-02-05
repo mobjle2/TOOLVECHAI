@@ -188,65 +188,83 @@ async function check(){
         if(x.vip.includes("9")) vipClass="vip-9";
         if(x.vip.includes("10")) vipClass="vip-10";
 
-       html += `
-  <div class="result-card" style="
-    background:#0f0f0f;
-    border:1px solid #2a2a2a;
-    border-radius:16px;
-    padding:18px;
-    margin-bottom:18px;
-  ">
+       async function check(){
+  try{
+    const key = document.getElementById("q").value.trim().toUpperCase();
+    const out = document.getElementById("out");
+    out.innerHTML = "";
 
-    <div style="
-      font-size:18px;
-      font-weight:600;
-      margin-bottom:8px;
-      letter-spacing:0.5px;
-    ">
-      ⚡ ${x.code}
-    </div>
+    if(!key) return;
 
-    <div style="
-      display:flex;
-      align-items:center;
-      gap:14px;
-    ">
+    const snap = await db.collection("codes").get();
+    let found = false;
 
-      <div style="
-        display:flex;
-        align-items:center;
-        gap:6px;
-        font-size:13px;
-        color:#22c55e;
-      ">
-        <span style="
-          width:8px;
-          height:8px;
-          background:#22c55e;
-          border-radius:50%;
-          display:inline-block;
-        "></span>
-        SAMSUNG
-      </div>
+    let html = "";
 
-      <div style="
-        padding:3px 10px;
-        border-radius:999px;
-        font-size:12px;
-        font-weight:500;
-        background:#2563eb;
-        color:white;
-      ">
-        👑 ${x.vip}
-      </div>
+    snap.forEach(doc=>{
+      const x = doc.data();
+      const codeValue = (x.code || "").toUpperCase();
 
-    </div>
+      if(codeValue.includes(key)){
+        found = true;
 
-  </div>
-`;
+        html += `
+          <div style="
+            background:#0f0f0f;
+            border:1px solid #2a2a2a;
+            border-radius:16px;
+            padding:18px;
+            margin-bottom:18px;
+          ">
 
+            <div style="
+              font-size:18px;
+              font-weight:600;
+              margin-bottom:8px;
+            ">
+              ⚡ ${x.code}
+            </div>
 
-    html += "</div>";
+            <div style="
+              display:flex;
+              align-items:center;
+              gap:12px;
+            ">
+
+              <div style="
+                display:flex;
+                align-items:center;
+                gap:6px;
+                font-size:13px;
+                color:#22c55e;
+              ">
+                <span style="
+                  width:8px;
+                  height:8px;
+                  background:#22c55e;
+                  border-radius:50%;
+                  display:inline-block;
+                "></span>
+                SAMSUNG
+              </div>
+
+              <div style="
+                padding:3px 10px;
+                border-radius:999px;
+                font-size:12px;
+                font-weight:500;
+                background:#2563eb;
+                color:white;
+              ">
+                👑 ${x.vip}
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }
+    });
 
     if(!found){
       out.innerHTML = `
@@ -263,22 +281,6 @@ async function check(){
     alert("Lỗi đọc dữ liệu");
   }
 }
-
-
-// ===== LOGIN =====
-function secureLogin(){
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass = document.getElementById("loginPass").value.trim();
-
-  auth.signInWithEmailAndPassword(email, pass)
-    .catch(()=>{
-      const err = document.getElementById("loginError");
-      if(err){
-        err.innerText = "Sai Gmail hoặc Password!";
-      }
-    });
-}
-
 
 // ===== CHECK ROLE =====
 auth.onAuthStateChanged(async user=>{
