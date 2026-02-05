@@ -94,7 +94,6 @@ body{
 </div>
 
 <script>
-// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCEL7BDXvmNi2dp1VNpua7b2plpTiTOK3U",
   authDomain: "toolvechai.firebaseapp.com",
@@ -107,7 +106,7 @@ const db = firebase.firestore();
 
 auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
-// USER MODE (?u=)
+// ===== USER MODE (?u=) =====
 const params = new URLSearchParams(window.location.search);
 const userParam = params.get("u");
 
@@ -128,15 +127,16 @@ async function runUserMode(id){
     }
     document.getElementById("loginScreen").remove();
     auth.signOut();
-  }catch{
+  }catch(e){
+    console.error(e);
     document.body.innerHTML = "❌ Lỗi quyền truy cập!";
   }
 }
 
-// LOGIN
+// ===== LOGIN =====
 function secureLogin(){
-  const email = document.getElementById("loginEmail").value;
-  const pass = document.getElementById("loginPass").value;
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
 
   auth.signInWithEmailAndPassword(email, pass)
     .catch(()=>{
@@ -144,57 +144,66 @@ function secureLogin(){
     });
 }
 
+// ===== CHECK ROLE =====
 auth.onAuthStateChanged(async user=>{
   if(!user) return;
 
-const doc = await db.collection("users").doc(user.email).get();
+  try{
+    const doc = await db.collection("users").doc(user.email).get();
 
+    if(!doc.exists || doc.data().role !== "admin"){
+      alert("Bạn không có quyền admin!");
+      auth.signOut();
+      return;
+    }
 
-  if(!doc.exists || doc.data().role !== "admin"){
-    alert("Bạn không có quyền admin!");
-    auth.signOut();
-    return;
+    document.getElementById("loginScreen").remove();
+    document.getElementById("adminPanel").style.display="block";
+    loadLinks();
+
+  }catch(e){
+    console.error(e);
+    alert("Lỗi phân quyền");
   }
-
-  document.getElementById("loginScreen").remove();
-  document.getElementById("adminPanel").style.display="block";
-  loadLinks();
 });
 
-
+// ===== CHECK VIP =====
 async function check(){
-  const key = document.getElementById("q").value.trim();
-  const out = document.getElementById("out");
-  out.innerHTML = "";
+  try{
+    const key = document.getElementById("q").value.trim().toUpperCase();
+    const out = document.getElementById("out");
+    out.innerHTML = "";
 
-  if(!key) return;
+    if(!key) return;
 
-  const snap = await db.collection("codes")
-                       .where("search","==", key.replace(/[^A-Z0-9]/gi,"").toUpperCase())
-                       .get();
+    const searchKey = key.replace(/[^A-Z0-9]/g,'');
 
-  if(snap.empty){
-    out.innerHTML = "❌ Không tìm thấy mã";
-    return;
+    const snap = await db.collection("codes")
+      .where("search","==", searchKey)
+      .get();
+
+    if(snap.empty){
+      out.innerHTML = "❌ Không tìm thấy mã";
+      return;
+    }
+
+    snap.forEach(doc=>{
+      const x = doc.data();
+      out.innerHTML += `
+        <div class="item">
+          <div><b>⚡ ${x.code}</b></div>
+          <div class="badge">👑 ${x.vip}</div>
+        </div>
+      `;
+    });
+
+  }catch(e){
+    console.error(e);
+    alert("Lỗi đọc dữ liệu");
   }
-
-  snap.forEach(doc=>{
-    const x = doc.data();
-    out.innerHTML += `
-      <div class="item">
-        <div><b>⚡ ${x.code}</b></div>
-        <div class="badge">👑 ${x.vip}</div>
-      </div>
-    `;
-  });
 }
 
-  if(!found){
-    out.innerHTML="❌ Không tìm thấy mã";
-  }
-}
-
-// LINK MANAGEMENT
+// ===== LINK MANAGEMENT =====
 async function createLink(){
   const id = Date.now().toString(36)+Math.random().toString(36).substring(2,6);
 
@@ -261,7 +270,6 @@ async function deleteLink(id){
 }
 </script>
 
-<script src="data.js"></script>
 
 </body>
 </html>
