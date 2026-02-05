@@ -145,6 +145,20 @@ body{
 .icon-btn.delete:hover{
   background:#dc2626;
 }
+/* ===== LINK GRID ===== */
+
+#linkList{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+/* Mobile tự xuống 1 cột */
+@media(max-width:768px){
+  #linkList{
+    grid-template-columns:1fr;
+  }
+}
 
 </style>
 
