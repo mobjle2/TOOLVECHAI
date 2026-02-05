@@ -16,7 +16,6 @@ body{
   color:white;
 }
 
-/* ===== GRID ===== */
 .result-grid{
   display:grid;
   gap:20px;
@@ -35,14 +34,12 @@ body{
   }
 }
 
-/* ===== CARD ===== */
 .result-card{
   background:#111;
   padding:20px;
   border-radius:20px;
   border:1px solid #222;
   transition:0.3s;
-  position:relative;
 }
 
 .result-card:hover{
@@ -50,87 +47,32 @@ body{
   transform:translateY(-4px);
 }
 
-/* ===== BRAND ===== */
-.brand{
-  color:#22c55e;
-  font-size:13px;
-  margin-top:8px;
-}
-
-/* ===== VIP BADGE ===== */
-.vip-badge{
-  display:inline-block;
-  padding:6px 16px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:600;
-  margin-top:12px;
-  color:white;
-}
-
-.vip-8{
-  background:linear-gradient(90deg,#7c3aed,#a855f7);
-  box-shadow:0 0 20px #9333ea88;
-}
-
-.vip-9{
-  background:linear-gradient(90deg,#06b6d4,#0ea5e9);
-  box-shadow:0 0 20px #0ea5e988;
-}
-
 .vip-10{
   background:linear-gradient(90deg,#FFD700,#ffcc00);
   color:black;
   box-shadow:0 0 25px #ffcc00aa;
 }
-html += `
-  <div style="
-    background:#151515;
-    padding:16px;
-    border-radius:14px;
-    margin-bottom:14px;
-    border:1px solid #222;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  ">
 
-    <div style="font-weight:600;">
-      ${doc.id}
-    </div>
+/* ===== BUTTON LINK ADMIN ===== */
+.link-btn{
+  border:none;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+  font-size:13px;
+  color:white;
+}
 
-    <div style="display:flex;gap:8px;">
-
-      <button class="link-btn"
-      style="background:#1f2937;color:white;"
-      onclick="copyLink('${doc.id}',this)">
-        🔗
-      </button>
-
-      <button class="link-btn"
-      style="background:${d.active ? '#22c55e' : '#f59e0b'};color:white;"
-      onclick="toggleLink('${doc.id}',${d.active})">
-        ${d.active ? '🔓' : '🔒'}
-      </button>
-
-      <button class="link-btn"
-      style="background:#dc2626;color:white;"
-      onclick="deleteLink('${doc.id}')">
-        🗑
-      </button>
-
-    </div>
-
-  </div>
-`;
-  
+.link-btn:hover{
+  transform:translateY(-2px);
+  opacity:0.9;
+}
 </style>
-
 </head>
 
 <body>
 
-<!-- LOGIN SCREEN -->
 <div id="loginScreen" style="position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;">
   <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
     <h2 style="text-align:center;color:gold;">🔐 Tool Ve Chai Admin</h2>
@@ -149,56 +91,25 @@ html += `
 <div style="padding:20px;max-width:900px;margin:auto;">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
 
- <div style="display:flex;gap:10px;margin-top:15px;">
-  
-  <input id="q" placeholder="Nhập mã cần kiểm tra"
-  style="
-    flex:1;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#111;
-    color:white;
-  ">
+  <div style="display:flex;gap:10px;margin-top:15px;">
+    <input id="q" placeholder="Nhập mã cần kiểm tra"
+    style="flex:1;padding:14px;border-radius:12px;border:1px solid #333;background:#111;color:white;">
+    <button onclick="check()"
+    style="padding:0 25px;border-radius:12px;border:none;background:#2563eb;color:white;font-weight:bold;cursor:pointer;">
+      CHECK
+    </button>
+  </div>
 
-  <button onclick="check()"
-  style="
-    padding:0 25px;
-    border-radius:12px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-  ">
-    CHECK
-  </button>
-
-</div>
-
-
-  <!-- ADMIN PANEL -->
   <div id="adminPanel" style="display:none;margin-top:30px;">
     <hr style="margin:20px 0;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-  <h3 style="margin:0;">🔗 Quản lý Link</h3>
-
-  <button onclick="createLink()"
-  style="
-    padding:8px 14px;
-    border-radius:8px;
-    background:#2563eb;
-    color:white;
-    font-size:13px;
-    border:none;
-    cursor:pointer;
-  ">
-    + Tạo
-  </button>
-</div>
-
-
-    <div id="linkList" style="margin-top:15px;"></div>
+      <h3 style="margin:0;">🔗 Quản lý Link</h3>
+      <button onclick="createLink()"
+      style="padding:8px 14px;border-radius:8px;background:#2563eb;color:white;font-size:13px;border:none;cursor:pointer;">
+        + Tạo
+      </button>
+    </div>
+    <div id="linkList"></div>
   </div>
 
   <div id="out" style="margin-top:20px;"></div>
@@ -217,186 +128,6 @@ const db = firebase.firestore();
 
 auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
-// ===== USER MODE (?u=) =====
-const params = new URLSearchParams(window.location.search);
-const userParam = params.get("u");
-
-if(userParam){
-  runUserMode(userParam);
-}
-async function runUserMode(id){
-  try{
-    const doc = await db.collection("shareLinks").doc(id).get();
-
-    if(!doc.exists){
-      document.body.innerHTML = "❌ Link không tồn tại!";
-      return;
-    }
-
-    if(!doc.data().active){
-      document.body.innerHTML = "🔒 Link đã bị khóa!";
-      return;
-    }
-
-    // Ẩn login nếu có
-    const login = document.getElementById("loginScreen");
-    if(login) login.style.display = "none";
-
-    // Ẩn admin panel nếu có
-    const admin = document.getElementById("adminPanel");
-    if(admin) admin.style.display = "none";
-
-    // Không cần auth ở user mode
-    auth.signOut();
-
-  }catch(e){
-    console.error(e);
-    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
-  }
-}
-
-async function check(){
-  try{
-    const key = document.getElementById("q").value.trim().toUpperCase();
-    const out = document.getElementById("out");
-    out.innerHTML = "";
-
-    if(!key) return;
-
-    const snap = await db.collection("codes").get();
-    let found = false;
-
-    let html = '<div class="result-grid">';
-
-    snap.forEach(doc=>{
-      const x = doc.data();
-      const codeValue = (x.code || "").toUpperCase();
-
-      if(codeValue.includes(key)){
-        found = true;
-
-       html += `
-  <div style="
-    background:#151515;
-    padding:16px;
-    border-radius:14px;
-    margin-bottom:14px;
-    border:1px solid #222;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  ">
-
-    <div style="font-weight:600;">
-      ${doc.id}
-    </div>
-
-    <div style="display:flex;gap:10px;align-items:center;">
-
-      <button onclick="copyLink('${doc.id}',this)"
-      style="
-        background:#1f2937;
-        color:white;
-        border:none;
-        padding:6px 10px;
-        border-radius:8px;
-        cursor:pointer;
-      ">
-        🔗
-      </button>
-
-      <button onclick="toggleLink('${doc.id}',${d.active})"
-      style="
-        background:${d.active ? '#22c55e' : '#f59e0b'};
-
-        color:white;
-        border:none;
-        padding:6px 10px;
-        border-radius:8px;
-        cursor:pointer;
-      ">
-        ${d.active ? '🔓' : '🔒'}
-      </button>
-
-      <button onclick="deleteLink('${doc.id}')"
-      style="
-        background:#dc2626;
-        color:white;
-        border:none;
-        padding:6px 10px;
-        border-radius:8px;
-        cursor:pointer;
-      ">
-        🗑
-      </button>
-
-    </div>
-
-  </div>
-`;
-
-      }
-    });
-
-    html += "</div>";
-
-    if(!found){
-      out.innerHTML = `
-        <div style="color:#ef4444;margin-top:15px;">
-          ❌ Không tìm thấy mã
-        </div>
-      `;
-    }else{
-      out.innerHTML = html;
-    }
-
-  }catch(e){
-    console.error(e);
-    alert("Lỗi đọc dữ liệu");
-  }
-}
-
-
-
-// ===== LOGIN =====
-function secureLogin(){
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass = document.getElementById("loginPass").value.trim();
-
-  auth.signInWithEmailAndPassword(email, pass)
-    .catch(()=>{
-      document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
-    });
-}
-
-// ===== CHECK ROLE =====
-auth.onAuthStateChanged(async user=>{
-
-  if(userParam) return; // Nếu đang mở link user thì bỏ qua login
-
-  if(!user) return;
-
-
-  try{
-    const doc = await db.collection("users").doc(user.email).get();
-
-    if(!doc.exists || doc.data().role !== "admin"){
-      alert("Bạn không có quyền admin!");
-      auth.signOut();
-      return;
-    }
-
-    document.getElementById("loginScreen").remove();
-    document.getElementById("adminPanel").style.display="block";
-    loadLinks();
-
-  }catch(e){
-    console.error(e);
-    alert("Lỗi phân quyền");
-  }
-});
-
-
 async function createLink(){
   const id = Date.now().toString(36)+Math.random().toString(36).substring(2,6);
 
@@ -405,34 +136,51 @@ async function createLink(){
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   });
 
-  loadLinks(); // vẫn hiện link mới
+  loadLinks();
 }
-
-
 
 async function loadLinks(){
   const snap = await db.collection("shareLinks").get();
   let html="";
 
   snap.forEach(doc=>{
-    const d=doc.data();
+    const d = doc.data();
 
     html+=`
-      <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
-        <div><strong>ID:</strong> ${doc.id}</div>
-        <div style="margin:5px 0;">
-        
+      <div style="
+        background:#151515;
+        padding:16px;
+        border-radius:14px;
+        margin-bottom:14px;
+        border:1px solid #222;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+      ">
+        <div style="font-weight:600;">
+          ${doc.id}
         </div>
-        <button onclick="copyLink('${doc.id}',this)">Copy</button>
-        <button onclick="toggleLink('${doc.id}',${d.active})">
-          ${d.active?'Khóa':'Mở'}
-        </button>
-        <button onclick="deleteLink('${doc.id}')" style="background:#dc2626;color:white;">Xóa</button>
+
+        <div style="display:flex;gap:8px;">
+          <button class="link-btn"
+          style="background:#1f2937;"
+          onclick="copyLink('${doc.id}',this)">🔗</button>
+
+          <button class="link-btn"
+          style="background:${d.active ? '#22c55e' : '#f59e0b'};"
+          onclick="toggleLink('${doc.id}',${d.active})">
+            ${d.active ? '🔓' : '🔒'}
+          </button>
+
+          <button class="link-btn"
+          style="background:#dc2626;"
+          onclick="deleteLink('${doc.id}')">🗑</button>
+        </div>
       </div>
     `;
   });
 
-  document.getElementById("linkList").innerHTML=html;
+  document.getElementById("linkList").innerHTML = html;
 }
 
 function copyLink(id,btn){
@@ -440,15 +188,13 @@ function copyLink(id,btn){
   navigator.clipboard.writeText(link);
 
   const old=btn.innerText;
-  btn.innerText="Đã copy ✓";
+  btn.innerText="✓";
   btn.style.background="#16a34a";
-  btn.style.color="white";
 
   setTimeout(()=>{
-    btn.innerText=old;
-    btn.style.background="";
-    btn.style.color="";
-  },2000);
+    btn.innerText="🔗";
+    btn.style.background="#1f2937";
+  },1500);
 }
 
 async function toggleLink(id,current){
@@ -461,7 +207,6 @@ async function deleteLink(id){
   loadLinks();
 }
 </script>
-
 
 </body>
 </html>
