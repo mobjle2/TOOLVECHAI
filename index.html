@@ -230,9 +230,13 @@ function secureLogin(){
 
   auth.signInWithEmailAndPassword(email, pass)
     .catch(()=>{
-      document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
+      const err = document.getElementById("loginError");
+      if(err){
+        err.innerText = "Sai Gmail hoặc Password!";
+      }
     });
 }
+
 
 // ===== CHECK ROLE =====
 auth.onAuthStateChanged(async user=>{
@@ -242,23 +246,29 @@ auth.onAuthStateChanged(async user=>{
     const doc = await db.collection("users").doc(user.email).get();
 
     if(!doc.exists || doc.data().role !== "admin"){
-      alert("Bạn không có quyền admin!");
-      auth.signOut();
+      showToast("❌ Bạn không có quyền admin!", "#dc2626");
+      await auth.signOut();
       return;
     }
 
-    document.getElementById("loginScreen").remove();
-    document.getElementById("adminPanel").style.display="block";
+    const loginScreen = document.getElementById("loginScreen");
+    if(loginScreen) loginScreen.remove();
+
+    const adminPanel = document.getElementById("adminPanel");
+    if(adminPanel) adminPanel.style.display="block";
+
     loadLinks();
 
   }catch(e){
     console.error(e);
-    alert("Lỗi phân quyền");
+    showToast("❌ Lỗi phân quyền!", "#dc2626");
   }
 });
 
 
 // ===== LINK MANAGEMENT =====
+
+
 async function createLink(){
   const id = Date.now().toString(36)+Math.random().toString(36).substring(2,6);
 
@@ -267,7 +277,7 @@ async function createLink(){
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   });
 
-  alert("Đã tạo link!");
+  showToast("✔ Đã tạo link thành công!", "#16a34a");
   loadLinks();
 }
 
@@ -279,18 +289,41 @@ async function loadLinks(){
     const d=doc.data();
 
     html+=`
-      <div style="background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:10px;">
-        <div><strong>ID:</strong> ${doc.id}</div>
-        <div style="margin:5px 0;">
-          <span style="background:${d.active?'#16a34a':'#facc15'};padding:4px 10px;border-radius:999px;font-size:12px;">
-          ${d.active?'ĐANG MỞ':'ĐANG KHÓA'}
+      <div style="
+        background:#1a1a1a;
+        padding:15px;
+        border-radius:12px;
+        margin-bottom:12px;
+        border:1px solid #222;
+      ">
+        <div style="font-weight:600;margin-bottom:6px;">
+          ID: ${doc.id}
+        </div>
+
+        <div style="margin:8px 0;">
+          <span style="
+            background:${d.active?'#16a34a':'#facc15'};
+            padding:6px 12px;
+            border-radius:999px;
+            font-size:12px;
+            color:${d.active?'white':'black'};
+          ">
+            ${d.active?'ĐANG MỞ':'ĐANG KHÓA'}
           </span>
         </div>
-        <button onclick="copyLink('${doc.id}',this)">Copy</button>
-        <button onclick="toggleLink('${doc.id}',${d.active})">
-          ${d.active?'Khóa':'Mở'}
-        </button>
-        <button onclick="deleteLink('${doc.id}')" style="background:#dc2626;color:white;">Xóa</button>
+
+        <div style="margin-top:10px;">
+          <button onclick="copyLink('${doc.id}',this)">Copy</button>
+
+          <button onclick="toggleLink('${doc.id}',${d.active})">
+            ${d.active?'Khóa':'Mở'}
+          </button>
+
+          <button onclick="deleteLink('${doc.id}')"
+            style="background:#dc2626;color:white;">
+            Xóa
+          </button>
+        </div>
       </div>
     `;
   });
@@ -316,13 +349,16 @@ function copyLink(id,btn){
 
 async function toggleLink(id,current){
   await db.collection("shareLinks").doc(id).update({active:!current});
+  showToast("✔ Đã cập nhật trạng thái!", "#2563eb");
   loadLinks();
 }
 
 async function deleteLink(id){
   await db.collection("shareLinks").doc(id).delete();
+  showToast("❌ Đã xóa link!", "#dc2626");
   loadLinks();
 }
+
 </script>
 
 
