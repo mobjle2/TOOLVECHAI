@@ -147,7 +147,8 @@ function secureLogin(){
 auth.onAuthStateChanged(async user=>{
   if(!user) return;
 
-  const doc = await db.collection("users").doc(user.uid).get();
+const doc = await db.collection("users").doc(user.email).get();
+
 
   if(!doc.exists || doc.data().role !== "admin"){
     alert("Bạn không có quyền admin!");
