@@ -145,6 +145,101 @@ body{
 .icon-btn.delete:hover{
   background:#dc2626;
 }
+/* ===== ADMIN HEADER ===== */
+
+.admin-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:20px 0;
+}
+
+/* ===== CREATE BUTTON ===== */
+
+.create-btn{
+  background:linear-gradient(90deg,#16a34a,#22c55e);
+  border:none;
+  padding:10px 18px;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 0 15px #22c55e33;
+}
+
+.create-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 25px #22c55e66;
+}
+
+/* ===== LINK CARD ===== */
+
+.link-card{
+  background:#141414;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:16px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:0.2s;
+}
+
+.link-card:hover{
+  border-color:#2563eb;
+  transform:translateY(-3px);
+}
+
+.link-id{
+  font-weight:600;
+  font-size:14px;
+}
+
+.link-status{
+  margin-top:6px;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+}
+
+.link-status.open{
+  background:#16a34a22;
+  color:#22c55e;
+}
+
+.link-status.lock{
+  background:#facc1522;
+  color:#facc15;
+}
+
+.link-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  transition:0.2s;
+}
+
+.link-card:hover .link-actions{
+  opacity:1;
+}
+
+.icon-btn{
+  border:none;
+  background:#1f1f1f;
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.icon-btn:hover{
+  background:#2563eb;
+  color:white;
+}
+
+.icon-btn.delete:hover{
+  background:#dc2626;
+}
 
 </style>
 
@@ -202,14 +297,18 @@ body{
   <!-- ADMIN PANEL -->
   <div id="adminPanel" style="display:none;margin-top:30px;">
     <hr style="margin:20px 0;">
-    <h3>🔗 Quản lý Link</h3>
+   <div class="admin-header">
+  <div class="admin-header">
+  <h3>🔗 Quản lý Link</h3>
 
-    <button onclick="createLink()"
-      style="width:100%;padding:12px;border-radius:10px;background:#16a34a;color:white;">
-      ➕ Tạo link mới
-    </button>
+  <button onclick="createLink()" class="create-btn">
+    ＋ Tạo link
+  </button>
+</div>
 
-    <div id="linkList" style="margin-top:15px;"></div>
+<div id="linkList" class="link-grid"></div>
+
+
   </div>
 
   <div id="out" style="margin-top:20px;"></div>
@@ -426,7 +525,7 @@ async function loadLinks(){
     html+=`
   <div class="link-card">
     
-    <div class="link-left">
+    <div>
       <div class="link-id">${doc.id}</div>
       <div class="link-status ${d.active?'open':'lock'}">
         ${d.active?'🟢 Đang mở':'🟡 Đang khóa'}
@@ -443,6 +542,7 @@ async function loadLinks(){
 
   </div>
 `;
+
 
   });
 
