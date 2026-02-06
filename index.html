@@ -678,6 +678,13 @@ async function check(){
     const out = document.getElementById("out");
 
     if(!key) return;
+    // ghi nhận lượt check theo ngày
+const today = new Date().toISOString().slice(0,10);
+
+await db.collection("stats").doc(today).set({
+  checks: firebase.firestore.FieldValue.increment(1)
+},{merge:true});
+
 
     // HIỆN LOADING TRƯỚC
     out.innerHTML = `
