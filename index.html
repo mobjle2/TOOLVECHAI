@@ -23,9 +23,11 @@ body{
 .result-grid{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:18px;               /* khoảng cách đều */
+  gap:24px;
   margin-top:30px;
+  overflow:visible;
 }
+
 
 
 
@@ -191,12 +193,10 @@ body{
 }
 
 .result-card:hover{
-  transform:translateY(-5px);
-  border-color:#2563eb;
-  box-shadow:
-    0 20px 45px rgba(37,99,235,0.25),
-    0 0 0 1px rgba(37,99,235,0.3);
+  transform:translateY(-4px);
+  z-index:2;
 }
+
 
 
 }
