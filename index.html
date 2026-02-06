@@ -196,6 +196,73 @@ body{
     padding:5px 14px;
   }
 }
+/* ===== LOGIN STYLE NEW ===== */
+
+.login-wrapper{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  z-index:9999;
+}
+
+.login-box{
+  width:420px;
+  padding:40px;
+  border-radius:24px;
+  background:rgba(30,41,59,0.8);
+  backdrop-filter:blur(15px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  text-align:center;
+}
+
+.login-title{
+  color:#f59e0b;
+  font-size:36px;
+  margin-bottom:30px;
+  font-weight:700;
+}
+
+.login-box input{
+  width:100%;
+  padding:16px;
+  margin-bottom:15px;
+  border-radius:14px;
+  border:none;
+  background:#cbd5e1;
+  font-size:15px;
+  outline:none;
+}
+
+.login-box input:last-of-type{
+  background:#334155;
+  color:white;
+}
+
+.login-box button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(90deg,#2563eb,#3b82f6);
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.login-box button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(37,99,235,0.5);
+}
+
+.login-error{
+  margin-top:15px;
+  color:#f87171;
+  font-weight:600;
+}
 
 </style>
 
@@ -204,20 +271,20 @@ body{
 <body>
 
 <!-- LOGIN SCREEN -->
-<div id="loginScreen" style="position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;">
-  <div style="width:360px;background:#111;padding:30px;border-radius:20px;border:1px solid gold;">
-    <h2 style="text-align:center;color:gold;">🔐 Tool Ve Chai Admin</h2>
-    <input id="loginEmail" type="email" placeholder="Nhập Gmail"
-    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <input id="loginPass" type="password" placeholder="Nhập Password"
-    style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:white;">
-    <button onclick="secureLogin()" 
-    style="margin-top:15px;width:100%;padding:12px;border-radius:10px;background:gold;font-weight:bold;">
-      LOGIN
-    </button>
-    <div id="loginError" style="color:red;text-align:center;margin-top:10px;"></div>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-wrapper">
+  <div class="login-box">
+    <h1 class="login-title">Tool Ve Chai</h1>
+
+    <input id="loginEmail" type="email" placeholder="Nhập Gmail">
+    <input id="loginPass" type="password" placeholder="Nhập Password">
+
+    <button onclick="secureLogin()">ĐĂNG NHẬP</button>
+
+    <div id="loginError" class="login-error">Sai tài khoản!</div>
   </div>
 </div>
+
 
 <div style="padding:20px;max-width:900px;margin:auto;">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
@@ -429,15 +496,22 @@ html+=`
 
 
 // ===== LOGIN =====
+  document.getElementById("loginError").style.display="none";
+
 function secureLogin(){
   const email = document.getElementById("loginEmail").value.trim();
   const pass = document.getElementById("loginPass").value.trim();
 
+  document.getElementById("loginError").style.display="none";
+
   auth.signInWithEmailAndPassword(email, pass)
     .catch(()=>{
-      document.getElementById("loginError").innerText = "Sai Gmail hoặc Password!";
+      const err = document.getElementById("loginError");
+      err.style.display="block";
+      err.innerText="Sai tài khoản!";
     });
 }
+
 
 // ===== CHECK ROLE =====
 auth.onAuthStateChanged(async user=>{
