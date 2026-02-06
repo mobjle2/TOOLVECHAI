@@ -230,7 +230,7 @@ body{
   }
 }
 
-/* ===== LOGIN ULTRA VIP ===== */
+/* ===== LOGIN ELITE ===== */
 
 .login-wrapper{
   position:fixed;
@@ -239,57 +239,40 @@ body{
   justify-content:center;
   align-items:center;
   background:
-    radial-gradient(circle at 20% 20%, rgba(59,130,246,0.15), transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(245,158,11,0.15), transparent 40%),
-    linear-gradient(135deg,#0f172a,#020617);
+    radial-gradient(circle at 15% 20%, rgba(59,130,246,0.25), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(245,158,11,0.25), transparent 40%),
+    linear-gradient(160deg,#020617,#0f172a);
   z-index:9999;
-  animation:fadeIn 0.6s ease;
 }
 
-@keyframes fadeIn{
-  from{opacity:0;transform:scale(0.98);}
-  to{opacity:1;transform:scale(1);}
-}
-
+/* CARD */
 .login-box{
-  width:440px;
-  padding:55px 45px;
-  border-radius:26px;
-  background:rgba(17,24,39,0.75);
-  backdrop-filter:blur(25px);
-  border:1px solid rgba(255,255,255,0.08);
-  box-shadow:
-    0 40px 80px rgba(0,0,0,0.6),
-    0 0 40px rgba(59,130,246,0.15);
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-
-/* viền ánh sáng nhẹ */
-.login-box::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
+  width:430px;
+  padding:60px 45px;
   border-radius:28px;
-  padding:2px;
-  background:linear-gradient(120deg,#2563eb,#f59e0b,#2563eb);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-  opacity:0.15;
-  pointer-events:none;
+  background:rgba(15,23,42,0.75);
+  backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.8),
+    0 0 80px rgba(59,130,246,0.15);
+  text-align:center;
+  transition:0.4s ease;
 }
 
+.login-box:hover{
+  transform:translateY(-5px);
+}
+
+/* TITLE */
 .login-title{
-  color:#f59e0b;
-  font-size:38px;
+  font-size:40px;
   font-weight:700;
-  margin-bottom:45px;
-  letter-spacing:1px;
-  text-shadow:0 0 20px rgba(245,158,11,0.4);
+  margin-bottom:50px;
+  background:linear-gradient(90deg,#f59e0b,#fbbf24);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 25px rgba(245,158,11,0.4);
 }
 
 /* INPUT GROUP */
@@ -301,18 +284,18 @@ body{
 /* INPUT */
 .input-group input{
   width:100%;
-  height:56px;
+  height:58px;
   padding:0 55px;
-  border-radius:14px;
+  border-radius:16px;
   border:1px solid rgba(255,255,255,0.08);
-  background:rgba(15,23,42,0.85);
+  background:rgba(2,6,23,0.85);
   color:white;
   font-size:15px;
   transition:0.3s;
 }
 
 .input-group input::placeholder{
-  color:#94a3b8;
+  color:#64748b;
   letter-spacing:1px;
 }
 
@@ -320,11 +303,11 @@ body{
   border-color:#3b82f6;
   box-shadow:
     0 0 0 3px rgba(59,130,246,0.25),
-    0 0 25px rgba(59,130,246,0.2);
+    0 0 40px rgba(59,130,246,0.3);
   outline:none;
 }
 
-/* ICON TRÁI */
+/* ICON LEFT */
 .input-icon{
   position:absolute;
   left:18px;
@@ -349,7 +332,29 @@ body{
 .toggle-pass:hover{
   opacity:1;
   color:#facc15;
-  transform:translateY(-50%) scale(1.1);
+  transform:translateY(-50%) scale(1.15);
+}
+
+/* BUTTON */
+.login-box button{
+  width:100%;
+  height:58px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(90deg,#2563eb,#3b82f6);
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:
+    0 15px 35px rgba(37,99,235,0.4);
+}
+
+.login-box button:hover{
+  transform:translateY(-4px);
+  box-shadow:
+    0 20px 45px rgba(37,99,235,0.6),
+    0 0 30px rgba(37,99,235,0.4);
 }
 
 /* BUTTON */
@@ -383,25 +388,32 @@ body{
   margin-bottom:6px;
   color:#94a3b8;
 }
-
-/* ===== INPUT STYLE GỌN ĐẸP ===== */
+/* ===== INPUT STYLE CÂN CHUẨN ===== */
 
 .input-group{
   position:relative;
-  margin-bottom:22px;
+  margin-bottom:24px;
+  width:100%;
 }
 
-.input-group input{
+/* INPUT + BUTTON CÙNG BOX MODEL */
+.input-group input,
+.login-box button{
   width:100%;
   height:58px;
-  padding:0 55px 0 48px;
   border-radius:16px;
+  box-sizing:border-box;
+}
+
+/* INPUT */
+.input-group input{
+  padding:0 55px;
   border:1px solid rgba(255,255,255,0.08);
-  background:#0f172a;
+  background:#0b1220;
   color:white;
   font-size:15px;
   letter-spacing:1px;
-  transition:0.3s;
+  transition:0.3s ease;
 }
 
 .input-group input::placeholder{
@@ -411,36 +423,39 @@ body{
 
 .input-group input:focus{
   border-color:#3b82f6;
-  box-shadow:0 0 0 3px rgba(59,130,246,0.25);
+  box-shadow:
+    0 0 0 3px rgba(59,130,246,0.25);
+  outline:none;
 }
 
-/* Icon trái */
+/* ICON TRÁI */
 .input-icon{
   position:absolute;
-  left:16px;
+  left:18px;
   top:50%;
   transform:translateY(-50%);
   font-size:15px;
   opacity:0.6;
+  pointer-events:none;
 }
 
-/* Icon mắt */
+/* ICON MẮT */
 .toggle-pass{
   position:absolute;
-  right:16px;
+  right:18px;
   top:50%;
   transform:translateY(-50%);
   cursor:pointer;
   font-size:16px;
   opacity:0.6;
-  transition:0.2s;
+  transition:0.2s ease;
 }
 
 .toggle-pass:hover{
   opacity:1;
   color:#facc15;
+  transform:translateY(-50%) scale(1.1);
 }
-
 
 /* ERROR */
 .login-error{
@@ -449,6 +464,8 @@ body{
   font-weight:600;
   display:none;
 }
+
+
 /* ===== CARD FOOTER GỌN ĐẸP ===== */
 
 .card-footer{
