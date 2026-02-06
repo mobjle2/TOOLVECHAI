@@ -690,8 +690,13 @@ async function check(){
     await new Promise(resolve => setTimeout(resolve, 800));
 
 
-    const snap = await db.collection("codes").get();
-    let found = false;
+  const snap = await db.collection("codes")
+  .where("code", ">=", key)
+  .where("code", "<=", key + "\uf8ff")
+  .get();
+
+let found = false;
+
 
     let html = '<div class="result-grid">';
 
