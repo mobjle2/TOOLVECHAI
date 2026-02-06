@@ -296,6 +296,36 @@ body{
   font-weight:600;
   display:none;
 }
+/* ===== CARD FOOTER GỌN ĐẸP ===== */
+
+.card-footer{
+  margin-top:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.chip-info{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  font-weight:500;
+  color:#22c55e;
+}
+
+.chip-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
+
+.vip-badge{
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+}
 
 
 </style>
@@ -479,30 +509,19 @@ html+=`
     ⚡ ${x.code}
   </div>
 
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-
-    <span style="
-      display:flex;
-      align-items:center;
-      gap:6px;
-      color:${chip.color};
-      font-size:13px;
-    ">
-      <span style="
-        width:8px;
-        height:8px;
-        background:${chip.color};
-        border-radius:50%;
-        display:inline-block;
-      "></span>
-      ${chip.name}
-    </span>
-
-    <span class="vip-badge vip-${vipNumber}">
-      👑 VIP ${vipNumber}
-    </span>
-
+  <div class="card-footer">
+  
+  <div class="chip-info">
+    <span class="chip-dot" style="background:${chip.color};"></span>
+    ${chip.name}
   </div>
+
+  <div class="vip-badge vip-${vipNumber}">
+    👑 VIP ${vipNumber}
+  </div>
+
+</div>
+
 
 </div>
 `;
