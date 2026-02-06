@@ -285,6 +285,47 @@ body{
   background:#334155;
   color:white;
 }
+/* LABEL */
+.login-label{
+  display:block;
+  text-align:left;
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:#94a3b8;
+}
+
+/* INPUT GROUP */
+.input-group{
+  position:relative;
+  margin-bottom:20px;
+}
+
+.input-group input{
+  width:100%;
+  height:60px;
+  padding:0 50px 0 20px;
+  border-radius:18px;
+  border:none;
+  font-size:16px;
+  outline:none;
+  box-sizing:border-box;
+}
+
+/* Icon mắt nằm trong ô */
+.toggle-pass{
+  position:absolute;
+  right:18px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:18px;
+  color:#cbd5e1;
+}
+
+.toggle-pass:hover{
+  color:#facc15;
+}
 
 /* NÚT */
 .login-box button{
@@ -432,11 +473,23 @@ body{
   <div class="login-box">
     <h1 class="login-title">Tool Ve Chai</h1>
 
-    <input id="loginEmail" type="email" placeholder="Nhập Gmail">
-    <div class="password-wrapper">
+    <!-- USER -->
+<label class="login-label">
+  👤 USER
+</label>
+<div class="input-group">
+  <input id="loginEmail" type="email" placeholder="Nhập Gmail">
+</div>
+
+<!-- PASS -->
+<label class="login-label">
+  🔒 PASS
+</label>
+<div class="input-group">
   <input id="loginPass" type="password" placeholder="Nhập Password">
   <span class="toggle-pass" onclick="togglePassword()">👁</span>
 </div>
+
 
 
     <button onclick="secureLogin()">ĐĂNG NHẬP</button>
@@ -644,20 +697,29 @@ html+=`
 
 
 // ===== LOGIN =====
-  document.getElementById("loginError").style.display="none";
-
 function secureLogin(){
   const email = document.getElementById("loginEmail").value.trim();
   const pass = document.getElementById("loginPass").value.trim();
 
-  document.getElementById("loginError").style.display="none";
+  const err = document.getElementById("loginError");
+  err.style.display = "none";
 
   auth.signInWithEmailAndPassword(email, pass)
     .catch(()=>{
-      const err = document.getElementById("loginError");
-      err.style.display="block";
-      err.innerText="Sai tài khoản!";
+      err.style.display = "block";
+      err.innerText = "Sai tài khoản!";
     });
+}
+
+// ===== TOGGLE PASSWORD =====
+function togglePassword(){
+  const passInput = document.getElementById("loginPass");
+
+  if(passInput.type === "password"){
+    passInput.type = "text";
+  }else{
+    passInput.type = "password";
+  }
 }
 
 
