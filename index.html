@@ -22,11 +22,12 @@ body{
 
 .result-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(4,1fr);
   gap:24px;
   margin-top:30px;
-  overflow:visible;
+  align-items:stretch;
 }
+
 
 
 
@@ -177,47 +178,99 @@ body{
   66%{content:'..';}
   100%{content:'...';}
 }
-/* ===== STYLE GIỐNG ẢNH ĐẸP ===== */
+/* ===== STYLE VIP CARD PRO ===== */
+
 .result-card{
-  background:linear-gradient(145deg,#0f172a,#111827);
-  border-radius:22px;
-  padding:20px;
-  border:1px solid rgba(255,255,255,0.06);
-  transition:all 0.25s ease;
-  box-shadow:
-    0 8px 25px rgba(0,0,0,0.5),
-    inset 0 0 0 1px rgba(255,255,255,0.03);
-}
-.result-card{
+  position:relative;
   width:100%;
+  background:linear-gradient(145deg,#0b1220,#0f172a);
+  border-radius:24px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,0.05);
+  transition:transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+  overflow:hidden;
 }
 
+/* Glow layer */
+.result-card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:26px;
+  opacity:0;
+  transition:opacity 0.4s ease;
+  z-index:-1;
+}
+
+/* Hover effect */
 .result-card:hover{
-  transform:translateY(-4px);
-  z-index:2;
+  transform:translateY(-6px);
+  box-shadow:0 18px 45px rgba(0,0,0,0.7);
+  border-color:#facc15;
 }
 
 
+/* ===== VIP GLOW THEO LEVEL ===== */
 
+.result-card.vip-8::before{
+  background:radial-gradient(circle,#a855f755,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-9::before{
+  background:radial-gradient(circle,#06b6d455,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-10::before{
+  background:radial-gradient(circle,#FFD70066,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-5::before{
+  background:radial-gradient(circle,#facc1555,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-6::before{
+  background:radial-gradient(circle,#fb923c55,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-7::before{
+  background:radial-gradient(circle,#ef444455,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-11::before{
+  background:radial-gradient(circle,#ff000055,transparent 70%);
+  opacity:1;
+}
+
+.result-card.vip-13::before{
+  background:radial-gradient(circle,#ff000088,transparent 70%);
+  opacity:1;
 }
 
 
+/* ===== VIP BADGE STYLE ===== */
 
-
-.vip-8{
-  background:linear-gradient(90deg,#6d28d9,#a855f7);
-  color:white;
+.vip-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 16px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  box-shadow:0 0 18px rgba(255,255,255,0.12);
 }
 
-.vip-9{
-  background:linear-gradient(90deg,#06b6d4,#0ea5e9);
-  color:white;
-}
+/* Badge màu */
 
-.vip-10{
-  background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700);
-  color:black;
-}
+.vip-8{ background:linear-gradient(90deg,#6d28d9,#a855f7); color:white; }
+.vip-9{ background:linear-gradient(90deg,#06b6d4,#0ea5e9); color:white; }
+.vip-10{ background:linear-gradient(90deg,#FFD700,#ffcc00,#FFD700); color:black; }
 
 .vip-5{ background:#facc15; color:black; }
 .vip-6{ background:linear-gradient(90deg,#facc15,#fb923c); color:black; }
@@ -225,15 +278,19 @@ body{
 .vip-11{ background:linear-gradient(90deg,#ff4d00,#ff0000); color:white; }
 .vip-13{ background:linear-gradient(90deg,#5b0000,#ff0000,#5b0000); color:white; }
 
+
+/* ===== MOBILE ===== */
+
 @media(max-width:768px){
   .result-card{
     padding:16px;
   }
-  .badge{
+  .vip-badge{
     font-size:11px;
-    padding:5px 14px;
+    padding:5px 12px;
   }
 }
+
 /* ================= CLEAN LOGIN FINAL ================= */
 
 .login-wrapper{
@@ -699,7 +756,7 @@ async function check(){
 const vipNumber = x.vip.replace("VIP ","");
 
 html+=`
-<div class="result-card">
+<div class="result-card vip-${vipNumber}">
 
   <div class="code-title">
     ⚡ ${x.code}
