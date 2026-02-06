@@ -355,6 +355,68 @@ body{
 .result-card{
   width:fit-content;   /* card co theo nội dung */
 }
+/* ================= MOBILE OPTIMIZE ================= */
+@media(max-width:640px){
+
+  /* Main container */
+  .main-container{
+    padding:20px 15px !important;
+  }
+
+  /* Login box */
+  .login-box{
+    width:90%;
+    padding:30px 20px;
+    border-radius:18px;
+  }
+
+  .login-title{
+    font-size:26px;
+    margin-bottom:20px;
+  }
+
+  .login-box input{
+    height:46px;
+    font-size:14px;
+  }
+
+  .login-box button{
+    height:46px;
+    font-size:14px;
+  }
+
+  /* Dashboard cards */
+  .result-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .result-card{
+    padding:14px;
+    border-radius:16px;
+  }
+
+  .code-title{
+    font-size:14px;
+  }
+
+  .chip-vip-line{
+    font-size:13px;
+    gap:10px;
+  }
+
+  .vip-badge{
+    font-size:12px;
+    padding:3px 8px;
+  }
+
+}
+/* Desktop container */
+.main-container{
+  padding:40px 60px;
+  max-width:1400px;
+  margin:auto;
+}
 
 
 </style>
@@ -382,7 +444,7 @@ body{
 </div>
 
 
-<div style="padding:40px 60px;max-width:1400px;margin:auto;">
+<div class="main-container">
   <h2>🛠 Tool Ve Chai Check VIP</h2>
 
  <div style="display:flex;gap:10px;margin-top:15px;">
