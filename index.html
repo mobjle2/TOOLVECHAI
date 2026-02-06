@@ -22,11 +22,11 @@ body{
 
 .result-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:30px;
-  margin-top:35px;
-  padding:10px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:36px;
+  margin-top:40px;
 }
+
 
 
 
@@ -182,7 +182,6 @@ body{
 /* ===== STYLE CLEAN CARD (KHÔNG ĐÈ – KHÔNG GLOW NỀN) ===== */
 
 .result-card{
-  width:100%;
   background:linear-gradient(145deg,#0e0e0e,#181818);
   border-radius:20px;
   padding:18px;
@@ -406,8 +405,11 @@ body{
 
   /* Main container */
   .main-container{
-    padding:20px 15px !important;
-  }
+  padding:40px 40px;
+  max-width:1200px;
+  margin:auto;
+}
+
 
   /* Login box */
   .login-box{
