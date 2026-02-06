@@ -326,6 +326,21 @@ body{
   font-size:13px;
   font-weight:600;
 }
+.code-title{
+  font-size:17px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.chip-vip-line{
+  display:flex;
+  align-items:center;
+  gap:18px;   /* khoảng cách giữa chip và vip */
+}
+
+.result-card{
+  width:fit-content;   /* card co theo nội dung */
+}
 
 
 </style>
@@ -505,26 +520,24 @@ const vipNumber = x.vip.replace("VIP ","");
 html+=`
 <div class="result-card">
 
-  <div style="font-size:18px;font-weight:600;margin-bottom:6px;">
+  <div class="code-title">
     ⚡ ${x.code}
   </div>
 
-  <div class="card-footer">
-  
-  <div class="chip-info">
-    <span class="chip-dot" style="background:${chip.color};"></span>
-    ${chip.name}
+  <div class="chip-vip-line">
+    <div class="chip-info" style="color:${chip.color}">
+      <span class="chip-dot" style="background:${chip.color};"></span>
+      ${chip.name}
+    </div>
+
+    <div class="vip-badge vip-${vipNumber}">
+      👑 VIP ${vipNumber}
+    </div>
   </div>
-
-  <div class="vip-badge vip-${vipNumber}">
-    👑 VIP ${vipNumber}
-  </div>
-
-</div>
-
 
 </div>
 `;
+
 
       }
     });
