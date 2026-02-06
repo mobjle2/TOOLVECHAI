@@ -22,10 +22,12 @@ body{
 
 .result-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:36px;
-  margin-top:40px;
+  grid-template-columns:repeat(4, minmax(0, 260px));
+  justify-content:center;
+  gap:40px;
+  margin-top:50px;
 }
+
 
 
 
@@ -35,21 +37,21 @@ body{
 
 
 /* Laptop */
-@media(max-width:1280px){
+
   .result-grid{
     grid-template-columns:repeat(3,1fr);
   }
 }
 
 /* Tablet */
-@media(max-width:1024px){
+
   .result-grid{
     grid-template-columns:repeat(2,1fr);
   }
 }
 
 /* Mobile */
-@media(max-width:640px){
+
   .result-grid{
     grid-template-columns:repeat(2,1fr);
     gap:16px;
