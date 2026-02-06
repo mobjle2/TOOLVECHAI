@@ -295,55 +295,63 @@ body{
   color:#94a3b8;
 }
 
-/* INPUT GROUP */
+/* ===== INPUT STYLE GỌN ĐẸP ===== */
+
 .input-group{
   position:relative;
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 .input-group input{
   width:100%;
-  height:60px;
-  padding:0 50px 0 20px;
-  border-radius:18px;
-  border:none;
-  font-size:16px;
-  outline:none;
-  box-sizing:border-box;
+  height:58px;
+  padding:0 55px 0 48px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:#0f172a;
+  color:white;
+  font-size:15px;
+  letter-spacing:1px;
+  transition:0.3s;
 }
 
-/* Icon mắt nằm trong ô */
+.input-group input::placeholder{
+  color:#94a3b8;
+  font-weight:600;
+}
+
+.input-group input:focus{
+  border-color:#3b82f6;
+  box-shadow:0 0 0 3px rgba(59,130,246,0.25);
+}
+
+/* Icon trái */
+.input-icon{
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:15px;
+  opacity:0.6;
+}
+
+/* Icon mắt */
 .toggle-pass{
   position:absolute;
-  right:18px;
+  right:16px;
   top:50%;
   transform:translateY(-50%);
   cursor:pointer;
-  font-size:18px;
-  color:#cbd5e1;
+  font-size:16px;
+  opacity:0.6;
+  transition:0.2s;
 }
 
 .toggle-pass:hover{
+  opacity:1;
   color:#facc15;
 }
 
-/* NÚT */
-.login-box button{
-  width:100%;
-  height:60px;
-  border:none;
-  border-radius:18px;
-  background:linear-gradient(90deg,#2563eb,#3b82f6);
-  font-weight:700;
-  font-size:16px;
-  cursor:pointer;
-  transition:all 0.25s ease;
-}
-
-.login-box button:hover{
-  transform:translateY(-3px);
-  box-shadow:0 15px 30px rgba(37,99,235,0.5);
-}
 
 /* ERROR */
 .login-error{
@@ -474,29 +482,24 @@ body{
     <h1 class="login-title">Tool Ve Chai</h1>
 
     <!-- USER -->
-<label class="login-label">
-  👤 USER
-</label>
-<div class="input-group">
-  <input id="loginEmail" type="email" placeholder="Nhập Gmail">
-</div>
+    <div class="input-group">
+      <span class="input-icon">👤</span>
+      <input id="loginEmail" type="email" placeholder="USER">
+    </div>
 
-<!-- PASS -->
-<label class="login-label">
-  🔒 PASS
-</label>
-<div class="input-group">
-  <input id="loginPass" type="password" placeholder="Nhập Password">
-  <span class="toggle-pass" onclick="togglePassword()">👁</span>
-</div>
-
-
+    <!-- PASS -->
+    <div class="input-group">
+      <span class="input-icon">🔒</span>
+      <input id="loginPass" type="password" placeholder="PASS">
+      <span class="toggle-pass" onclick="togglePassword()">👁</span>
+    </div>
 
     <button onclick="secureLogin()">ĐĂNG NHẬP</button>
 
     <div id="loginError" class="login-error">Sai tài khoản!</div>
   </div>
 </div>
+
 
 
 <div class="main-container">
