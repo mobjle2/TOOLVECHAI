@@ -370,7 +370,10 @@ body{
     <h1 class="login-title">Tool Ve Chai</h1>
 
     <input id="loginEmail" type="email" placeholder="Nhập Gmail">
-    <input id="loginPass" type="password" placeholder="Nhập Password">
+    <div class="password-wrapper">
+  <input id="loginPass" type="password" placeholder="Nhập Password">
+  <span class="toggle-pass" onclick="togglePassword()">👁</span>
+</div>
 
     <button onclick="secureLogin()">ĐĂNG NHẬP</button>
 
