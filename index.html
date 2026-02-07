@@ -701,9 +701,10 @@ function showInactive(){
 const params = new URLSearchParams(window.location.search);
 const userParam = params.get("u");
 
-if(userParam){
+if(userParam && !auth.currentUser){
   runUserMode(userParam);
 }
+
 
 async function runUserMode(id){
   try{
