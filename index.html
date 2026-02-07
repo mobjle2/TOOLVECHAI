@@ -662,35 +662,40 @@ if(userParam){
   runUserMode(userParam);
 }
 async function runUserMode(id){
+  showChecking();
+
   try{
-    const doc = await db.collection("shareLinks").doc(id).get();
+    const ref = db.collection("shareLinks").doc(id);
+    const doc = await ref.get();
+
+    await new Promise(r => setTimeout(r, 700));
 
     if(!doc.exists){
-      document.body.innerHTML = "❌ Link không tồn tại!";
+      showInactive();
       return;
     }
 
-    if(!doc.data().active){
-      document.body.innerHTML = "🔒 Link đã bị khóa!";
+    const data = doc.data();
+    const now = new Date();
+
+    if(
+      data.active !== true ||
+      (data.startAt && now < data.startAt.toDate()) ||
+      (data.endAt && now > data.endAt.toDate())
+    ){
+      showInactive();
       return;
     }
 
-    // Ẩn login nếu có
-    const login = document.getElementById("loginScreen");
-    if(login) login.style.display = "none";
+    // ✅ LINK HỢP LỆ → LOAD LẠI GIAO DIỆN CHÍNH
+    location.href = location.pathname;
 
-    // Ẩn admin panel nếu có
-    const admin = document.getElementById("adminPanel");
-    if(admin) admin.style.display = "none";
-
-    // Không cần auth ở user mode
-    auth.signOut();
-
-  }catch(e){
-    console.error(e);
-    document.body.innerHTML = "❌ Lỗi quyền truy cập!";
+  }catch(err){
+    console.error(err);
+    showInactive();
   }
 }
+
 function detectChip(code){
   code = code.toUpperCase();
 
