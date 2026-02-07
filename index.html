@@ -859,15 +859,26 @@ auth.onAuthStateChanged(async user=>{
 
 
 async function createLink(){
-  const id = Date.now().toString(36)+Math.random().toString(36).substring(2,6);
+  const id = Date.now().toString(36) + Math.random().toString(36).substring(2,6);
+  const now = firebase.firestore.Timestamp.now();
 
   await db.collection("shareLinks").doc(id).set({
-    active:true,
-    createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    active: true,
+    createdAt: now,
+
+    // ✅ CÀI THỜI GIAN MẶC ĐỊNH
+    startAt: now,
+    endAt: firebase.firestore.Timestamp.fromMillis(
+      now.toMillis() + 24 * 60 * 60 * 1000 // +24h
+    ),
+
+    totalViews: 0,
+    maxOnline: 0
   });
 
-  loadLinks(); // vẫn hiện link mới
+  loadLinks();
 }
+
 
 
 
