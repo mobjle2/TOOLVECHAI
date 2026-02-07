@@ -653,6 +653,49 @@ async function setTime(id){
     alert("❌ Lỗi cài thời gian");
   }
 }
+// ===== CHECKING OVERLAY =====
+function showChecking(){
+  let el = document.getElementById("checkingOverlay");
+  if(el) return;
+
+  el = document.createElement("div");
+  el.id = "checkingOverlay";
+  el.style = `
+    position:fixed;
+    inset:0;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    color:#facc15;
+    z-index:9999;
+  `;
+  el.innerText = "⏳ Đang kiểm tra trạng thái link...";
+  document.body.appendChild(el);
+}
+
+function showInactive(){
+  let el = document.getElementById("checkingOverlay");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "checkingOverlay";
+    document.body.appendChild(el);
+  }
+
+  el.style = `
+    position:fixed;
+    inset:0;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    color:#f87171;
+    z-index:9999;
+  `;
+  el.innerText = "🔒 Link này hiện không còn hoạt động";
+}
 
 // ===== USER MODE (?u=) =====
 const params = new URLSearchParams(window.location.search);
