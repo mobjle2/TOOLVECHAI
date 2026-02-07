@@ -706,17 +706,15 @@ if(userParam){
 }
 
 async function runUserMode(id){
-  showChecking();
-
   try{
     const ref = db.collection("shareLinks").doc(id);
     const doc = await ref.get();
 
-    // delay ngắn – giống đoạn 1 (lúc còn vào được)
-    await new Promise(r => setTimeout(r, 500));
+    // delay ngắn, KHÔNG ĐỤNG DOM
+    await new Promise(r => setTimeout(r, 300));
 
     if(!doc.exists){
-      showInactive();
+      alert("❌ Link không tồn tại");
       return;
     }
 
@@ -728,29 +726,25 @@ async function runUserMode(id){
       (data.startAt && now < data.startAt.toDate()) ||
       (data.endAt && now > data.endAt.toDate())
     ){
-      showInactive();
+      alert("🔒 Link này hiện không còn hoạt động");
       return;
     }
 
-    // ✅ LINK HỢP LỆ → GỠ OVERLAY
-    const overlay = document.getElementById("checkingOverlay");
-    if(overlay) overlay.remove();
-
-    // Ẩn admin panel nếu có
+    // ✅ LINK OK → ẨN ADMIN / LOGIN
     const admin = document.getElementById("adminPanel");
     if(admin) admin.style.display = "none";
 
-    // Ẩn login nếu có
     const login = document.getElementById("loginScreen");
     if(login) login.style.display = "none";
 
-    // ❗ KHÔNG render gì thêm – giữ nguyên UI gốc (đúng như đoạn 1)
+    // ❗ KHÔNG LÀM GÌ KHÁC
 
   }catch(err){
     console.error(err);
-    showInactive();
+    alert("❌ Lỗi quyền truy cập");
   }
 }
+
 
 
     // ✅ LINK HỢP LỆ → HIỂN THỊ TOOL
