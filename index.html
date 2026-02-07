@@ -613,6 +613,46 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+async function setTime(id){
+  const choice = prompt(
+    "Cài thời gian cho link:\n" +
+    "1 = Mở 24 giờ\n" +
+    "2 = Mở 7 ngày\n" +
+    "3 = Mở 30 ngày"
+  );
+
+  if(!choice) return;
+
+  let days = 0;
+
+  if(choice === "1") days = 1;
+  else if(choice === "2") days = 7;
+  else if(choice === "3") days = 30;
+  else{
+    alert("Lựa chọn không hợp lệ");
+    return;
+  }
+
+  const now = firebase.firestore.Timestamp.now();
+  const endAt = firebase.firestore.Timestamp.fromMillis(
+    now.toMillis() + days * 24 * 60 * 60 * 1000
+  );
+
+  try{
+    await db.collection("shareLinks").doc(id).update({
+      active: true,
+      startAt: now,
+      endAt: endAt
+    });
+
+    alert(`✅ Đã mở link ${days} ngày`);
+    loadLinks();
+
+  }catch(err){
+    console.error(err);
+    alert("❌ Lỗi cài thời gian");
+  }
+}
 
 // ===== USER MODE (?u=) =====
 const params = new URLSearchParams(window.location.search);
@@ -848,13 +888,23 @@ async function loadLinks(){
       </div>
     </div>
 
-    <div class="link-actions">
-      <button class="icon-btn" onclick="copyLink('${doc.id}',this)">📋</button>
-      <button class="icon-btn" onclick="toggleLink('${doc.id}',${d.active})">
-        ${d.active?'🔒':'🔓'}
-      </button>
-      <button class="icon-btn delete" onclick="deleteLink('${doc.id}')">🗑</button>
-    </div>
+<div class="link-actions">
+  <!-- 📋 COPY -->
+  <button class="icon-btn" onclick="copyLink('${doc.id}',this)">📋</button>
+
+  <!-- ⏱ CÀI THỜI GIAN (NGAY SAU COPY) -->
+  <button class="icon-btn" onclick="setTime('${doc.id}')">⏱</button>
+
+  <!-- 🔒 KHÓA / MỞ -->
+  <button class="icon-btn" onclick="toggleLink('${doc.id}',${d.active})">
+    ${d.active?'🔒':'🔓'}
+  </button>
+
+  <!-- 🗑 XOÁ -->
+  <button class="icon-btn delete" onclick="deleteLink('${doc.id}')">🗑</button>
+</div>
+
+
 
   </div>
 `;
