@@ -704,6 +704,7 @@ const userParam = params.get("u");
 if(userParam){
   runUserMode(userParam);
 }
+
 async function runUserMode(id){
   showChecking();
 
@@ -711,7 +712,8 @@ async function runUserMode(id){
     const ref = db.collection("shareLinks").doc(id);
     const doc = await ref.get();
 
-    await new Promise(r => setTimeout(r, 700));
+    // delay ngắn – giống đoạn 1 (lúc còn vào được)
+    await new Promise(r => setTimeout(r, 500));
 
     if(!doc.exists){
       showInactive();
@@ -729,6 +731,27 @@ async function runUserMode(id){
       showInactive();
       return;
     }
+
+    // ✅ LINK HỢP LỆ → GỠ OVERLAY
+    const overlay = document.getElementById("checkingOverlay");
+    if(overlay) overlay.remove();
+
+    // Ẩn admin panel nếu có
+    const admin = document.getElementById("adminPanel");
+    if(admin) admin.style.display = "none";
+
+    // Ẩn login nếu có
+    const login = document.getElementById("loginScreen");
+    if(login) login.style.display = "none";
+
+    // ❗ KHÔNG render gì thêm – giữ nguyên UI gốc (đúng như đoạn 1)
+
+  }catch(err){
+    console.error(err);
+    showInactive();
+  }
+}
+
 
     // ✅ LINK HỢP LỆ → HIỂN THỊ TOOL
     const login = document.getElementById("loginScreen");
