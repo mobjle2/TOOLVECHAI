@@ -701,17 +701,26 @@ function showInactive(){
 const params = new URLSearchParams(window.location.search);
 const userParam = params.get("u");
 
-if(userParam && !auth.currentUser){
-  runUserMode(userParam);
-}
+// ⚠️ TUYỆT ĐỐI KHÔNG gọi runUserMode ngoài onAuthStateChanged
+auth.onAuthStateChanged(user => {
 
+  // 1️⃣ Nếu đã login (ADMIN) → KHÔNG BAO GIỜ chạy user mode
+  if(user){
+    return;
+  }
+
+  // 2️⃣ Chỉ khi CHƯA login + có ?u= → mới chạy user mode
+  if(userParam){
+    runUserMode(userParam);
+  }
+});
 
 async function runUserMode(id){
   try{
     const ref = db.collection("shareLinks").doc(id);
     const doc = await ref.get();
 
-    // delay ngắn, KHÔNG ĐỤNG DOM
+    // delay ngắn – giống đoạn 1 (lúc còn vào được)
     await new Promise(r => setTimeout(r, 300));
 
     if(!doc.exists){
@@ -731,20 +740,23 @@ async function runUserMode(id){
       return;
     }
 
-    // ✅ LINK OK → ẨN ADMIN / LOGIN
+    // ✅ LINK HỢP LỆ → CHỈ ẨN ADMIN / LOGIN
     const admin = document.getElementById("adminPanel");
     if(admin) admin.style.display = "none";
 
     const login = document.getElementById("loginScreen");
     if(login) login.style.display = "none";
 
-    // ❗ KHÔNG LÀM GÌ KHÁC
-
-  }catch(err){
+    // ❗ KHÔNG signOut
+    // ❗ KHÔNG reload
+    // ❗ KHÔNG overlay
+  }
+  catch(err){
     console.error(err);
     alert("❌ Lỗi quyền truy cập");
   }
 }
+
 
 
 
