@@ -873,43 +873,58 @@ async function createLink(){
 
 async function loadLinks(){
   const snap = await db.collection("shareLinks").get();
-  let html="";
+  let html = "";
 
   snap.forEach(doc=>{
-    const d=doc.data();
+    const d = doc.data();
 
-    html+=`
+    // ===== TẠO TEXT THỜI GIAN =====
+    let timeText = "⏳ Chưa cài thời gian";
+    if(d.startAt && d.endAt){
+      const start = d.startAt.toDate().toLocaleString("vi-VN");
+      const end   = d.endAt.toDate().toLocaleString("vi-VN");
+      timeText = `⏳ ${start} → ${end}`;
+    }
+
+    html += `
   <div class="link-card">
     
     <div class="link-left">
       <div class="link-id">${doc.id}</div>
-      <div class="link-status ${d.active?'open':'lock'}">
-        ${d.active?'🟢 Đang mở':'🟡 Đang khóa'}
+
+      <div class="link-status ${d.active ? 'open' : 'lock'}">
+        ${d.active ? '🟢 Đang mở' : '🟡 Đang khóa'}
+      </div>
+
+      <!-- ⏱ HIỂN THỊ ĐỒNG HỒ -->
+      <div style="font-size:12px;color:#94a3b8;margin-top:4px;">
+        ${timeText}
       </div>
     </div>
 
-<div class="link-actions">
-  <!-- 📋 COPY -->
-  <button class="icon-btn" onclick="copyLink('${doc.id}',this)">📋</button>
+    <div class="link-actions">
+      <!-- 📋 COPY -->
+      <button class="icon-btn" onclick="copyLink('${doc.id}',this)">📋</button>
 
-  <!-- ⏱ CÀI THỜI GIAN (NGAY SAU COPY) -->
-  <button class="icon-btn" onclick="setTime('${doc.id}')">⏱</button>
+      <!-- ⏱ CÀI THỜI GIAN -->
+      <button class="icon-btn" onclick="setTime('${doc.id}')">⏱</button>
 
-  <!-- 🔒 KHÓA / MỞ -->
-  <button class="icon-btn" onclick="toggleLink('${doc.id}',${d.active})">
-    ${d.active?'🔒':'🔓'}
-  </button>
+      <!-- 🔒 KHÓA / MỞ -->
+      <button class="icon-btn" onclick="toggleLink('${doc.id}',${d.active})">
+        ${d.active ? '🔒' : '🔓'}
+      </button>
 
-  <!-- 🗑 XOÁ -->
-  <button class="icon-btn delete" onclick="deleteLink('${doc.id}')">🗑</button>
-</div>
-
-
+      <!-- 🗑 XOÁ -->
+      <button class="icon-btn delete" onclick="deleteLink('${doc.id}')">🗑</button>
+    </div>
 
   </div>
 `;
-
   });
+
+  document.getElementById("linkList").innerHTML = html;
+}
+
 
   document.getElementById("linkList").innerHTML=html;
 }
